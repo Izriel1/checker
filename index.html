@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <meta name="theme-color" content="#0a0e1a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Starry Sky Communications</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -15,11 +17,10 @@
     color: #fff;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    transition: all 0.3s ease;
+    -moz-osx-font-smoothing: grayscale;
   }
   body.cn { font-family: 'Noto Sans SC', 'Inter', sans-serif; }
 
-  /* ================= LOGIN PAGE ================= */
   #loginPage {
     min-height: 100vh;
     min-height: 100dvh;
@@ -245,68 +246,6 @@
     box-shadow: 0 0 0 3px rgba(231,76,60,0.15);
   }
 
-  /* ===== FIXED CAPTCHA - VERY VISIBLE ===== */
-  .captcha-row { 
-    display: flex; 
-    gap: 12px; 
-    align-items: flex-end; 
-  }
-  .captcha-row .form-group { flex: 1; margin-bottom: 0; }
-  .captcha-box {
-    width: 160px;
-    height: 60px;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    user-select: none;
-    flex-shrink: 0;
-    position: relative;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 2px solid rgba(255,255,255,0.3);
-    overflow: visible;
-    padding: 5px 10px;
-  }
-  
-  .captcha-box:hover { 
-    transform: scale(1.05); 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
-  }
-  .captcha-box:active { transform: scale(0.98); }
-  
-  .captcha-char {
-    font-family: 'Courier New', 'Monaco', monospace;
-    font-size: 36px;
-    font-weight: 900;
-    display: inline-block;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3), -1px -1px 2px rgba(255,255,255,0.5);
-    line-height: 1;
-    position: relative;
-    z-index: 2;
-    margin: 0 2px;
-  }
-  
-  .captcha-refresh-icon {
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    font-size: 14px;
-    color: rgba(0,0,0,0.4);
-    pointer-events: none;
-    z-index: 3;
-  }
-  .captcha-hint { 
-    font-size: 12px; 
-    color: rgba(255,255,255,0.5); 
-    margin-top: 8px; 
-    text-align: right; 
-    font-weight: 500; 
-  }
-
   .login-submit {
     width: 100%; padding: 15px; margin-top: 22px;
     background: linear-gradient(135deg, #1e90ff 0%, #8b5cf6 50%, #f97316 100%);
@@ -326,25 +265,34 @@
 
   .login-footer { text-align: center; margin-top: 20px; font-size: 12px; color: rgba(255,255,255,0.35); }
 
+  /* Language Toggle - Clickable */
   .lang-toggle {
     position: absolute; top: 25px; right: 25px; z-index: 100;
     display: flex; gap: 8px;
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 5px; border-radius: 30px;
     border: 1px solid rgba(255,255,255,0.1);
   }
   .lang-btn {
-    padding: 8px 16px; background: transparent; border: none;
-    color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 600;
+    padding: 10px 20px; background: transparent; border: none;
+    color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 600;
     cursor: pointer; border-radius: 25px;
     transition: all 0.3s ease; font-family: inherit;
+    min-width: 80px;
+  }
+  .lang-btn:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
   }
   .lang-btn.active {
     background: linear-gradient(135deg, #1e90ff, #4db8ff);
     color: #fff;
     box-shadow: 0 4px 12px rgba(30,144,255,0.4);
+    transform: scale(1.05);
   }
+  .lang-btn:active { transform: scale(0.95); }
 
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
@@ -353,7 +301,6 @@
   }
   .shake { animation: shake 0.4s ease; }
 
-  /* ================= DASHBOARD ================= */
   #dashboardPage { display: none; }
   .topbar {
     background: #2a3142; color: #fff;
@@ -430,7 +377,7 @@
   }
   .search-box input:focus { border-color: #1e90ff; }
   .search-box::before {
-    content: "🔍"; position: absolute; left: 8px; top: 50%;
+    content: ""; position: absolute; left: 8px; top: 50%;
     transform: translateY(-50%); font-size: 12px;
   }
   .menu-item {
@@ -923,6 +870,12 @@
   .campaign-status.done { background: #e3f2fd; color: #1e90ff; }
   .campaign-status.failed { background: #fde8e8; color: #e74c3c; }
 
+  .quick-sms-form {
+    background: #fff; border-radius: 4px; padding: 30px 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eef0f4;
+    max-width: 800px; margin: 0 auto;
+  }
+
   .tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #e5e9f0; padding-bottom: 8px; flex-wrap: wrap; }
   .tab {
     padding: 8px 15px; cursor: pointer; font-size: 14px; color: #555;
@@ -1106,7 +1059,6 @@
   .balance-warning .bw-text { flex: 1; }
   .balance-warning .bw-text strong { color: #d35400; }
 
-  /* ================= RESPONSIVE ================= */
   @media (max-width: 1024px) {
     .two-col { grid-template-columns: 1fr; }
     .report-row { grid-template-columns: 1fr; gap: 10px; }
@@ -1130,9 +1082,6 @@
     .starry-icon-wrapper { width: 70px; height: 70px; }
     .starry-icon-core { width: 52px; height: 52px; font-size: 28px; }
     .starry-icon-core svg { width: 30px; height: 30px; }
-
-    .captcha-box { width: 140px; height: 55px; }
-    .captcha-char { font-size: 30px; }
 
     .topbar { padding: 10px 15px; }
     .topbar-left { width: 100%; justify-content: space-between; }
@@ -1194,10 +1143,6 @@
     .contact-stats { grid-template-columns: 1fr; }
     .logo-title { font-size: 22px; }
     .hero-title { font-size: 28px; }
-    .captcha-box { width: 120px; height: 50px; }
-    .captcha-char { font-size: 26px; }
-    .captcha-row { flex-direction: column; align-items: stretch; }
-    .captcha-box { width: 100%; max-width: 200px; margin: 0 auto; }
   }
 
   @media (min-width: 1400px) {
@@ -1212,7 +1157,6 @@
 </head>
 <body>
 
-<!-- ================= LOGIN PAGE ================= -->
 <div id="loginPage">
   <div class="bg-grid"></div>
   <div class="orb orb-1"></div>
@@ -1280,19 +1224,6 @@
           <input type="password" class="form-input" id="password" data-i18n-placeholder="passwordPh" placeholder="Please enter your password." required autocomplete="current-password" />
         </div>
 
-        <div class="form-group">
-          <label class="form-label" data-i18n="captcha">Verification code</label>
-          <div class="captcha-row">
-            <div class="form-group" style="flex:1;">
-              <input type="text" class="form-input" id="captchaInput" data-i18n-placeholder="captchaPh" placeholder="Enter code shown" required autocomplete="off" inputmode="text" />
-            </div>
-            <div class="captcha-box" id="captchaBox" onclick="generateCaptcha()" title="Click to refresh">
-              <span class="captcha-refresh-icon">🔄</span>
-            </div>
-          </div>
-          <div class="captcha-hint" data-i18n="captchaHint">👆 Click captcha to refresh</div>
-        </div>
-
         <button type="submit" class="login-submit" data-i18n="loginBtn">Enter the console</button>
       </form>
 
@@ -1303,7 +1234,6 @@
   </div>
 </div>
 
-<!-- ================= DASHBOARD PAGE ================= -->
 <div id="dashboardPage">
   <div class="topbar">
     <div class="topbar-left">
@@ -1330,7 +1260,7 @@
       <div class="search-box">
         <input type="text" id="searchInput" data-i18n-placeholder="searchPh" placeholder="Search Menu Option" oninput="filterMenu()" />
       </div>
-      <div class="menu-item active" data-page="dashboard"><span class="icon"></span><span data-i18n="menuDashboard">Dashboard</span></div>
+      <div class="menu-item active" data-page="dashboard"><span class="icon">📊</span><span data-i18n="menuDashboard">Dashboard</span></div>
       <div class="menu-item" data-page="account"><span class="icon">👤</span><span data-i18n="menuAccount">Account Details</span></div>
       <div class="menu-item" data-page="technical"><span class="icon">️</span><span data-i18n="menuTechnical">Technical Details</span></div>
       <div class="menu-item" data-page="smpproutes"><span class="icon">🔌</span><span data-i18n="menuSmppRoutes">SMPP Routes</span></div>
@@ -1340,7 +1270,7 @@
       <div class="menu-item" data-page="campaign"><span class="icon"></span><span data-i18n="menuCampaign">SMS Campaign</span></div>
       <div class="menu-item" data-page="history"><span class="icon">📜</span><span data-i18n="menuHistory">SMS History</span></div>
       <div class="menu-item" data-page="inbox"><span class="icon">📥</span><span data-i18n="menuInbox">Message Inbox</span></div>
-      <div class="menu-item" data-page="recharge"><span class="icon"></span><span data-i18n="menuRecharge">Recharge History</span></div>
+      <div class="menu-item" data-page="recharge"><span class="icon">💰</span><span data-i18n="menuRecharge">Recharge History</span></div>
       <div class="menu-item" data-page="campaignreport"><span class="icon">📄</span><span data-i18n="menuCampaignReport">Campaign Report</span></div>
       <div class="menu-item" data-page="contactreport"><span class="icon">📑</span><span data-i18n="menuContactReport">Contact Report</span></div>
       <div class="menu-item" data-page="payment"><span class="icon">💳</span><span data-i18n="menuPayment">Buy Credit</span></div>
@@ -1348,7 +1278,6 @@
 
     <main class="content">
 
-      <!-- Dashboard -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">📊 <span data-i18n="menuDashboard">SMS Dashboard</span></div>
         
@@ -1365,9 +1294,9 @@
           <div class="card clickable" onclick="navigateToPage('smscontact')" title="Click to manage contacts">
             <div class="card-top">
               <div>
-                <div class="card-icon blue">👤</div>
+                <div class="card-icon blue"></div>
                 <div class="card-label" data-i18n="cardContacts">Contacts</div>
-                <div class="card-sub" data-i18n="cardContactsSub">📇 Contact added in this week</div>
+                <div class="card-sub" data-i18n="cardContactsSub"> Contact added in this week</div>
               </div>
               <div class="card-value">0</div>
             </div>
@@ -1385,7 +1314,7 @@
           <div class="card clickable" onclick="navigateToPage('campaignlist')" title="Click to view campaigns">
             <div class="card-top">
               <div>
-                <div class="card-icon teal">📋</div>
+                <div class="card-icon teal"></div>
                 <div class="card-label" data-i18n="cardCampaigns">Campaigns</div>
                 <div class="card-sub" data-i18n="cardCampaignsSub">📊 View all campaigns</div>
               </div>
@@ -1415,7 +1344,6 @@
         </div>
       </div>
 
-      <!-- Account Details -->
       <div class="page" id="page-account">
         <div class="page-header">👤 <span data-i18n="pageAccount">SMS Client Account Details Edit</span></div>
         <div class="form-section">
@@ -1452,7 +1380,6 @@
         <button class="save-btn" onclick="saveAccount()">💾 <span data-i18n="btnSave">Save</span></button>
       </div>
 
-      <!-- Technical Details -->
       <div class="page" id="page-technical">
         <div class="page-header">⚙️ <span data-i18n="pageTechnical">SMS Client Technical Details Edit</span></div>
         <div class="form-section">
@@ -1495,7 +1422,6 @@
         <button class="save-btn" onclick="saveTechnical()">💾 <span data-i18n="btnSave">Save</span></button>
       </div>
 
-      <!-- SMPP Routes Page -->
       <div class="page" id="page-smpproutes">
         <div class="page-header">🔌 <span data-i18n="menuSmppRoutes">SMPP Routes</span></div>
         
@@ -1517,7 +1443,6 @@
         </div>
       </div>
 
-      <!-- SMS Contact -->
       <div class="page" id="page-smscontact">
         <div class="page-header">👥 <span data-i18n="menuSmsContact">SMS Contact</span></div>
         <div class="top-actions">
@@ -1550,7 +1475,7 @@
         </div>
 
         <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-          <button class="action-btn" onclick="downloadContact()">⬇️ <span data-i18n="btnDownloadContact">Download Contact</span></button>
+          <button class="action-btn" onclick="downloadContact()">️ <span data-i18n="btnDownloadContact">Download Contact</span></button>
         </div>
 
         <div class="contact-stats">
@@ -1569,7 +1494,7 @@
             </div>
           </div>
           <div class="stat-item">
-            <div class="stat-icon red"></div>
+            <div class="stat-icon red">🚫</div>
             <div>
               <div class="stat-label" data-i18n="statBlockContacts">Block Contacts</div>
               <div class="stat-value">0</div>
@@ -1585,12 +1510,11 @@
         </div>
       </div>
 
-      <!-- Quick SMS (WTC-STYLE) -->
       <div class="page" id="page-quicksms">
         <div class="page-header">💬 <span data-i18n="menuQuickSms">Quick SMS / Campaign</span></div>
         
         <div id="smsBalanceWarning" class="balance-warning" style="display:none;">
-          <div class="bw-icon">💰</div>
+          <div class="bw-icon"></div>
           <div class="bw-text">
             <strong data-i18n="depositRequiredTitle">Deposit Required</strong><br>
             <span data-i18n="depositRequiredMsg">Your balance is zero. Please deposit credits before sending SMS.</span>
@@ -1694,7 +1618,7 @@
                   <select id="messageTemplate" onchange="applyTemplate()">
                     <option value="">-- Message templates --</option>
                     <option value="promo">🎉 Promotional Offer</option>
-                    <option value="otp"> OTP Verification</option>
+                    <option value="otp">🔐 OTP Verification</option>
                     <option value="reminder">⏰ Appointment Reminder</option>
                     <option value="welcome">👋 Welcome Message</option>
                   </select>
@@ -1744,7 +1668,6 @@
         </div>
       </div>
 
-      <!-- Campaign List Page -->
       <div class="page" id="page-campaignlist">
         <div class="page-header">📋 <span data-i18n="menuCampaignList">Campaign List</span></div>
 
@@ -1822,20 +1745,17 @@
             <button>◀</button>
             <span>Page <input type="text" value="1" style="width:50px;" /> of <span id="totalPages">1</span></span>
             <button>▶</button>
-            <button></button>
+            <button>⏭</button>
           </div>
         </div>
       </div>
 
-      <!-- SMS Campaign -->
-      <div class="page" id="page-campaign"><div class="page-header"> <span data-i18n="menuCampaign">SMS Campaign</span></div><div class="placeholder-page" data-i18n="phCampaign">Create and manage SMS campaigns. <br><br><button class="action-btn" onclick="navigateToPage('quicksms')">+ New Campaign</button></div></div>
+      <div class="page" id="page-campaign"><div class="page-header">📢 <span data-i18n="menuCampaign">SMS Campaign</span></div><div class="placeholder-page" data-i18n="phCampaign">Create and manage SMS campaigns. <br><br><button class="action-btn" onclick="navigateToPage('quicksms')">+ New Campaign</button></div></div>
 
-      <!-- SMS History -->
-      <div class="page" id="page-history"><div class="page-header">📜 <span data-i18n="menuHistory">SMS History</span></div><div class="placeholder-page" data-i18n="phHistory">View your SMS sending history. <br><br><button class="action-btn" onclick="showToast('Loading history...', 'info')">📋 Load History</button></div></div>
+      <div class="page" id="page-history"><div class="page-header">📜 <span data-i18n="menuHistory">SMS History</span></div><div class="placeholder-page" data-i18n="phHistory">View your SMS sending history. <br><br><button class="action-btn" onclick="showToast('Loading history...', 'info')"> Load History</button></div></div>
 
-      <!-- Message Inbox -->
       <div class="page" id="page-inbox">
-        <div class="page-header">📥 <span data-i18n="menuInbox">SMS Inbox</span></div>
+        <div class="page-header"> <span data-i18n="menuInbox">SMS Inbox</span></div>
         <div class="report-form">
           <div class="report-row">
             <label data-i18n="labelReportType">Report Type</label>
@@ -1867,7 +1787,6 @@
         </div>
       </div>
 
-      <!-- Recharge History -->
       <div class="page" id="page-recharge">
         <div class="page-header">💰 <span data-i18n="menuRecharge">Recharge History</span></div>
         <div class="table-wrapper">
@@ -1888,10 +1807,8 @@
         </div>
       </div>
 
-      <!-- Campaign Report -->
-      <div class="page" id="page-campaignreport"><div class="page-header"> <span data-i18n="menuCampaignReport">Campaign Report</span></div><div class="placeholder-page" data-i18n="phCampaignReport">Detailed campaign performance reports. <br><br><button class="action-btn" onclick="showToast('No campaigns to report yet', 'info')" data-i18n="btnGenerateReport">Generate Report</button></div></div>
+      <div class="page" id="page-campaignreport"><div class="page-header">📄 <span data-i18n="menuCampaignReport">Campaign Report</span></div><div class="placeholder-page" data-i18n="phCampaignReport">Detailed campaign performance reports. <br><br><button class="action-btn" onclick="showToast('No campaigns to report yet', 'info')" data-i18n="btnGenerateReport">Generate Report</button></div></div>
 
-      <!-- Contact Report -->
       <div class="page" id="page-contactreport">
         <div class="page-header">📑 <span data-i18n="menuContactReport">SMS Contact Report</span></div>
         <div class="report-form">
@@ -1909,7 +1826,7 @@
           </div>
           <div style="text-align:center; margin-top:15px;">
             <button class="action-btn" onclick="resetContactReport()">🔄 <span data-i18n="btnReset">Reset</span></button>
-            <button class="action-btn" onclick="searchContactReport()">🔍 <span data-i18n="btnSearch">Search</span></button>
+            <button class="action-btn" onclick="searchContactReport()"> <span data-i18n="btnSearch">Search</span></button>
           </div>
         </div>
 
@@ -1919,7 +1836,7 @@
             <button>⏮</button>
             <button>◀</button>
             <button>▶</button>
-            <button>⏭</button>
+            <button></button>
             <span data-i18n="labelPage">Page</span>
             <input type="text" value="1" />
             <span data-i18n="labelOf">of</span> 1
@@ -1944,7 +1861,6 @@
         </div>
       </div>
 
-      <!-- Payment Page -->
       <div class="page" id="page-payment">
         <div class="page-header">💳 <span data-i18n="menuPayment">Buy Credit</span></div>
         
@@ -1977,7 +1893,7 @@
                 <div data-i18n="methodBank">Bank Transfer</div>
               </div>
               <div class="payment-method" data-method="paypal" onclick="selectPaymentMethod('paypal')">
-                <div class="pm-icon">️</div>
+                <div class="pm-icon">🅿️</div>
                 <div>PayPal</div>
               </div>
               <div class="payment-method" data-method="crypto" onclick="selectPaymentMethod('crypto')">
@@ -2063,7 +1979,6 @@
   </div>
 </div>
 
-<!-- Moderation Popup -->
 <div class="moderation-popup" id="moderationPopup">
   <div class="moderation-box">
     <div class="moderation-icon">✓</div>
@@ -2079,25 +1994,21 @@
   </div>
 </div>
 
-<!-- Session Timeout Modal -->
 <div class="timeout-modal" id="timeoutModal">
   <div class="timeout-box">
-    <h2> <span data-i18n="sessionExpired">Session Expired</span></h2>
+    <h2>⏰ <span data-i18n="sessionExpired">Session Expired</span></h2>
     <p data-i18n="sessionExpiredMsg">Your session has timed out due to 30 minutes of inactivity.<br>Please login again to continue.</p>
     <button onclick="closeTimeoutModal()">OK</button>
   </div>
 </div>
 
-<!-- Generic Modal -->
 <div class="modal-overlay" id="genericModal">
   <div class="modal-content" id="modalContent"></div>
 </div>
 
-<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-  /* ================= TRANSLATIONS ================= */
   const translations = {
     en: {
       badge: 'GLOBAL SMS NETWORK',
@@ -2110,11 +2021,8 @@
       brandName: 'Starry Sky Communications',
       username: 'username',
       password: 'password',
-      captcha: 'Verification code',
       usernamePh: 'Please enter your username.',
       passwordPh: 'Please enter your password.',
-      captchaPh: 'Enter code shown',
-      captchaHint: '👆 Click captcha to refresh',
       loginBtn: 'Enter the console',
       welcome: 'Welcome',
       balanceLabel: 'Balance',
@@ -2136,7 +2044,7 @@
       menuContactReport: 'Contact Report',
       menuPayment: 'Buy Credit',
       cardContacts: 'Contacts',
-      cardContactsSub: '📇 Contact added in this week',
+      cardContactsSub: ' Contact added in this week',
       cardSmsSub: '✉️ SMS processed today till now',
       cardCampaigns: 'Campaigns',
       cardCampaignsSub: '📊 View all campaigns',
@@ -2259,7 +2167,6 @@
       optAll: 'All',
       optActive: 'Active',
       optBlock: 'Block',
-      captchaWrong: 'Invalid verification code, please try again',
       loginSuccess: 'Welcome back',
       logoutSuccess: 'Logged out successfully',
       adminOnly: 'Admin access only. Please use admin credentials.',
@@ -2321,23 +2228,15 @@
       thMethod: 'Method',
       noRechargeHistory: 'No recharge history yet. Make your first deposit!',
       depositSuccessMsg: 'Your deposit was successful. You can now send SMS.',
-      toastCampaign: 'Campaign creator coming soon',
       toastLoadingHistory: 'Loading history...',
-      toastNoRecharge: 'No recharge history found',
       toastNavigating: 'Navigating to page...',
       toastAdvance: 'Advanced search options expanded',
       toastFiltersReset: 'Filters reset',
       toastSwitchedView: 'Switched to',
       toastView: 'view',
       toastContactsDownloaded: 'Contacts downloaded!',
-      toastSelectProfile: 'Please select a client profile',
-      toastSenderIdRequired: 'Sender ID is required',
       toastPhoneRequired: 'Phone numbers are required',
       toastMessageRequired: 'Message text is required',
-      toastMaxNumbers: 'Maximum 10,000 numbers allowed',
-      toastSendingSms: 'Sending SMS to',
-      toastSmsSent: 'SMS sent successfully to',
-      toastRecipients: 'recipient(s)!',
       toastGenerating: 'Generating report...',
       toastReportGenerated: 'Report generated!',
       toastExcelDownloaded: 'Excel file downloaded!',
@@ -2362,7 +2261,6 @@
       toastFileUploaded: 'File uploaded successfully!',
       sessionLabel: 'Session',
       redirectingTo: 'Redirecting to',
-      campaignCreated: 'Campaign created successfully',
       fileUploaded: 'File uploaded successfully',
       fileTooLarge: 'File too large. Maximum size is 10 MB',
       invalidFileFormat: 'Invalid file format. Allowed: TXT, CSV, XLS, XLSX, ZIP',
@@ -2388,11 +2286,8 @@
       brandName: '星空通讯',
       username: '用户名',
       password: '密码',
-      captcha: '验证码',
       usernamePh: '请输入用户名',
       passwordPh: '请输入密码',
-      captchaPh: '请输入显示的验证码',
-      captchaHint: '👆 点击验证码刷新',
       loginBtn: '进入控制台',
       welcome: '欢迎',
       balanceLabel: '余额',
@@ -2504,7 +2399,7 @@
       labelPriority: '优先级',
       labelSmppRoute: 'SMPP 路由',
       optAutoRoute: '自动路由',
-      btnCreate: '🚀 创建/发送活动',
+      btnCreate: ' 创建/发送活动',
       moderationTitle: '消息已发送至审核',
       moderationMsg: '消息已在几分钟内发送至审核。要取消审核，请联系您的经理。',
       modCampaignId: '活动 ID：',
@@ -2537,7 +2432,6 @@
       optAll: '全部',
       optActive: '活跃',
       optBlock: '已屏蔽',
-      captchaWrong: '验证码错误，请重试',
       loginSuccess: '欢迎回来',
       logoutSuccess: '已成功登出',
       adminOnly: '仅限管理员访问。请使用管理员凭据。',
@@ -2599,23 +2493,15 @@
       thMethod: '方式',
       noRechargeHistory: '暂无充值历史。进行您的第一笔充值！',
       depositSuccessMsg: '您的充值已成功。您现在可以发送短信了。',
-      toastCampaign: '活动创建器即将推出',
       toastLoadingHistory: '正在加载历史...',
-      toastNoRecharge: '未找到充值历史',
       toastNavigating: '正在跳转页面...',
       toastAdvance: '已展开高级搜索选项',
       toastFiltersReset: '筛选器已重置',
       toastSwitchedView: '已切换到',
       toastView: '视图',
       toastContactsDownloaded: '联系人已下载！',
-      toastSelectProfile: '请选择客户配置文件',
-      toastSenderIdRequired: '发送者 ID 为必填项',
       toastPhoneRequired: '电话号码为必填项',
       toastMessageRequired: '消息内容为必填项',
-      toastMaxNumbers: '最多允许 10,000 个号码',
-      toastSendingSms: '正在向',
-      toastSmsSent: '短信已成功发送至',
-      toastRecipients: '个收件人！',
       toastGenerating: '正在生成报告...',
       toastReportGenerated: '报告已生成！',
       toastExcelDownloaded: 'Excel 文件已下载！',
@@ -2640,7 +2526,6 @@
       toastFileUploaded: '文件上传成功！',
       sessionLabel: '会话',
       redirectingTo: '正在跳转到',
-      campaignCreated: '活动创建成功',
       fileUploaded: '文件上传成功',
       fileTooLarge: '文件太大。最大大小为 10 MB',
       invalidFileFormat: '文件格式无效。允许：TXT、CSV、XLS、XLSX、ZIP',
@@ -2665,99 +2550,36 @@
 
   function setLanguage(lang) {
     currentLang = lang;
-    
-    // Update language buttons
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
-    
-    // Update body class for Chinese font
     document.body.classList.toggle('cn', lang === 'zh');
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
-    // Update page title
     document.title = t('brandName');
 
-    // Update all text content with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
-      if (translations[lang][key] !== undefined) {
-        el.textContent = translations[lang][key];
-      }
+      if (translations[lang][key]) el.textContent = translations[lang][key];
     });
-    
-    // Update all placeholders with data-i18n-placeholder
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.dataset.i18nPlaceholder;
-      if (translations[lang][key] !== undefined) {
-        el.placeholder = translations[lang][key];
-      }
+      if (translations[lang][key]) el.placeholder = translations[lang][key];
     });
 
-    // Update welcome text if logged in
     const welcomeEl = document.getElementById('welcomeText');
     const session = getSession();
-    if (session && welcomeEl) {
+    if (session && welcomeEl.textContent !== t('welcome')) {
       const username = welcomeEl.textContent.replace(/^Welcome\s+/, '').replace(/^欢迎\s+/, '');
-      if (username && username !== 'Welcome' && username !== '欢迎') {
-        welcomeEl.textContent = t('welcome') + ' ' + username;
-      }
+      welcomeEl.textContent = t('welcome') + ' ' + username;
     }
 
-    // Re-render dynamic content
     renderSmppRoutes();
     updateSmppRouteSelect();
     updateBalanceDisplay();
     renderCampaignTable();
-    
-    // Update captcha hint
-    const captchaHint = document.querySelector('.captcha-hint');
-    if (captchaHint) {
-      captchaHint.textContent = t('captchaHint');
-    }
   }
 
-  /* ================= CAPTCHA (FIXED - VERY VISIBLE) ================= */
-  let currentCaptcha = '';
-
-  function generateCaptcha() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    const colors = ['#e74c3c', '#27ae60', '#2980b9', '#8e44ad', '#d35400', '#16a085', '#c0392b', '#e91e63', '#00bcd4'];
-    const box = document.getElementById('captchaBox');
-    
-    // Clear box but keep refresh icon
-    box.innerHTML = '<span class="captcha-refresh-icon">🔄</span>';
-    currentCaptcha = '';
-
-    // Generate 4 random characters
-    for (let i = 0; i < 4; i++) {
-      const char = chars.charAt(Math.floor(Math.random() * chars.length));
-      currentCaptcha += char;
-      
-      const span = document.createElement('span');
-      span.className = 'captcha-char';
-      span.textContent = char;
-      
-      // Random color
-      span.style.color = colors[Math.floor(Math.random() * colors.length)];
-      
-      // Random rotation and position
-      const rotation = (Math.random() - 0.5) * 30;
-      const yOffset = (Math.random() - 0.5) * 8;
-      span.style.transform = `rotate(${rotation}deg) translateY(${yOffset}px)`;
-      
-      box.appendChild(span);
-    }
-
-    // Random gradient background
-    const angle = Math.floor(Math.random() * 360);
-    box.style.background = `linear-gradient(${angle}deg, #ffffff 0%, #f0f4ff 50%, #e8ecf1 100%)`;
-  }
-
-  // Generate captcha on page load
-  generateCaptcha();
-
-  /* ================= BALANCE MANAGEMENT ================= */
   const BALANCE_KEY = 'starrySkyBalance';
   const RECHARGE_KEY = 'starrySkyRechargeHistory';
   const SMPP_ROUTES_KEY = 'starrySkySmppRoutes';
@@ -2809,7 +2631,6 @@
     navigateToPage(pageName);
   }
 
-  /* ================= CAMPAIGNS ================= */
   let campaigns = [];
 
   function loadCampaigns() {
@@ -2890,7 +2711,6 @@
     showToast(t('toastFiltersReset'), 'info');
   }
 
-  /* ================= SMPP ROUTES ================= */
   let smppRoutes = [];
 
   function loadSmppRoutes() {
@@ -2941,7 +2761,7 @@
           <button class="action-btn" onclick="testSmppRoute(${route.id})">🔍 ${t('btnTest')}</button>
           <button class="action-btn" onclick="editSmppRoute(${route.id})">✏️ ${t('btnEdit')}</button>
           <button class="action-btn" onclick="toggleSmppRouteStatus(${route.id})">${route.status === 'active' ? '⏸️ ' + (currentLang === 'zh' ? '停用' : 'Disable') : '▶️ ' + (currentLang === 'zh' ? '启用' : 'Enable')}</button>
-          <button class="action-btn" onclick="deleteSmppRoute(${route.id})">🗑️ ${t('btnDelete')}</button>
+          <button class="action-btn" onclick="deleteSmppRoute(${route.id})">️ ${t('btnDelete')}</button>
         </div>
       </div>
     `).join('');
@@ -3074,7 +2894,6 @@
     });
   }
 
-  /* ================= SENDER IDS ================= */
   let senderIds = [];
 
   function loadSenderIds() {
@@ -3142,7 +2961,6 @@
     }
   });
 
-  /* ================= SESSION MANAGEMENT ================= */
   const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
   const STORAGE_KEY = 'starrySkySession';
   let sessionInterval = null;
@@ -3224,7 +3042,6 @@
     doLogout(true);
   }
 
-  /* ================= LIVE TIME ================= */
   function updateLiveTime() {
     const now = new Date();
     const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'UTC' };
@@ -3235,7 +3052,6 @@
   setInterval(updateLiveTime, 1000);
   updateLiveTime();
 
-  /* ================= LOGIN / LOGOUT ================= */
   const ADMIN_USERNAME = 'admin';
   const ADMIN_PASSWORD = 'admin123';
 
@@ -3243,20 +3059,10 @@
     if (e) e.preventDefault();
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
-    const captchaInput = document.getElementById('captchaInput').value.trim();
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
 
     if (!username || !password) return;
-
-    if (captchaInput.toLowerCase() !== currentCaptcha.toLowerCase()) {
-      showToast(t('captchaWrong'), 'error');
-      document.getElementById('captchaInput').classList.add('shake');
-      setTimeout(() => document.getElementById('captchaInput').classList.remove('shake'), 400);
-      generateCaptcha();
-      document.getElementById('captchaInput').value = '';
-      return;
-    }
 
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
       showToast(t('adminOnly'), 'error');
@@ -3266,8 +3072,6 @@
         usernameInput.classList.remove('error');
         passwordInput.classList.remove('error');
       }, 2000);
-      generateCaptcha();
-      document.getElementById('captchaInput').value = '';
       return;
     }
 
@@ -3298,10 +3102,8 @@
     document.getElementById('loginPage').style.display = 'flex';
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
-    document.getElementById('captchaInput').value = '';
     document.getElementById('welcomeText').textContent = t('welcome');
     document.getElementById('searchInput').value = '';
-    generateCaptcha();
     filterMenu();
     closeSidebarMobile();
     if (!silent) showToast(t('logoutSuccess'), 'info');
@@ -3319,7 +3121,6 @@
     }
   });
 
-  /* ================= SIDEBAR ================= */
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const sidebar = document.getElementById('sidebar');
   const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -3350,7 +3151,6 @@
     drawChart();
   });
 
-  /* ================= NAVIGATE TO PAGE ================= */
   function navigateToPage(pageName) {
     document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -3388,7 +3188,6 @@
     }
   }
 
-  /* ================= MENU SEARCH ================= */
   function filterMenu() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
     document.querySelectorAll('.menu-item').forEach(item => {
@@ -3397,7 +3196,6 @@
     });
   }
 
-  /* ================= MENU NAV ================= */
   document.querySelectorAll('.menu-item').forEach(item => {
     item.addEventListener('click', () => {
       document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
@@ -3410,7 +3208,6 @@
     });
   });
 
-  /* ================= CHART ================= */
   const chartArea = document.getElementById('chartArea');
   function drawChart() {
     if (!chartArea) return;
@@ -3457,8 +3254,6 @@
   window.addEventListener('resize', drawChart);
   setTimeout(drawChart, 100);
 
-  /* ================= WTC QUICK SMS FUNCTIONS ================= */
-  
   function switchRecipientTab(tabName) {
     document.querySelectorAll('.recipient-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.recipient-panel').forEach(p => p.classList.remove('active'));
@@ -3664,7 +3459,6 @@
     navigateToPage('campaignlist');
   }
 
-  /* ================= PAYMENT FUNCTIONS ================= */
   let selectedPaymentMethod = 'card';
 
   function selectPaymentMethod(method) {
@@ -3749,7 +3543,6 @@
     updateBalanceDisplay();
   }
 
-  /* ================= CONTACT FUNCTIONS ================= */
   function openAddContactModal() {
     openModal(currentLang === 'zh' ? '添加新联系人' : 'Add New Contact', `
       <label style="font-weight:600; display:block; margin-bottom:5px;">${t('labelPhone')}</label>
@@ -3805,7 +3598,6 @@
     showToast(t('toastContactsDownloaded'), 'success');
   }
 
-  /* ================= INBOX ================= */
   function getReport() {
     showToast(t('toastGenerating'), 'info');
     setTimeout(() => {
@@ -3863,7 +3655,6 @@ startxref
     }, 800);
   }
 
-  /* ================= ACCOUNT/TECHNICAL ================= */
   function addIp() {
     const ip = document.getElementById('loginIpInput').value.trim();
     if (!ip) { showToast(t('toastIpRequired'), 'warning'); return; }
@@ -3899,7 +3690,6 @@ startxref
       `<button class="action-btn" onclick="closeModal()">${currentLang === 'zh' ? '关闭' : 'Close'}</button>`);
   }
 
-  /* ================= MODAL ================= */
   function openModal(title, content, actions) {
     const modal = document.getElementById('genericModal');
     document.getElementById('modalContent').innerHTML = `
@@ -3912,13 +3702,12 @@ startxref
     if (e.target.id === 'genericModal') closeModal();
   });
 
-  /* ================= TOAST ================= */
   function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = 'toast ' + type;
-    const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-    toast.innerHTML = `<span>${icons[type] || '️'}</span><span>${message}</span>`;
+    const icons = { success: '✅', error: '❌', warning: '️', info: 'ℹ️' };
+    toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.animation = 'slideOut 0.3s ease forwards';
@@ -3926,7 +3715,6 @@ startxref
     }, 3000);
   }
 
-  /* ================= INIT ================= */
   loadSmppRoutes();
   loadSenderIds();
   loadCampaigns();
