@@ -509,6 +509,548 @@
     font-family: 'Playfair Display', serif;
   }
 
+  /* ================= WTC-STYLE QUICK SMS ================= */
+  .wtc-campaign-form {
+    background: #fff;
+    border-radius: 6px;
+    padding: 30px 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #eef0f4;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .wtc-campaign-form h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1e90ff;
+  }
+  .wtc-field {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 22px;
+  }
+  .wtc-field-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    padding-top: 10px;
+    font-family: 'Lora', serif;
+  }
+  .wtc-field-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .wtc-select, .wtc-input {
+    width: 100%;
+    max-width: 320px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Lora', serif;
+    font-weight: 500;
+    background: #fff;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .wtc-select:focus, .wtc-input:focus {
+    border-color: #1e90ff;
+  }
+  .wtc-hint {
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+  }
+  .wtc-link {
+    color: #1e90ff;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  .wtc-link:hover { color: #1678d4; }
+
+  /* Sender dropdown with suggestions */
+  .sender-wrapper {
+    position: relative;
+    max-width: 320px;
+  }
+  .sender-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 10;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .sender-suggestions.active { display: block; }
+  .sender-suggestion {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .sender-suggestion:hover { background: #eef3fb; color: #1e90ff; }
+  .sender-suggestion:last-child { border-bottom: none; }
+
+  /* Recipient tabs */
+  .recipient-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e5e9f0;
+    margin-bottom: 15px;
+  }
+  .recipient-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    background: #f8f9fc;
+    border: 1px solid #e5e9f0;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    margin-right: 4px;
+    transition: all 0.2s;
+    font-family: 'Lora', serif;
+  }
+  .recipient-tab:hover { background: #eef3fb; color: #1e90ff; }
+  .recipient-tab.active {
+    background: #1e90ff;
+    color: #fff;
+    border-color: #1e90ff;
+  }
+  .recipient-panel { display: none; padding: 15px 0; }
+  .recipient-panel.active { display: block; }
+
+  .phone-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    resize: vertical;
+    outline: none;
+  }
+  .phone-textarea:focus { border-color: #1e90ff; }
+
+  .file-upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    background: #fafbfd;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .file-upload-area:hover {
+    border-color: #1e90ff;
+    background: #eef3fb;
+  }
+  .file-upload-area .upload-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+  .file-upload-area .upload-text {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+  }
+  .file-upload-area .upload-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+  }
+  .file-upload-area input[type="file"] { display: none; }
+  .file-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #e8f5e9;
+    border-radius: 4px;
+    color: #2e7d32;
+    font-size: 13px;
+    font-weight: 600;
+    display: none;
+  }
+  .file-info.active { display: block; }
+
+  .separator-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fc;
+    border-radius: 4px;
+  }
+  .separator-row label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+  }
+  .separator-row select {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: 'Lora', serif;
+  }
+
+  .all-numbers-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #555;
+    font-weight: 600;
+  }
+  .all-numbers-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #1e90ff;
+  }
+
+  /* Unsubscribe toggle */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 15px 0;
+  }
+  .toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .toggle-switch.active { background: #1e90ff; }
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .toggle-switch.active::after { transform: translateX(20px); }
+  .toggle-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  /* Text area with templates */
+  .text-editor-wrapper {
+    position: relative;
+  }
+  .template-dropdowns {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .template-dropdowns select {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Lora', serif;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+  }
+  .template-dropdowns select:focus { border-color: #1e90ff; }
+  .message-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    line-height: 1.6;
+  }
+  .message-textarea:focus { border-color: #1e90ff; }
+  .char-counter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #f8f9fc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .char-counter-bar .length-info { color: #333; }
+  .char-counter-bar .parts-info { color: #1e90ff; font-weight: 700; }
+  .char-counter-bar.over-limit { background: #fde8e8; }
+  .char-counter-bar.over-limit .length-info { color: #e74c3c; }
+
+  .additional-params-link {
+    color: #e74c3c;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .additional-params-link:hover { text-decoration: underline; }
+  .additional-params-panel {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fc;
+    border-radius: 4px;
+    border: 1px solid #e5e9f0;
+  }
+  .additional-params-panel.active { display: block; }
+
+  .create-btn {
+    background: linear-gradient(135deg, #1e90ff 0%, #4db8ff 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(30,144,255,0.3);
+  }
+  .create-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30,144,255,0.4);
+  }
+  .create-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ================= MODERATION POPUP ================= */
+  .moderation-popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .moderation-popup.active { display: flex; }
+  .moderation-box {
+    background: #fff;
+    border-radius: 8px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.4s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .moderation-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #70ad47, #4ecdc4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 40px;
+    color: #fff;
+    animation: popIn 0.5s ease;
+  }
+  .moderation-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  .moderation-box p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-family: 'Lora', serif;
+  }
+  .moderation-box .mod-details {
+    background: #f8f9fc;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: left;
+    font-size: 13px;
+  }
+  .moderation-box .mod-details div {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #e5e9f0;
+  }
+  .moderation-box .mod-details div:last-child { border-bottom: none; }
+  .moderation-box .mod-details strong { color: #333; }
+  .moderation-box .mod-details span { color: #1e90ff; font-weight: 600; }
+  .moderation-box button {
+    background: #1e90ff;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+    transition: all 0.2s;
+  }
+  .moderation-box button:hover { background: #1678d4; }
+
+  /* ================= CAMPAIGN LIST PAGE ================= */
+  .campaign-filters {
+    background: #fff;
+    border-radius: 6px;
+    padding: 25px 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #eef0f4;
+    margin-bottom: 20px;
+  }
+  .campaign-filters h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .filter-item label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .filter-item input, .filter-item select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Lora', serif;
+    outline: none;
+  }
+  .filter-item input:focus, .filter-item select:focus { border-color: #1e90ff; }
+  .filter-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .filter-actions button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+    min-height: 44px;
+  }
+  .filter-actions .find-btn {
+    background: #1e90ff;
+    color: #fff;
+    border: none;
+  }
+  .filter-actions .find-btn:hover { background: #1678d4; }
+  .filter-actions .reset-btn {
+    background: #fff;
+    color: #1e90ff;
+    border: 1px solid #1e90ff;
+  }
+  .filter-actions .reset-btn:hover { background: #1e90ff; color: #fff; }
+
+  .campaign-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .campaign-table-header .total-count {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+  }
+  .campaign-table-header .total-count strong {
+    color: #1e90ff;
+    font-size: 18px;
+  }
+
+  .campaign-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .campaign-status.pending { background: #fff3e0; color: #e67e22; }
+  .campaign-status.active { background: #e8f5e9; color: #70ad47; }
+  .campaign-status.done { background: #e3f2fd; color: #1e90ff; }
+  .campaign-status.failed { background: #fde8e8; color: #e74c3c; }
+
   .quick-sms-form {
     background: #fff; border-radius: 4px; padding: 30px 40px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eef0f4;
@@ -705,11 +1247,6 @@
     font-size: 30px;
     animation: popIn 0.4s ease;
   }
-  @keyframes popIn {
-    0% { transform: scale(0); }
-    70% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-  }
 
   /* ================= SMPP ROUTES ================= */
   .smpp-route-card {
@@ -831,6 +1368,8 @@
     .report-row label { justify-content: flex-start; text-align: left; }
     .report-row input, .report-row select { max-width: 100%; }
     .qs-row { grid-template-columns: 1fr; }
+    .wtc-field { grid-template-columns: 1fr; gap: 8px; }
+    .wtc-field-label { padding-top: 0; }
   }
 
   @media (max-width: 768px) {
@@ -881,7 +1420,7 @@
     .stat-item { padding: 12px; }
     .stat-icon { width: 45px; height: 45px; font-size: 22px; }
     .stat-label { font-size: 13px; }
-    .quick-sms-form { padding: 20px 15px; }
+    .quick-sms-form, .wtc-campaign-form { padding: 20px 15px; }
     .top-actions { justify-content: stretch; }
     .top-actions button { flex: 1; justify-content: center; }
     .pagination-bar { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -893,6 +1432,10 @@
     .group-by-row { flex-direction: column; align-items: flex-start; gap: 10px; }
     .payment-page { padding: 25px 20px; }
     .card-row { grid-template-columns: 1fr; }
+    .moderation-box { padding: 25px 20px; }
+    .recipient-tabs { flex-wrap: wrap; }
+    .recipient-tab { flex: 1; min-width: 120px; text-align: center; }
+    .filter-grid { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 400px) {
@@ -949,9 +1492,9 @@
 
     <div class="login-card">
       <div class="login-logo">
-        <div class="logo-icon">📡</div>
+        <div class="logo-icon"></div>
         <div class="logo-title" data-i18n="brandName">Starry Sky Communications</div>
-        <div class="admin-badge"> ADMIN ONLY</div>
+        <div class="admin-badge">🔒 ADMIN ONLY</div>
       </div>
 
       <form id="loginForm" onsubmit="doLogin(event)">
@@ -1019,11 +1562,12 @@
       <div class="menu-item" data-page="smpproutes"><span class="icon">🔌</span><span data-i18n="menuSmppRoutes">SMPP Routes</span></div>
       <div class="menu-item" data-page="smscontact"><span class="icon">👥</span><span data-i18n="menuSmsContact">SMS Contact</span></div>
       <div class="menu-item" data-page="quicksms"><span class="icon">💬</span><span data-i18n="menuQuickSms">Quick SMS</span></div>
-      <div class="menu-item" data-page="campaign"><span class="icon">📢</span><span data-i18n="menuCampaign">SMS Campaign</span></div>
-      <div class="menu-item" data-page="history"><span class="icon"></span><span data-i18n="menuHistory">SMS History</span></div>
+      <div class="menu-item" data-page="campaignlist"><span class="icon">📋</span><span data-i18n="menuCampaignList">Campaign List</span></div>
+      <div class="menu-item" data-page="campaign"><span class="icon"></span><span data-i18n="menuCampaign">SMS Campaign</span></div>
+      <div class="menu-item" data-page="history"><span class="icon">📜</span><span data-i18n="menuHistory">SMS History</span></div>
       <div class="menu-item" data-page="inbox"><span class="icon">📥</span><span data-i18n="menuInbox">Message Inbox</span></div>
-      <div class="menu-item" data-page="recharge"><span class="icon">💰</span><span data-i18n="menuRecharge">Recharge History</span></div>
-      <div class="menu-item" data-page="campaignreport"><span class="icon"></span><span data-i18n="menuCampaignReport">Campaign Report</span></div>
+      <div class="menu-item" data-page="recharge"><span class="icon"></span><span data-i18n="menuRecharge">Recharge History</span></div>
+      <div class="menu-item" data-page="campaignreport"><span class="icon">📄</span><span data-i18n="menuCampaignReport">Campaign Report</span></div>
       <div class="menu-item" data-page="contactreport"><span class="icon">📑</span><span data-i18n="menuContactReport">Contact Report</span></div>
       <div class="menu-item" data-page="payment"><span class="icon">💳</span><span data-i18n="menuPayment">Buy Credit</span></div>
     </aside>
@@ -1047,9 +1591,9 @@
           <div class="card clickable" onclick="navigateToPage('smscontact')" title="Click to manage contacts">
             <div class="card-top">
               <div>
-                <div class="card-icon blue">👤</div>
+                <div class="card-icon blue"></div>
                 <div class="card-label" data-i18n="cardContacts">Contacts</div>
-                <div class="card-sub" data-i18n="cardContactsSub">📇 Contact added in this week</div>
+                <div class="card-sub" data-i18n="cardContactsSub"> Contact added in this week</div>
               </div>
               <div class="card-value">0</div>
             </div>
@@ -1064,14 +1608,14 @@
               <div class="card-value">0</div>
             </div>
           </div>
-          <div class="card clickable" onclick="navigateToPage('campaign')" title="Click to manage campaigns">
+          <div class="card clickable" onclick="navigateToPage('campaignlist')" title="Click to view campaigns">
             <div class="card-top">
               <div>
-                <div class="card-icon teal">📇</div>
-                <div class="card-label" data-i18n="cardCampaign">Campaign</div>
-                <div class="card-sub" data-i18n="cardCampaignSub">📇 Campaign in this week</div>
+                <div class="card-icon teal">📋</div>
+                <div class="card-label" data-i18n="cardCampaigns">Campaigns</div>
+                <div class="card-sub" data-i18n="cardCampaignsSub">📊 View all campaigns</div>
               </div>
-              <div class="card-value">0</div>
+              <div class="card-value" id="dashCampaignCount">0</div>
             </div>
           </div>
           <div class="card clickable" onclick="navigateToPage('payment')" title="Click to buy credits">
@@ -1193,10 +1737,7 @@
           </p>
         </div>
 
-        <div id="smppRoutesContainer">
-          <!-- Routes will be rendered here -->
-        </div>
-
+        <div id="smppRoutesContainer"></div>
         <div id="noRoutesMsg" class="placeholder-page" style="margin-top:20px;">
           <p data-i18n="noRoutesMsg">No SMPP routes configured yet. Click "Add Route" to create your first SMPP connection.</p>
         </div>
@@ -1235,7 +1776,7 @@
         </div>
 
         <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-          <button class="action-btn" onclick="downloadContact()">⬇️ <span data-i18n="btnDownloadContact">Download Contact</span></button>
+          <button class="action-btn" onclick="downloadContact()">️ <span data-i18n="btnDownloadContact">Download Contact</span></button>
         </div>
 
         <div class="contact-stats">
@@ -1270,9 +1811,9 @@
         </div>
       </div>
 
-      <!-- Quick SMS -->
+      <!-- Quick SMS (WTC-STYLE) -->
       <div class="page" id="page-quicksms">
-        <div class="page-header">💬 <span data-i18n="menuQuickSms">Quick SMS</span></div>
+        <div class="page-header">💬 <span data-i18n="menuQuickSms">Quick SMS / Campaign</span></div>
         
         <div id="smsBalanceWarning" class="balance-warning" style="display:none;">
           <div class="bw-icon">💰</div>
@@ -1283,63 +1824,252 @@
           <button class="action-btn primary" onclick="navigateToPage('payment')" style="margin-left:10px;" data-i18n="btnGoDeposit">Go to Deposit</button>
         </div>
 
-        <div class="quick-sms-form">
-          <h3 data-i18n="quickSmsTitle">Send Quick SMS <span style="font-size:13px;">(Only for Http Profile)</span></h3>
-          <div class="qs-row">
-            <div>
-              <label data-i18n="labelClientName">Client Name</label>
-              <select id="qsClient"><option>Honey-HK</option></select>
-            </div>
-            <div>
-              <label data-i18n="labelClientProfile">Client Profile</label>
-              <select id="qsProfile"><option data-i18n="optSelectProfile">Select Client Profile</option><option>Profile 1 - HTTP</option></select>
-            </div>
-          </div>
-          <div class="qs-row">
-            <div>
-              <label data-i18n="labelSenderId">Sender ID</label>
-              <input type="text" id="qsSender" />
-            </div>
-            <div>
-              <label data-i18n="labelSmppRoute">SMPP Route</label>
-              <select id="qsSmppRoute"><option data-i18n="optAutoRoute">Auto Route</option></select>
+        <div class="wtc-campaign-form">
+          <h2 data-i18n="campaignNewTitle">Campaign (new)</h2>
+
+          <!-- Message type -->
+          <div class="wtc-field">
+            <div class="wtc-field-label" data-i18n="labelMessageType">Message type</div>
+            <div class="wtc-field-content">
+              <select class="wtc-select" id="qsMessageType">
+                <option value="SMS">SMS</option>
+                <option value="HLR">HLR</option>
+              </select>
             </div>
           </div>
-          <div class="qs-row full">
-            <div>
-              <label data-i18n="labelEnterPhone">Enter Phone Number <i>(Max 10000)</i></label>
-              <textarea id="qsPhone" data-i18n-placeholder="phPastePhone" placeholder="Paste phone number (seperated by new line)"></textarea>
+
+          <!-- Sender -->
+          <div class="wtc-field">
+            <div class="wtc-field-label" data-i18n="labelSender">Sender</div>
+            <div class="wtc-field-content">
+              <div class="sender-wrapper">
+                <input type="text" class="wtc-input" id="qsSender" placeholder="e.g. Apple, SVIP" oninput="showSenderSuggestions()" onfocus="showSenderSuggestions()" />
+                <div class="sender-suggestions" id="senderSuggestions"></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span class="wtc-hint" data-i18n="senderHint">1-11 latin letters, numbers or symbols | 1-15 numbers. The sender can be changed if it is not registered</span>
+                <span class="wtc-link" onclick="openRegisterSenderModal()" data-i18n="registerSender">Register the sender</span>
+              </div>
             </div>
           </div>
-          <div class="qs-row full">
-            <div>
-              <label data-i18n="labelEnterMessage">Enter Message Text</label>
-              <textarea id="msgText" data-i18n-placeholder="phTypeHere" placeholder="Type Here" oninput="updateCounter()"></textarea>
-              <div class="char-counter"><span id="charCount">0</span>/160</div>
+
+          <!-- Recipient -->
+          <div class="wtc-field">
+            <div class="wtc-field-label" data-i18n="labelRecipient">Recipient</div>
+            <div class="wtc-field-content">
+              <div class="recipient-tabs">
+                <div class="recipient-tab active" data-tab="phones" onclick="switchRecipientTab('phones')" data-i18n="tabPhoneNumbers">Phone numbers</div>
+                <div class="recipient-tab" data-tab="contacts" onclick="switchRecipientTab('contacts')" data-i18n="tabContactList">Contact list</div>
+                <div class="recipient-tab" data-tab="file" onclick="switchRecipientTab('file')" data-i18n="tabNumbersFile">Numbers from file</div>
+              </div>
+
+              <!-- Phone numbers panel -->
+              <div class="recipient-panel active" id="panel-phones">
+                <textarea class="phone-textarea" id="qsPhone" data-i18n-placeholder="phPastePhone" placeholder="Paste phone numbers, one per line&#10;+1234567890&#10;+9876543210"></textarea>
+                <div class="all-numbers-check">
+                  <input type="checkbox" id="allPhonesCheck" checked />
+                  <label for="allPhonesCheck" data-i18n="allPhoneNumbers">All phone numbers</label>
+                  <span id="phoneCountDisplay" style="color:#1e90ff; font-weight:700;">(0 numbers)</span>
+                </div>
+              </div>
+
+              <!-- Contact list panel -->
+              <div class="recipient-panel" id="panel-contacts">
+                <select class="wtc-select" id="contactListSelect" style="max-width:100%;">
+                  <option value="">-- Select contact list --</option>
+                  <option value="vip">VIP Customers (1,234)</option>
+                  <option value="regular">Regular Customers (5,678)</option>
+                  <option value="new">New Leads (890)</option>
+                </select>
+                <div class="wtc-hint" data-i18n="contactListHint">Select from your saved contact lists</div>
+              </div>
+
+              <!-- Numbers from file panel -->
+              <div class="recipient-panel" id="panel-file">
+                <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                  <div class="upload-icon">📁</div>
+                  <div class="upload-text" data-i18n="clickToUpload">Click to upload file</div>
+                  <div class="upload-hint" data-i18n="fileFormats">Allowed file formats: TXT, CSV, XLS/XLSX, ZIP; maximum size: 10 MB</div>
+                  <input type="file" id="fileInput" accept=".txt,.csv,.xls,.xlsx,.zip" onchange="handleFileUpload(event)" />
+                </div>
+                <div class="file-info" id="fileInfo"></div>
+                <div class="separator-row">
+                  <label data-i18n="labelSeparator">Separator of the file fields (TXT, CSV):</label>
+                  <select id="fileSeparator">
+                    <option value="tab" data-i18n="sepTab">Tab</option>
+                    <option value="comma" data-i18n="sepComma">Comma (,)</option>
+                    <option value="semicolon" data-i18n="sepSemicolon">Semicolon (;)</option>
+                    <option value="space" data-i18n="sepSpace">Space</option>
+                    <option value="pipe" data-i18n="sepPipe">Pipe (|)</option>
+                  </select>
+                </div>
+                <div class="wtc-hint" style="margin-top:10px;" data-i18n="separatorHint">To insert data from the file fields to message text, put in the right place a field number in parentheses: (1),(2),(3)</div>
+              </div>
             </div>
           </div>
-          <div style="margin-top:20px;">
-            <button class="action-btn" onclick="sendQuickSms()">📤 <span data-i18n="btnSend">Send</span></button>
+
+          <!-- Add unsubscribe link -->
+          <div class="wtc-field">
+            <div class="wtc-field-label" data-i18n="labelUnsubscribe">Add unsubscribe link</div>
+            <div class="wtc-field-content">
+              <div class="toggle-row">
+                <div class="toggle-switch" id="unsubscribeToggle" onclick="toggleUnsubscribe()"></div>
+                <span class="toggle-label" id="unsubscribeLabel" data-i18n="unsubscribeOff">Off</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="wtc-field">
+            <div class="wtc-field-label" data-i18n="labelText">Text</div>
+            <div class="wtc-field-content">
+              <div class="text-editor-wrapper">
+                <div class="template-dropdowns">
+                  <select id="messageTemplate" onchange="applyTemplate()">
+                    <option value="">-- Message templates --</option>
+                    <option value="promo">🎉 Promotional Offer</option>
+                    <option value="otp"> OTP Verification</option>
+                    <option value="reminder">⏰ Appointment Reminder</option>
+                    <option value="welcome"> Welcome Message</option>
+                  </select>
+                  <select id="contactFields" onchange="insertContactField()">
+                    <option value="">-- Contact fields --</option>
+                    <option value="{name}">{name}</option>
+                    <option value="{phone}">{phone}</option>
+                    <option value="{country}">{country}</option>
+                    <option value="{tag}">{tag}</option>
+                  </select>
+                </div>
+                <textarea class="message-textarea" id="qsMessageText" data-i18n-placeholder="phTypeMessage" placeholder="Type your message here..." oninput="updateCharCounter()"></textarea>
+                <div class="char-counter-bar" id="charCounterBar">
+                  <div class="length-info">
+                    <span data-i18n="lengthLabel">Length:</span> <strong id="charLength">0</strong> from 760 (<span id="encodingType">GSM</span> <span id="charLimit">01.38</span>)
+                  </div>
+                  <div class="parts-info">
+                    <span data-i18n="partsLabel">Parts:</span> <strong id="smsParts">0</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="additional-params-link" onclick="toggleAdditionalParams()">
+                ⚙️ <span data-i18n="additionalParams">Additional parameters</span>
+              </div>
+              <div class="additional-params-panel" id="additionalParamsPanel">
+                <div class="form-row" style="margin-bottom:10px;">
+                  <label style="width:150px;" data-i18n="labelValidity">Validity (hours)</label>
+                  <input type="number" value="72" min="1" max="168" style="max-width:200px;" />
+                </div>
+                <div class="form-row" style="margin-bottom:10px;">
+                  <label style="width:150px;" data-i18n="labelPriority">Priority</label>
+                  <select style="max-width:200px;">
+                    <option>Normal</option>
+                    <option>High</option>
+                    <option>Low</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label style="width:150px;" data-i18n="labelSmppRoute">SMPP Route</label>
+                  <select id="qsSmppRoute" style="max-width:200px;"><option value="auto" data-i18n="optAutoRoute">Auto Route</option></select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="create-btn" onclick="createCampaign()" data-i18n="btnCreate">🚀 Create / Send Campaign</button>
+        </div>
+      </div>
+
+      <!-- Campaign List Page (NEW) -->
+      <div class="page" id="page-campaignlist">
+        <div class="page-header">📋 <span data-i18n="menuCampaignList">Campaign List</span></div>
+
+        <div class="campaign-filters">
+          <h3 data-i18n="filterTitle">Filter Campaigns</h3>
+          <div class="filter-grid">
+            <div class="filter-item">
+              <label data-i18n="filterId">ID</label>
+              <input type="text" id="filterCampaignId" placeholder="e.g. 1480170" />
+            </div>
+            <div class="filter-item">
+              <label data-i18n="filterStatus">Status</label>
+              <select id="filterCampaignStatus">
+                <option value="">-- select --</option>
+                <option value="pending" data-i18n="statusPending">Pending moderation</option>
+                <option value="active" data-i18n="statusActive">Active</option>
+                <option value="done" data-i18n="statusDone">Done</option>
+                <option value="failed" data-i18n="statusFailed">Failed</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label data-i18n="filterCreationDate">Creation date from / to</label>
+              <input type="text" id="filterCreationDate" placeholder="30.09.2026 00:00:00 - 01.10.2026 00:00:00" />
+            </div>
+            <div class="filter-item">
+              <label data-i18n="filterStartDate">Start date from / to</label>
+              <input type="text" id="filterStartDate" placeholder="dd.mm.yyyy hh:mm:ss" />
+            </div>
+            <div class="filter-item">
+              <label data-i18n="filterClicks">Clicks (Short links)</label>
+              <select id="filterClicks">
+                <option value="">-- select --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="reset-btn" onclick="resetCampaignFilters()" data-i18n="btnReset">🔄 Reset</button>
+            <button class="find-btn" onclick="findCampaigns()" data-i18n="btnFind">🔍 Find</button>
+          </div>
+        </div>
+
+        <div class="campaign-table-header">
+          <div class="total-count">
+            <span data-i18n="labelTotal">Total</span>: <strong id="campaignTotalCount">0</strong>
+          </div>
+          <button class="action-btn primary" onclick="navigateToPage('quicksms')" data-i18n="btnAddCampaign">➕ Add Campaign</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th data-i18n="thName">Name</th>
+                <th data-i18n="thMessageType">Message type</th>
+                <th data-i18n="thSender">Sender</th>
+                <th data-i18n="thDates">Date of creation, start, done</th>
+                <th data-i18n="thTotalSent">Total / Sent</th>
+                <th data-i18n="thDelivered">Delivered / Undelivered</th>
+                <th data-i18n="thStatus">Status</th>
+              </tr>
+            </thead>
+            <tbody id="campaignTableBody">
+              <tr><td colspan="8" style="color:#999; padding:20px;" data-i18n="noCampaigns">No campaigns yet. Create your first campaign!</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination-bar" id="campaignPagination" style="display:none;">
+          <div></div>
+          <div class="pagination-controls">
+            <button></button>
+            <button>◀</button>
+            <span>Page <input type="text" value="1" style="width:50px;" /> of <span id="totalPages">1</span></span>
+            <button>▶</button>
+            <button>⏭</button>
           </div>
         </div>
       </div>
 
-      <!-- SMS Campaign -->
-      <div class="page" id="page-campaign">
-        <div class="page-header">📢 <span data-i18n="menuCampaign">SMS Campaign</span></div>
-        <div class="placeholder-page">
-          <p data-i18n="phCampaign">Create and manage SMS campaigns.</p>
-          <br>
-          <button class="action-btn" onclick="checkBalanceAndNavigateCampaign()">+ <span data-i18n="btnNewCampaign">New Campaign</span></button>
-        </div>
-      </div>
+      <!-- SMS Campaign (legacy) -->
+      <div class="page" id="page-campaign"><div class="page-header">📢 <span data-i18n="menuCampaign">SMS Campaign</span></div><div class="placeholder-page" data-i18n="phCampaign">Create and manage SMS campaigns. <br><br><button class="action-btn" onclick="navigateToPage('quicksms')">+ New Campaign</button></div></div>
 
       <!-- SMS History -->
-      <div class="page" id="page-history"><div class="page-header"> <span data-i18n="menuHistory">SMS History</span></div><div class="placeholder-page" data-i18n="phHistory">View your SMS sending history. <br><br><button class="action-btn" onclick="showToast('Loading history...', 'info')">📋 Load History</button></div></div>
+      <div class="page" id="page-history"><div class="page-header">📜 <span data-i18n="menuHistory">SMS History</span></div><div class="placeholder-page" data-i18n="phHistory">View your SMS sending history. <br><br><button class="action-btn" onclick="showToast('Loading history...', 'info')"> Load History</button></div></div>
 
       <!-- Message Inbox -->
       <div class="page" id="page-inbox">
-        <div class="page-header"> <span data-i18n="menuInbox">SMS Inbox</span></div>
+        <div class="page-header">📥 <span data-i18n="menuInbox">SMS Inbox</span></div>
         <div class="report-form">
           <div class="report-row">
             <label data-i18n="labelReportType">Report Type</label>
@@ -1361,9 +2091,9 @@
             <label data-i18n="labelRecordsPerPage">Records Per Page</label><input type="text" value="100" />
           </div>
           <div class="action-buttons">
-            <button class="action-btn" onclick="getReport()">📊 <span data-i18n="btnGetReport">Get Report</span></button>
-            <button class="action-btn" onclick="downloadExcel()">📥 <span data-i18n="btnDownloadExcel">Download Excel</span></button>
-            <button class="action-btn" onclick="downloadPdf()">📄 <span data-i18n="btnDownloadPdf">Download Pdf</span></button>
+            <button class="action-btn" onclick="getReport()"> <span data-i18n="btnGetReport">Get Report</span></button>
+            <button class="action-btn" onclick="downloadExcel()"> <span data-i18n="btnDownloadExcel">Download Excel</span></button>
+            <button class="action-btn" onclick="downloadPdf()"> <span data-i18n="btnDownloadPdf">Download Pdf</span></button>
           </div>
           <div class="report-result" id="reportResult">
             <strong data-i18n="reportGenerated">Report Generated:</strong> <span id="reportCount">0</span> <span data-i18n="recordsFound">records found for the selected date range.</span>
@@ -1380,19 +2110,20 @@
               <tr>
                 <th data-i18n="thDate">Date</th>
                 <th data-i18n="thAmount">Amount</th>
+                <th data-i18n="thCredits">Credits</th>
                 <th data-i18n="thMethod">Method</th>
                 <th data-i18n="thStatus">Status</th>
               </tr>
             </thead>
             <tbody id="rechargeHistoryBody">
-              <tr><td colspan="4" style="color:#999; padding:20px;" data-i18n="noRechargeHistory">No recharge history yet. Make your first deposit!</td></tr>
+              <tr><td colspan="5" style="color:#999; padding:20px;" data-i18n="noRechargeHistory">No recharge history yet. Make your first deposit!</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Campaign Report -->
-      <div class="page" id="page-campaignreport"><div class="page-header">📄 <span data-i18n="menuCampaignReport">Campaign Report</span></div><div class="placeholder-page" data-i18n="phCampaignReport">Detailed campaign performance reports. <br><br><button class="action-btn" onclick="showToast('No campaigns to report yet', 'info')" data-i18n="btnGenerateReport">Generate Report</button></div></div>
+      <div class="page" id="page-campaignreport"><div class="page-header"> <span data-i18n="menuCampaignReport">Campaign Report</span></div><div class="placeholder-page" data-i18n="phCampaignReport">Detailed campaign performance reports. <br><br><button class="action-btn" onclick="showToast('No campaigns to report yet', 'info')" data-i18n="btnGenerateReport">Generate Report</button></div></div>
 
       <!-- Contact Report -->
       <div class="page" id="page-contactreport">
@@ -1419,7 +2150,7 @@
         <div class="pagination-bar">
           <div><span data-i18n="labelTotalReport">Total Report</span>: <span id="totalReportCount">0</span></div>
           <div class="pagination-controls">
-            <button></button>
+            <button>⏮</button>
             <button>◀</button>
             <button>▶</button>
             <button>⏭</button>
@@ -1447,7 +2178,7 @@
         </div>
       </div>
 
-      <!-- Payment Page (Buy Credit) -->
+      <!-- Payment Page -->
       <div class="page" id="page-payment">
         <div class="page-header">💳 <span data-i18n="menuPayment">Buy Credit</span></div>
         
@@ -1515,10 +2246,10 @@
             <div class="form-section" style="background:#f8f9fc; border:none;">
               <p style="font-size:14px; color:#555; line-height:1.6;">
                 <strong data-i18n="bankInstructions">Bank Transfer Instructions:</strong><br><br>
-                 <strong>Bank:</strong> Starry Sky International Bank<br>
-                 <strong>Account:</strong> 1234-5678-9012-3456<br>
+                🏦 <strong>Bank:</strong> Starry Sky International Bank<br>
+                💳 <strong>Account:</strong> 1234-5678-9012-3456<br>
                 📍 <strong>SWIFT:</strong> SSICUS33<br>
-                📍 <strong>Reference:</strong> <span id="bankRef">SSC-2026-XXXX</span><br><br>
+                 <strong>Reference:</strong> <span id="bankRef">SSC-2026-XXXX</span><br><br>
                 <span data-i18n="bankNote">Credits will be added within 24 hours after payment confirmation.</span>
               </p>
             </div>
@@ -1527,7 +2258,7 @@
           <div id="paypalFields" class="card-fields">
             <div class="form-section" style="background:#f8f9fc; border:none;">
               <p style="font-size:14px; color:#555; line-height:1.6; text-align:center;">
-                ️ <span data-i18n="paypalRedirect">You will be redirected to PayPal to complete the payment.</span>
+                🅿️ <span data-i18n="paypalRedirect">You will be redirected to PayPal to complete the payment.</span>
               </p>
             </div>
           </div>
@@ -1563,6 +2294,22 @@
       </div>
 
     </main>
+  </div>
+</div>
+
+<!-- Moderation Popup -->
+<div class="moderation-popup" id="moderationPopup">
+  <div class="moderation-box">
+    <div class="moderation-icon">✓</div>
+    <h3 data-i18n="moderationTitle">Message Sent to Moderation</h3>
+    <p data-i18n="moderationMsg">The message has been sent to moderation within a few minutes. To cancel the moderation please contact your manager.</p>
+    <div class="mod-details">
+      <div><strong data-i18n="modCampaignId">Campaign ID:</strong> <span id="modCampaignId">--</span></div>
+      <div><strong data-i18n="modRecipients">Recipients:</strong> <span id="modRecipients">0</span></div>
+      <div><strong data-i18n="modSender">Sender:</strong> <span id="modSender">--</span></div>
+      <div><strong data-i18n="modStatus">Status:</strong> <span style="color:#e67e22;" data-i18n="modStatusPending">Pending moderation</span></div>
+    </div>
+    <button onclick="closeModerationPopup()" data-i18n="btnOk">OK</button>
   </div>
 </div>
 
@@ -1614,6 +2361,7 @@
       menuSmppRoutes: 'SMPP Routes',
       menuSmsContact: 'SMS Contact',
       menuQuickSms: 'Quick SMS',
+      menuCampaignList: 'Campaign List',
       menuCampaign: 'SMS Campaign',
       menuHistory: 'SMS History',
       menuInbox: 'Message Inbox',
@@ -1624,10 +2372,10 @@
       cardContacts: 'Contacts',
       cardContactsSub: '📇 Contact added in this week',
       cardSmsSub: '✉️ SMS processed today till now',
-      cardCampaign: 'Campaign',
-      cardCampaignSub: '📇 Campaign in this week',
+      cardCampaigns: 'Campaigns',
+      cardCampaignsSub: ' View all campaigns',
       cardCredits: 'Credits',
-      cardCreditsSub: ' Top up your balance',
+      cardCreditsSub: '💰 Top up your balance',
       chartTitle: 'SMS Flow',
       legendLast: 'Last Thursday',
       legendYesterday: 'Yesterday',
@@ -1679,48 +2427,69 @@
       statActiveContacts: 'Active Contacts',
       statBlockContacts: 'Block Contacts',
       statTagContacts: 'Tag Contacts',
-      quickSmsTitle: 'Send Quick SMS',
-      labelClientName: 'Client Name',
-      labelClientProfile: 'Client Profile',
-      optSelectProfile: 'Select Client Profile',
-      labelSenderId: 'Sender ID',
+      campaignNewTitle: 'Campaign (new)',
+      labelMessageType: 'Message type',
+      labelSender: 'Sender',
+      senderHint: '1-11 latin letters, numbers or symbols | 1-15 numbers. The sender can be changed if it is not registered',
+      registerSender: 'Register the sender',
+      labelRecipient: 'Recipient',
+      tabPhoneNumbers: 'Phone numbers',
+      tabContactList: 'Contact list',
+      tabNumbersFile: 'Numbers from file',
+      phPastePhone: 'Paste phone numbers, one per line',
+      allPhoneNumbers: 'All phone numbers',
+      contactListHint: 'Select from your saved contact lists',
+      clickToUpload: 'Click to upload file',
+      fileFormats: 'Allowed file formats: TXT, CSV, XLS/XLSX, ZIP; maximum size: 10 MB',
+      labelSeparator: 'Separator of the file fields (TXT, CSV):',
+      sepTab: 'Tab',
+      sepComma: 'Comma (,)',
+      sepSemicolon: 'Semicolon (;)',
+      sepSpace: 'Space',
+      sepPipe: 'Pipe (|)',
+      separatorHint: 'To insert data from the file fields to message text, put in the right place a field number in parentheses: (1),(2),(3)',
+      labelUnsubscribe: 'Add unsubscribe link',
+      unsubscribeOff: 'Off',
+      unsubscribeOn: 'On',
+      labelText: 'Text',
+      phTypeMessage: 'Type your message here...',
+      lengthLabel: 'Length:',
+      partsLabel: 'Parts:',
+      additionalParams: 'Additional parameters',
+      labelValidity: 'Validity (hours)',
+      labelPriority: 'Priority',
       labelSmppRoute: 'SMPP Route',
       optAutoRoute: 'Auto Route',
-      labelEnterPhone: 'Enter Phone Number',
-      phPastePhone: 'Paste phone number (seperated by new line)',
-      labelEnterMessage: 'Enter Message Text',
-      phTypeHere: 'Type Here',
-      btnSend: 'Send',
-      phCampaign: 'Create and manage SMS campaigns.',
-      btnNewCampaign: 'New Campaign',
-      phHistory: 'View your SMS sending history.',
-      labelReportType: 'Report Type',
-      optDetails: 'Details',
-      optSummary: 'Summary',
-      labelShortCode: 'Short Code/Long Code',
-      labelOperator: 'Operator',
-      btnGetReport: 'Get Report',
-      btnDownloadExcel: 'Download Excel',
-      btnDownloadPdf: 'Download Pdf',
-      reportGenerated: 'Report Generated:',
-      recordsFound: 'records found for the selected date range.',
-      phRecharge: 'Track your recharge transactions.',
-      btnViewHistory: 'View History',
-      phCampaignReport: 'Detailed campaign performance reports.',
-      btnGenerateReport: 'Generate Report',
-      labelGroupBy: 'Group By',
-      labelCity: 'City',
-      btnSearch: 'Search',
-      labelTotalReport: 'Total Report',
-      labelPage: 'Page',
-      labelOf: 'of',
-      btnGo: 'Go',
-      thSerial: 'Serial NO',
-      noRecords: 'No records found',
-      phBuyCredit: 'Purchase SMS credits for your account.',
-      btnBuyCredits: 'Buy Credits',
-      sessionExpired: 'Session Expired',
-      sessionExpiredMsg: 'Your session has timed out due to 30 minutes of inactivity.<br>Please login again to continue.',
+      btnCreate: '🚀 Create / Send Campaign',
+      moderationTitle: 'Message Sent to Moderation',
+      moderationMsg: 'The message has been sent to moderation within a few minutes. To cancel the moderation please contact your manager.',
+      modCampaignId: 'Campaign ID:',
+      modRecipients: 'Recipients:',
+      modSender: 'Sender:',
+      modStatus: 'Status:',
+      modStatusPending: 'Pending moderation',
+      btnOk: 'OK',
+      filterTitle: 'Filter Campaigns',
+      filterId: 'ID',
+      filterStatus: 'Status',
+      filterCreationDate: 'Creation date from / to',
+      filterStartDate: 'Start date from / to',
+      filterClicks: 'Clicks (Short links)',
+      btnFind: '🔍 Find',
+      labelTotal: 'Total',
+      btnAddCampaign: '➕ Add Campaign',
+      thName: 'Name',
+      thMessageType: 'Message type',
+      thSender: 'Sender',
+      thDates: 'Date of creation, start, done',
+      thTotalSent: 'Total / Sent',
+      thDelivered: 'Delivered / Undelivered',
+      thStatus: 'Status',
+      noCampaigns: 'No campaigns yet. Create your first campaign!',
+      statusPending: 'Pending moderation',
+      statusActive: 'Active',
+      statusDone: 'Done',
+      statusFailed: 'Failed',
       optAll: 'All',
       optActive: 'Active',
       optBlock: 'Block',
@@ -1728,56 +2497,8 @@
       loginSuccess: 'Welcome back',
       logoutSuccess: 'Logged out successfully',
       adminOnly: 'Admin access only. Please use admin credentials.',
-      invalidCredentials: 'Invalid username or password',
-      toastCampaign: 'Campaign creator coming soon',
-      toastLoadingHistory: 'Loading history...',
-      toastNoRecharge: 'No recharge history found',
-      toastNoCampaign: 'No campaigns to report yet',
-      toastNavigating: 'Navigating to page...',
-      toastAdvance: 'Advanced search options expanded',
-      toastFiltersReset: 'Filters reset',
-      toastSwitchedView: 'Switched to',
-      toastView: 'view',
-      toastContactsDownloaded: 'Contacts downloaded!',
-      toastSelectProfile: 'Please select a client profile',
-      toastSenderIdRequired: 'Sender ID is required',
-      toastPhoneRequired: 'Phone numbers are required',
-      toastMessageRequired: 'Message text is required',
-      toastMaxNumbers: 'Maximum 10,000 numbers allowed',
-      toastSendingSms: 'Sending SMS to',
-      toastSmsSent: 'SMS sent successfully to',
-      toastRecipients: 'recipient(s)!',
-      toastGenerating: 'Generating report...',
-      toastReportGenerated: 'Report generated!',
-      toastExcelDownloaded: 'Excel file downloaded!',
-      toastPdfDownloaded: 'PDF file downloaded!',
-      toastContactReportReset: 'Contact report filters reset',
-      toastSearching: 'Searching contacts...',
-      toastSearchComplete: 'Search complete',
-      toastRecordsFound: 'records found',
-      toastMinCredits: 'Minimum 100 credits required',
-      toastProcessingPayment: 'Processing payment for',
-      toastCredits: 'credits...',
-      toastPaymentSuccess: 'Payment successful! Credits added.',
-      toastIpRequired: 'Please enter an IP address',
-      toastInvalidIp: 'Invalid IP format',
-      toastIpAdded: 'IP',
-      toastAdded: 'added',
-      toastNoIps: 'No IPs to remove',
-      toastLastIpRemoved: 'Last IP removed',
-      toastAccountSaved: 'Account details saved successfully!',
-      toastTechnicalSaved: 'Technical details saved successfully!',
-      toastPhoneRequiredModal: 'Phone number is required',
-      toastContactAdded: 'Contact',
-      toastAddedSuccessfully: 'added successfully!',
-      toastSelectFile: 'Please select a file',
-      toastUploading: 'Uploading',
-      toastFileUploaded: 'File uploaded successfully!',
-      toastWrongCaptcha: 'Invalid verification code, please try again',
-      sessionLabel: 'Session',
-      redirectingTo: 'Redirecting to',
-      depositRequired: 'Deposit Required',
-      depositRequiredMsg: 'Your balance is zero. Please deposit credits before performing this action.',
+      depositRequired: '️ Deposit Required',
+      depositRequiredMsg: 'Your balance is zero. Please deposit credits before sending SMS.',
       btnGoDeposit: 'Go to Deposit',
       lowBalanceTitle: 'Low Balance Warning',
       lowBalanceMsg: 'Your balance is zero. Please deposit credits to continue using SMS services.',
@@ -1820,7 +2541,6 @@
       bindType: 'Bind Type',
       priority: 'Priority',
       throughput: 'Throughput (TPS)',
-      status: 'Status',
       actions: 'Actions',
       btnTest: 'Test',
       btnEdit: 'Edit',
@@ -1831,10 +2551,65 @@
       routeTestFailed: 'Connection failed',
       thDate: 'Date',
       thAmount: 'Amount',
+      thCredits: 'Credits',
       thMethod: 'Method',
-      thStatus: 'Status',
       noRechargeHistory: 'No recharge history yet. Make your first deposit!',
-      depositSuccessMsg: 'Your deposit was successful. You can now send SMS.'
+      depositSuccessMsg: 'Your deposit was successful. You can now send SMS.',
+      toastCampaign: 'Campaign creator coming soon',
+      toastLoadingHistory: 'Loading history...',
+      toastNoRecharge: 'No recharge history found',
+      toastNavigating: 'Navigating to page...',
+      toastAdvance: 'Advanced search options expanded',
+      toastFiltersReset: 'Filters reset',
+      toastSwitchedView: 'Switched to',
+      toastView: 'view',
+      toastContactsDownloaded: 'Contacts downloaded!',
+      toastSelectProfile: 'Please select a client profile',
+      toastSenderIdRequired: 'Sender ID is required',
+      toastPhoneRequired: 'Phone numbers are required',
+      toastMessageRequired: 'Message text is required',
+      toastMaxNumbers: 'Maximum 10,000 numbers allowed',
+      toastSendingSms: 'Sending SMS to',
+      toastSmsSent: 'SMS sent successfully to',
+      toastRecipients: 'recipient(s)!',
+      toastGenerating: 'Generating report...',
+      toastReportGenerated: 'Report generated!',
+      toastExcelDownloaded: 'Excel file downloaded!',
+      toastPdfDownloaded: 'PDF file downloaded!',
+      toastContactReportReset: 'Contact report filters reset',
+      toastSearching: 'Searching contacts...',
+      toastSearchComplete: 'Search complete',
+      toastRecordsFound: 'records found',
+      toastIpRequired: 'Please enter an IP address',
+      toastInvalidIp: 'Invalid IP format',
+      toastIpAdded: 'IP',
+      toastAdded: 'added',
+      toastNoIps: 'No IPs to remove',
+      toastLastIpRemoved: 'Last IP removed',
+      toastAccountSaved: 'Account details saved successfully!',
+      toastTechnicalSaved: 'Technical details saved successfully!',
+      toastPhoneRequiredModal: 'Phone number is required',
+      toastContactAdded: 'Contact',
+      toastAddedSuccessfully: 'added successfully!',
+      toastSelectFile: 'Please select a file',
+      toastUploading: 'Uploading',
+      toastFileUploaded: 'File uploaded successfully!',
+      sessionLabel: 'Session',
+      redirectingTo: 'Redirecting to',
+      campaignCreated: 'Campaign created successfully',
+      fileUploaded: 'File uploaded successfully',
+      fileTooLarge: 'File too large. Maximum size is 10 MB',
+      invalidFileFormat: 'Invalid file format. Allowed: TXT, CSV, XLS, XLSX, ZIP',
+      senderRegistered: 'Sender registered successfully',
+      templateApplied: 'Template applied',
+      fieldInserted: 'Field inserted',
+      noSender: 'Please enter a sender ID',
+      noRecipient: 'Please add recipients',
+      noMessage: 'Please enter message text',
+      messageTooLong: 'Message exceeds maximum length (760 characters)',
+      campaignSent: 'Campaign sent to moderation',
+      noCampaignsFound: 'No campaigns found matching your filters',
+      campaignsFound: 'campaigns found'
     },
     zh: {
       badge: '全球短信网络',
@@ -1864,6 +2639,7 @@
       menuSmppRoutes: 'SMPP 路由',
       menuSmsContact: '短信联系人',
       menuQuickSms: '快速短信',
+      menuCampaignList: '活动列表',
       menuCampaign: '短信活动',
       menuHistory: '短信历史',
       menuInbox: '消息收件箱',
@@ -1874,8 +2650,8 @@
       cardContacts: '联系人',
       cardContactsSub: '📇 本周新增联系人',
       cardSmsSub: '✉️ 今日已处理短信',
-      cardCampaign: '活动',
-      cardCampaignSub: '📇 本周活动数',
+      cardCampaigns: '活动',
+      cardCampaignsSub: '📊 查看所有活动',
       cardCredits: '额度',
       cardCreditsSub: '💰 充值余额',
       chartTitle: '短信流量',
@@ -1929,48 +2705,69 @@
       statActiveContacts: '活跃联系人',
       statBlockContacts: '已屏蔽联系人',
       statTagContacts: '标签联系人',
-      quickSmsTitle: '发送快速短信',
-      labelClientName: '客户名称',
-      labelClientProfile: '客户配置文件',
-      optSelectProfile: '选择客户配置文件',
-      labelSenderId: '发送者 ID',
+      campaignNewTitle: '新建活动',
+      labelMessageType: '消息类型',
+      labelSender: '发送者',
+      senderHint: '1-11 个拉丁字母、数字或符号 | 1-15 个数字。如果未注册，发送者可以更改',
+      registerSender: '注册发送者',
+      labelRecipient: '接收者',
+      tabPhoneNumbers: '电话号码',
+      tabContactList: '联系人列表',
+      tabNumbersFile: '从文件导入号码',
+      phPastePhone: '粘贴电话号码，每行一个',
+      allPhoneNumbers: '所有电话号码',
+      contactListHint: '从已保存的联系人列表中选择',
+      clickToUpload: '点击上传文件',
+      fileFormats: '允许的文件格式：TXT、CSV、XLS/XLSX、ZIP；最大大小：10 MB',
+      labelSeparator: '文件字段分隔符（TXT、CSV）：',
+      sepTab: '制表符',
+      sepComma: '逗号 (,)',
+      sepSemicolon: '分号 (;)',
+      sepSpace: '空格',
+      sepPipe: '竖线 (|)',
+      separatorHint: '要将文件字段数据插入消息文本，请在正确位置放置括号中的字段编号：(1),(2),(3)',
+      labelUnsubscribe: '添加退订链接',
+      unsubscribeOff: '关闭',
+      unsubscribeOn: '开启',
+      labelText: '文本',
+      phTypeMessage: '在此输入您的消息...',
+      lengthLabel: '长度：',
+      partsLabel: '条数：',
+      additionalParams: '附加参数',
+      labelValidity: '有效期（小时）',
+      labelPriority: '优先级',
       labelSmppRoute: 'SMPP 路由',
       optAutoRoute: '自动路由',
-      labelEnterPhone: '输入电话号码',
-      phPastePhone: '粘贴电话号码（每行一个）',
-      labelEnterMessage: '输入消息内容',
-      phTypeHere: '在此输入',
-      btnSend: '发送',
-      phCampaign: '创建和管理短信活动。',
-      btnNewCampaign: '新建活动',
-      phHistory: '查看您的短信发送历史。',
-      labelReportType: '报告类型',
-      optDetails: '详情',
-      optSummary: '摘要',
-      labelShortCode: '短码/长码',
-      labelOperator: '运营商',
-      btnGetReport: '获取报告',
-      btnDownloadExcel: '下载 Excel',
-      btnDownloadPdf: '下载 PDF',
-      reportGenerated: '报告已生成：',
-      recordsFound: '在所选日期范围内找到记录。',
-      phRecharge: '跟踪您的充值交易。',
-      btnViewHistory: '查看历史',
-      phCampaignReport: '详细的活动绩效报告。',
-      btnGenerateReport: '生成报告',
-      labelGroupBy: '分组方式',
-      labelCity: '城市',
-      btnSearch: '搜索',
-      labelTotalReport: '总报告',
-      labelPage: '页',
-      labelOf: '共',
-      btnGo: '跳转',
-      thSerial: '序号',
-      noRecords: '未找到记录',
-      phBuyCredit: '为您的账户购买短信额度。',
-      btnBuyCredits: '购买额度',
-      sessionExpired: '会话已过期',
-      sessionExpiredMsg: '由于 30 分钟不活动，您的会话已超时。<br>请重新登录以继续。',
+      btnCreate: ' 创建/发送活动',
+      moderationTitle: '消息已发送至审核',
+      moderationMsg: '消息已在几分钟内发送至审核。要取消审核，请联系您的经理。',
+      modCampaignId: '活动 ID：',
+      modRecipients: '接收者：',
+      modSender: '发送者：',
+      modStatus: '状态：',
+      modStatusPending: '待审核',
+      btnOk: '确定',
+      filterTitle: '筛选活动',
+      filterId: 'ID',
+      filterStatus: '状态',
+      filterCreationDate: '创建日期 从/到',
+      filterStartDate: '开始日期 从/到',
+      filterClicks: '点击（短链接）',
+      btnFind: '🔍 查找',
+      labelTotal: '总计',
+      btnAddCampaign: '➕ 添加活动',
+      thName: '名称',
+      thMessageType: '消息类型',
+      thSender: '发送者',
+      thDates: '创建/开始/完成日期',
+      thTotalSent: '总计/已发送',
+      thDelivered: '已送达/未送达',
+      thStatus: '状态',
+      noCampaigns: '暂无活动。创建您的第一个活动！',
+      statusPending: '待审核',
+      statusActive: '活跃',
+      statusDone: '已完成',
+      statusFailed: '失败',
       optAll: '全部',
       optActive: '活跃',
       optBlock: '已屏蔽',
@@ -1978,56 +2775,8 @@
       loginSuccess: '欢迎回来',
       logoutSuccess: '已成功登出',
       adminOnly: '仅限管理员访问。请使用管理员凭据。',
-      invalidCredentials: '用户名或密码无效',
-      toastCampaign: '活动创建器即将推出',
-      toastLoadingHistory: '正在加载历史...',
-      toastNoRecharge: '未找到充值历史',
-      toastNoCampaign: '暂无活动可报告',
-      toastNavigating: '正在跳转页面...',
-      toastAdvance: '已展开高级搜索选项',
-      toastFiltersReset: '筛选器已重置',
-      toastSwitchedView: '已切换到',
-      toastView: '视图',
-      toastContactsDownloaded: '联系人已下载！',
-      toastSelectProfile: '请选择客户配置文件',
-      toastSenderIdRequired: '发送者 ID 为必填项',
-      toastPhoneRequired: '电话号码为必填项',
-      toastMessageRequired: '消息内容为必填项',
-      toastMaxNumbers: '最多允许 10,000 个号码',
-      toastSendingSms: '正在向',
-      toastSmsSent: '短信已成功发送至',
-      toastRecipients: '个收件人！',
-      toastGenerating: '正在生成报告...',
-      toastReportGenerated: '报告已生成！',
-      toastExcelDownloaded: 'Excel 文件已下载！',
-      toastPdfDownloaded: 'PDF 文件已下载！',
-      toastContactReportReset: '联系人报告筛选器已重置',
-      toastSearching: '正在搜索联系人...',
-      toastSearchComplete: '搜索完成',
-      toastRecordsFound: '找到记录',
-      toastMinCredits: '最少需要 100 额度',
-      toastProcessingPayment: '正在处理',
-      toastCredits: '额度的支付...',
-      toastPaymentSuccess: '支付成功！额度已添加。',
-      toastIpRequired: '请输入 IP 地址',
-      toastInvalidIp: 'IP 格式无效',
-      toastIpAdded: 'IP',
-      toastAdded: '已添加',
-      toastNoIps: '没有可删除的 IP',
-      toastLastIpRemoved: '已删除最后一个 IP',
-      toastAccountSaved: '账户详情保存成功！',
-      toastTechnicalSaved: '技术详情保存成功！',
-      toastPhoneRequiredModal: '电话号码为必填项',
-      toastContactAdded: '联系人',
-      toastAddedSuccessfully: '添加成功！',
-      toastSelectFile: '请选择文件',
-      toastUploading: '正在上传',
-      toastFileUploaded: '文件上传成功！',
-      toastWrongCaptcha: '验证码错误，请重试',
-      sessionLabel: '会话',
-      redirectingTo: '正在跳转到',
-      depositRequired: '需要充值',
-      depositRequiredMsg: '您的余额为零。请在执行此操作之前充值。',
+      depositRequired: '⚠️ 需要充值',
+      depositRequiredMsg: '您的余额为零。请在发送短信之前充值。',
       btnGoDeposit: '去充值',
       lowBalanceTitle: '余额不足警告',
       lowBalanceMsg: '您的余额为零。请充值以继续使用短信服务。',
@@ -2070,7 +2819,6 @@
       bindType: '绑定类型',
       priority: '优先级',
       throughput: '吞吐量 (TPS)',
-      status: '状态',
       actions: '操作',
       btnTest: '测试',
       btnEdit: '编辑',
@@ -2081,10 +2829,65 @@
       routeTestFailed: '连接失败',
       thDate: '日期',
       thAmount: '金额',
+      thCredits: '额度',
       thMethod: '方式',
-      thStatus: '状态',
       noRechargeHistory: '暂无充值历史。进行您的第一笔充值！',
-      depositSuccessMsg: '您的充值已成功。您现在可以发送短信了。'
+      depositSuccessMsg: '您的充值已成功。您现在可以发送短信了。',
+      toastCampaign: '活动创建器即将推出',
+      toastLoadingHistory: '正在加载历史...',
+      toastNoRecharge: '未找到充值历史',
+      toastNavigating: '正在跳转页面...',
+      toastAdvance: '已展开高级搜索选项',
+      toastFiltersReset: '筛选器已重置',
+      toastSwitchedView: '已切换到',
+      toastView: '视图',
+      toastContactsDownloaded: '联系人已下载！',
+      toastSelectProfile: '请选择客户配置文件',
+      toastSenderIdRequired: '发送者 ID 为必填项',
+      toastPhoneRequired: '电话号码为必填项',
+      toastMessageRequired: '消息内容为必填项',
+      toastMaxNumbers: '最多允许 10,000 个号码',
+      toastSendingSms: '正在向',
+      toastSmsSent: '短信已成功发送至',
+      toastRecipients: '个收件人！',
+      toastGenerating: '正在生成报告...',
+      toastReportGenerated: '报告已生成！',
+      toastExcelDownloaded: 'Excel 文件已下载！',
+      toastPdfDownloaded: 'PDF 文件已下载！',
+      toastContactReportReset: '联系人报告筛选器已重置',
+      toastSearching: '正在搜索联系人...',
+      toastSearchComplete: '搜索完成',
+      toastRecordsFound: '找到记录',
+      toastIpRequired: '请输入 IP 地址',
+      toastInvalidIp: 'IP 格式无效',
+      toastIpAdded: 'IP',
+      toastAdded: '已添加',
+      toastNoIps: '没有可删除的 IP',
+      toastLastIpRemoved: '已删除最后一个 IP',
+      toastAccountSaved: '账户详情保存成功！',
+      toastTechnicalSaved: '技术详情保存成功！',
+      toastPhoneRequiredModal: '电话号码为必填项',
+      toastContactAdded: '联系人',
+      toastAddedSuccessfully: '添加成功！',
+      toastSelectFile: '请选择文件',
+      toastUploading: '正在上传',
+      toastFileUploaded: '文件上传成功！',
+      sessionLabel: '会话',
+      redirectingTo: '正在跳转到',
+      campaignCreated: '活动创建成功',
+      fileUploaded: '文件上传成功',
+      fileTooLarge: '文件太大。最大大小为 10 MB',
+      invalidFileFormat: '文件格式无效。允许：TXT、CSV、XLS、XLSX、ZIP',
+      senderRegistered: '发送者注册成功',
+      templateApplied: '模板已应用',
+      fieldInserted: '字段已插入',
+      noSender: '请输入发送者 ID',
+      noRecipient: '请添加接收者',
+      noMessage: '请输入消息文本',
+      messageTooLong: '消息超过最大长度（760 个字符）',
+      campaignSent: '活动已发送至审核',
+      noCampaignsFound: '未找到匹配筛选条件的活动',
+      campaignsFound: '个活动'
     }
   };
 
@@ -2123,12 +2926,15 @@
     renderSmppRoutes();
     updateSmppRouteSelect();
     updateBalanceDisplay();
+    renderCampaignTable();
   }
 
   /* ================= BALANCE MANAGEMENT ================= */
   const BALANCE_KEY = 'starrySkyBalance';
   const RECHARGE_KEY = 'starrySkyRechargeHistory';
   const SMPP_ROUTES_KEY = 'starrySkySmppRoutes';
+  const CAMPAIGNS_KEY = 'starrySkyCampaigns';
+  const SENDERS_KEY = 'starrySkySenders';
 
   function getBalance() {
     const b = localStorage.getItem(BALANCE_KEY);
@@ -2160,7 +2966,6 @@
     if (dashBalance) dashBalance.textContent = balance.toFixed(0);
     if (paymentBalance) paymentBalance.textContent = balance.toFixed(2);
 
-    // Show/hide balance warnings
     if (balanceWarning) balanceWarning.style.display = balance === 0 ? 'flex' : 'none';
     if (smsBalanceWarning) smsBalanceWarning.style.display = balance === 0 ? 'flex' : 'none';
   }
@@ -2178,13 +2983,85 @@
     navigateToPage(pageName);
   }
 
-  function checkBalanceAndNavigateCampaign() {
-    if (!hasBalance()) {
-      showToast(t('depositRequired'), 'warning');
-      setTimeout(() => navigateToPage('payment'), 500);
+  /* ================= CAMPAIGNS ================= */
+  let campaigns = [];
+
+  function loadCampaigns() {
+    try {
+      const data = localStorage.getItem(CAMPAIGNS_KEY);
+      campaigns = data ? JSON.parse(data) : [];
+    } catch (e) {
+      campaigns = [];
+    }
+  }
+
+  function saveCampaigns() {
+    localStorage.setItem(CAMPAIGNS_KEY, JSON.stringify(campaigns));
+  }
+
+  function renderCampaignTable(filteredCampaigns = null) {
+    const tbody = document.getElementById('campaignTableBody');
+    const totalCount = document.getElementById('campaignTotalCount');
+    const pagination = document.getElementById('campaignPagination');
+    const list = filteredCampaigns || campaigns;
+
+    if (!tbody) return;
+
+    if (list.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="color:#999; padding:20px;">${t('noCampaigns')}</td></tr>`;
+      if (totalCount) totalCount.textContent = '0';
+      if (pagination) pagination.style.display = 'none';
       return;
     }
-    showToast(t('toastCampaign'), 'info');
+
+    if (totalCount) totalCount.textContent = list.length;
+    if (pagination) pagination.style.display = 'flex';
+
+    tbody.innerHTML = list.map(c => {
+      const statusClass = c.status || 'pending';
+      const statusText = t('status' + statusClass.charAt(0).toUpperCase() + statusClass.slice(1));
+      return `
+        <tr>
+          <td>${c.id}</td>
+          <td>${c.name || '-'}</td>
+          <td>${c.messageType || 'SMS'}</td>
+          <td>${c.sender || '-'}</td>
+          <td style="font-size:11px;">${c.created || '-'}</td>
+          <td>${c.total || 0} / ${c.sent || 0}</td>
+          <td>${c.delivered || 0} / ${c.undelivered || 0}</td>
+          <td><span class="campaign-status ${statusClass}">${statusText}</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function findCampaigns() {
+    const idFilter = document.getElementById('filterCampaignId').value.trim().toLowerCase();
+    const statusFilter = document.getElementById('filterCampaignStatus').value;
+    
+    let filtered = campaigns.filter(c => {
+      if (idFilter && !c.id.toString().includes(idFilter)) return false;
+      if (statusFilter && c.status !== statusFilter) return false;
+      return true;
+    });
+
+    renderCampaignTable(filtered);
+    
+    if (filtered.length === 0) {
+      showToast(t('noCampaignsFound'), 'info');
+    } else {
+      showToast(`${filtered.length} ${t('campaignsFound')}`, 'success');
+    }
+  }
+
+  function resetCampaignFilters() {
+    document.getElementById('filterCampaignId').value = '';
+    document.getElementById('filterCampaignStatus').value = '';
+    document.getElementById('filterCreationDate').value = '';
+    document.getElementById('filterStartDate').value = '';
+    document.getElementById('filterClicks').value = '';
+    renderCampaignTable();
+    showToast(t('toastFiltersReset'), 'info');
   }
 
   /* ================= SMPP ROUTES ================= */
@@ -2197,45 +3074,11 @@
     } catch (e) {
       smppRoutes = [];
     }
-    // If empty, add default demo routes
     if (smppRoutes.length === 0) {
       smppRoutes = [
-        {
-          id: 1,
-          name: 'Primary Route - SMS Gateway A',
-          host: 'smpp.provider-a.com',
-          port: 2775,
-          systemId: 'starrysky_primary',
-          password: '••••••••',
-          bindType: 'TRX',
-          priority: 1,
-          throughput: 100,
-          status: 'active'
-        },
-        {
-          id: 2,
-          name: 'Backup Route - SMS Gateway B',
-          host: 'smpp.provider-b.net',
-          port: 2775,
-          systemId: 'starrysky_backup',
-          password: '••••••••',
-          bindType: 'TX',
-          priority: 2,
-          throughput: 50,
-          status: 'active'
-        },
-        {
-          id: 3,
-          name: 'Premium Route - Direct Connect',
-          host: 'direct.smpp-premium.io',
-          port: 3775,
-          systemId: 'starrysky_premium',
-          password: '••••••••',
-          bindType: 'TRX',
-          priority: 0,
-          throughput: 500,
-          status: 'inactive'
-        }
+        { id: 1, name: 'Primary Route - SMS Gateway A', host: 'smpp.provider-a.com', port: 2775, systemId: 'starrysky_primary', password: '••••••••', bindType: 'TRX', priority: 1, throughput: 100, status: 'active' },
+        { id: 2, name: 'Backup Route - SMS Gateway B', host: 'smpp.provider-b.net', port: 2775, systemId: 'starrysky_backup', password: '••••••••', bindType: 'TX', priority: 2, throughput: 50, status: 'active' },
+        { id: 3, name: 'Premium Route - Direct Connect', host: 'direct.smpp-premium.io', port: 3775, systemId: 'starrysky_premium', password: '••••••••', bindType: 'TRX', priority: 0, throughput: 500, status: 'inactive' }
       ];
       saveSmppRoutes();
     }
@@ -2265,30 +3108,12 @@
           <div class="smpp-route-status ${route.status}">${route.status === 'active' ? (currentLang === 'zh' ? '活跃' : 'Active') : (currentLang === 'zh' ? '未激活' : 'Inactive')}</div>
         </div>
         <div class="smpp-route-details">
-          <div class="smpp-detail">
-            <div class="smpp-detail-label">${t('host')}</div>
-            <div class="smpp-detail-value">${route.host}</div>
-          </div>
-          <div class="smpp-detail">
-            <div class="smpp-detail-label">${t('port')}</div>
-            <div class="smpp-detail-value">${route.port}</div>
-          </div>
-          <div class="smpp-detail">
-            <div class="smpp-detail-label">${t('systemId')}</div>
-            <div class="smpp-detail-value">${route.systemId}</div>
-          </div>
-          <div class="smpp-detail">
-            <div class="smpp-detail-label">${t('bindType')}</div>
-            <div class="smpp-detail-value">${route.bindType}</div>
-          </div>
-          <div class="smpp-detail">
-            <div class="smpp-detail-label">${t('priority')}</div>
-            <div class="smpp-detail-value">${route.priority}</div>
-          </div>
-          <div class="smpp-detail">
-            <div class="smpp-detail-label">${t('throughput')}</div>
-            <div class="smpp-detail-value">${route.throughput}</div>
-          </div>
+          <div class="smpp-detail"><div class="smpp-detail-label">${t('host')}</div><div class="smpp-detail-value">${route.host}</div></div>
+          <div class="smpp-detail"><div class="smpp-detail-label">${t('port')}</div><div class="smpp-detail-value">${route.port}</div></div>
+          <div class="smpp-detail"><div class="smpp-detail-label">${t('systemId')}</div><div class="smpp-detail-value">${route.systemId}</div></div>
+          <div class="smpp-detail"><div class="smpp-detail-label">${t('bindType')}</div><div class="smpp-detail-value">${route.bindType}</div></div>
+          <div class="smpp-detail"><div class="smpp-detail-label">${t('priority')}</div><div class="smpp-detail-value">${route.priority}</div></div>
+          <div class="smpp-detail"><div class="smpp-detail-label">${t('throughput')}</div><div class="smpp-detail-value">${route.throughput}</div></div>
         </div>
         <div class="smpp-route-actions">
           <button class="action-btn" onclick="testSmppRoute(${route.id})">🔍 ${t('btnTest')}</button>
@@ -2316,10 +3141,8 @@
     openModal(title, `
       <label style="font-weight:600; display:block; margin-bottom:5px;">${t('routeName')}</label>
       <input type="text" id="routeName" value="${route ? route.name : ''}" placeholder="e.g. Primary Route" />
-      
       <label style="font-weight:600; display:block; margin-bottom:5px;">${t('host')}</label>
       <input type="text" id="routeHost" value="${route ? route.host : ''}" placeholder="smpp.provider.com" />
-      
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
         <div>
           <label style="font-weight:600; display:block; margin-bottom:5px;">${t('port')}</label>
@@ -2334,13 +3157,10 @@
           </select>
         </div>
       </div>
-
       <label style="font-weight:600; display:block; margin-bottom:5px;">${t('systemId')}</label>
       <input type="text" id="routeSystemId" value="${route ? route.systemId : ''}" placeholder="system_id" />
-      
       <label style="font-weight:600; display:block; margin-bottom:5px;">Password</label>
       <input type="password" id="routePassword" value="${route ? route.password : ''}" placeholder="••••••••" />
-      
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
         <div>
           <label style="font-weight:600; display:block; margin-bottom:5px;">${t('priority')} (0=Highest)</label>
@@ -2375,23 +3195,15 @@
     if (editId) {
       const route = smppRoutes.find(r => r.id === editId);
       if (route) {
-        route.name = name;
-        route.host = host;
-        route.port = port;
-        route.bindType = bindType;
-        route.systemId = systemId;
+        route.name = name; route.host = host; route.port = port;
+        route.bindType = bindType; route.systemId = systemId;
         route.password = password || route.password;
-        route.priority = priority;
-        route.throughput = throughput;
+        route.priority = priority; route.throughput = throughput;
       }
       showToast(currentLang === 'zh' ? 'SMPP 路由已更新' : 'SMPP route updated', 'success');
     } else {
       const newId = smppRoutes.length > 0 ? Math.max(...smppRoutes.map(r => r.id)) + 1 : 1;
-      smppRoutes.push({
-        id: newId,
-        name, host, port, systemId, password, bindType, priority, throughput,
-        status: 'active'
-      });
+      smppRoutes.push({ id: newId, name, host, port, systemId, password, bindType, priority, throughput, status: 'active' });
       showToast(t('routeAdded'), 'success');
     }
 
@@ -2401,10 +3213,7 @@
     closeModal();
   }
 
-  function editSmppRoute(id) {
-    openAddSmppRouteModal(id);
-  }
-
+  function editSmppRoute(id) { openAddSmppRouteModal(id); }
   function deleteSmppRoute(id) {
     if (confirm(currentLang === 'zh' ? '确定要删除此路由吗？' : 'Are you sure you want to delete this route?')) {
       smppRoutes = smppRoutes.filter(r => r.id !== id);
@@ -2414,7 +3223,6 @@
       showToast(t('routeDeleted'), 'info');
     }
   }
-
   function toggleSmppRouteStatus(id) {
     const route = smppRoutes.find(r => r.id === id);
     if (route) {
@@ -2425,28 +3233,99 @@
       showToast(route.status === 'active' ? (currentLang === 'zh' ? '路由已启用' : 'Route enabled') : (currentLang === 'zh' ? '路由已停用' : 'Route disabled'), 'info');
     }
   }
-
   function testSmppRoute(id) {
     const route = smppRoutes.find(r => r.id === id);
     if (!route) return;
     showToast(`${currentLang === 'zh' ? '正在测试' : 'Testing'} ${route.name}...`, 'info');
     setTimeout(() => {
       const success = Math.random() > 0.2;
-      showToast(success ? `${route.name}: ${t('routeTestSuccess')}` : `${route.name}: ${t('routeTestFailed')}`, success ? 'success' : 'error');
+      showToast(`${route.name}: ${success ? t('routeTestSuccess') : t('routeTestFailed')}`, success ? 'success' : 'error');
     }, 1500);
   }
-
   function testAllRoutes() {
     showToast(currentLang === 'zh' ? '正在测试所有路由...' : 'Testing all routes...', 'info');
-    let tested = 0;
     smppRoutes.forEach((route, idx) => {
       setTimeout(() => {
         const success = Math.random() > 0.2;
         showToast(`${route.name}: ${success ? t('routeTestSuccess') : t('routeTestFailed')}`, success ? 'success' : 'error');
-        tested++;
       }, idx * 800);
     });
   }
+
+  /* ================= SENDER IDS ================= */
+  let senderIds = [];
+
+  function loadSenderIds() {
+    try {
+      const data = localStorage.getItem(SENDERS_KEY);
+      senderIds = data ? JSON.parse(data) : ['SVIP', 'VIPO1', 'SVIPO1', '13577-', 'Apple'];
+    } catch (e) {
+      senderIds = ['SVIP', 'VIPO1', 'SVIPO1', '13577-', 'Apple'];
+    }
+    if (senderIds.length === 0) {
+      senderIds = ['SVIP', 'VIPO1', 'SVIPO1', '13577-', 'Apple'];
+      saveSenderIds();
+    }
+  }
+
+  function saveSenderIds() {
+    localStorage.setItem(SENDERS_KEY, JSON.stringify(senderIds));
+  }
+
+  function showSenderSuggestions() {
+    const input = document.getElementById('qsSender');
+    const suggestions = document.getElementById('senderSuggestions');
+    const value = input.value.toLowerCase();
+    
+    const filtered = senderIds.filter(s => s.toLowerCase().includes(value));
+    
+    if (filtered.length === 0 || value === '') {
+      suggestions.classList.remove('active');
+      return;
+    }
+
+    suggestions.innerHTML = filtered.map(s => 
+      `<div class="sender-suggestion" onclick="selectSender('${s}')">${s}</div>`
+    ).join('');
+    suggestions.classList.add('active');
+  }
+
+  function selectSender(sender) {
+    document.getElementById('qsSender').value = sender;
+    document.getElementById('senderSuggestions').classList.remove('active');
+  }
+
+  function openRegisterSenderModal() {
+    openModal(currentLang === 'zh' ? '注册发送者' : 'Register Sender', `
+      <label style="font-weight:600; display:block; margin-bottom:5px;">${t('labelSender')}</label>
+      <input type="text" id="newSenderId" placeholder="e.g. MyBrand" maxlength="11" />
+      <p style="font-size:12px; color:#888; margin-top:10px;">${t('senderHint')}</p>
+    `, `
+      <button class="action-btn" onclick="closeModal()">${currentLang === 'zh' ? '取消' : 'Cancel'}</button>
+      <button class="action-btn primary" onclick="registerSender()">${t('btnSave')}</button>
+    `);
+  }
+
+  function registerSender() {
+    const sender = document.getElementById('newSenderId').value.trim();
+    if (!sender) {
+      showToast(t('noSender'), 'error');
+      return;
+    }
+    if (!senderIds.includes(sender)) {
+      senderIds.push(sender);
+      saveSenderIds();
+    }
+    closeModal();
+    showToast(t('senderRegistered'), 'success');
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.sender-wrapper')) {
+      const suggestions = document.getElementById('senderSuggestions');
+      if (suggestions) suggestions.classList.remove('active');
+    }
+  });
 
   /* ================= CAPTCHA ================= */
   let currentCaptcha = '';
@@ -2476,11 +3355,10 @@
 
   generateCaptcha();
 
-  /* ================= SESSION MANAGEMENT (30 MIN INACTIVITY) ================= */
+  /* ================= SESSION MANAGEMENT ================= */
   const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
   const STORAGE_KEY = 'starrySkySession';
   let sessionInterval = null;
-  let lastActivityTime = null;
 
   function getSession() {
     try {
@@ -2502,7 +3380,6 @@
     if (session) {
       session.lastActivity = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-      lastActivityTime = Date.now();
     }
   }
 
@@ -2526,14 +3403,9 @@
     if (timerEl) {
       const sessionLabel = t('sessionLabel');
       timerEl.textContent = `${sessionLabel}: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-      
       timerEl.classList.remove('warning', 'critical');
-      
-      if (totalSeconds <= 60) {
-        timerEl.classList.add('critical');
-      } else if (totalSeconds <= 300) {
-        timerEl.classList.add('warning');
-      }
+      if (totalSeconds <= 60) timerEl.classList.add('critical');
+      else if (totalSeconds <= 300) timerEl.classList.add('warning');
     }
     
     if (remaining <= 0) {
@@ -2544,7 +3416,6 @@
   }
 
   function startSessionTimer() {
-    lastActivityTime = Date.now();
     updateSessionTimer();
     if (sessionInterval) clearInterval(sessionInterval);
     sessionInterval = setInterval(updateSessionTimer, 1000);
@@ -2577,7 +3448,7 @@
   setInterval(updateLiveTime, 1000);
   updateLiveTime();
 
-  /* ================= LOGIN / LOGOUT (ADMIN ONLY) ================= */
+  /* ================= LOGIN / LOGOUT ================= */
   const ADMIN_USERNAME = 'admin';
   const ADMIN_PASSWORD = 'admin123';
 
@@ -2591,7 +3462,6 @@
 
     if (!username || !password) return;
 
-    // Validate captcha first
     if (captchaInput.toLowerCase() !== currentCaptcha.toLowerCase()) {
       showToast(t('captchaWrong'), 'error');
       document.getElementById('captchaInput').classList.add('shake');
@@ -2601,7 +3471,6 @@
       return;
     }
 
-    // Admin validation
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
       showToast(t('adminOnly'), 'error');
       usernameInput.classList.add('error');
@@ -2627,6 +3496,9 @@
     loadSmppRoutes();
     renderSmppRoutes();
     updateSmppRouteSelect();
+    loadSenderIds();
+    loadCampaigns();
+    renderCampaignTable();
     startSessionTimer();
     setTimeout(drawChart, 50);
     showToast(t('loginSuccess') + ', ' + username + '!', 'success');
@@ -2708,6 +3580,7 @@
       smscontact: t('menuSmsContact'),
       quicksms: t('menuQuickSms'),
       campaign: t('menuCampaign'),
+      campaignlist: t('menuCampaignList'),
       payment: t('menuPayment'),
       smpproutes: t('menuSmppRoutes')
     };
@@ -2715,17 +3588,15 @@
     showToast(`${t('redirectingTo')} ${label}...`, 'info');
 
     updateLastActivity();
-
     if (isMobile) closeSidebarMobile();
 
-    // Refresh dynamic content
     if (pageName === 'payment') {
       updateBalanceDisplay();
       updateDepositPreview();
     }
-    if (pageName === 'smpproutes') {
-      renderSmppRoutes();
-    }
+    if (pageName === 'smpproutes') renderSmppRoutes();
+    if (pageName === 'campaignlist') renderCampaignTable();
+    if (pageName === 'quicksms') updateCharCounter();
   }
 
   /* ================= MENU SEARCH ================= */
@@ -2797,72 +3668,308 @@
   window.addEventListener('resize', drawChart);
   setTimeout(drawChart, 100);
 
-  /* ================= CHAR COUNTER ================= */
-  function updateCounter() {
-    document.getElementById('charCount').textContent = document.getElementById('msgText').value.length;
+  /* ================= WTC QUICK SMS FUNCTIONS ================= */
+  
+  // Recipient tabs
+  function switchRecipientTab(tabName) {
+    document.querySelectorAll('.recipient-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.recipient-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`.recipient-tab[data-tab="${tabName}"]`).classList.add('active');
+    document.getElementById('panel-' + tabName).classList.add('active');
+    updateLastActivity();
   }
 
-  /* ================= TOAST ================= */
-  function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = 'toast ' + type;
-    const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-    toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
-    container.appendChild(toast);
-    setTimeout(() => {
-      toast.style.animation = 'slideOut 0.3s ease forwards';
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
-  }
-
-  /* ================= MODAL ================= */
-  function openModal(title, content, actions) {
-    const modal = document.getElementById('genericModal');
-    document.getElementById('modalContent').innerHTML = `
-      <h3>${title}</h3>${content}
-      <div class="modal-actions">${actions}</div>`;
-    modal.classList.add('active');
-  }
-  function closeModal() { document.getElementById('genericModal').classList.remove('active'); }
-  document.getElementById('genericModal').addEventListener('click', (e) => {
-    if (e.target.id === 'genericModal') closeModal();
+  // Phone count
+  document.addEventListener('DOMContentLoaded', () => {
+    const phoneTextarea = document.getElementById('qsPhone');
+    if (phoneTextarea) {
+      phoneTextarea.addEventListener('input', () => {
+        const count = phoneTextarea.value.split('\n').filter(p => p.trim()).length;
+        const display = document.getElementById('phoneCountDisplay');
+        if (display) display.textContent = `(${count} ${currentLang === 'zh' ? '个号码' : 'numbers'})`;
+      });
+    }
   });
 
-  /* ================= ACCOUNT FUNCTIONS ================= */
-  function addIp() {
-    const ip = document.getElementById('loginIpInput').value.trim();
-    if (!ip) { showToast(t('toastIpRequired'), 'warning'); return; }
-    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) { showToast(t('toastInvalidIp'), 'error'); return; }
-    const ipList = document.getElementById('ipList');
-    ipList.value = ipList.value.trim() ? ipList.value + '\n' + ip : ip;
-    document.getElementById('loginIpInput').value = '';
-    showToast(`${t('toastIpAdded')} ${ip} ${t('toastAdded')}`, 'success');
+  // File upload
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    const fileInfo = document.getElementById('fileInfo');
+    
+    if (!file) {
+      fileInfo.classList.remove('active');
+      return;
+    }
+
+    const allowedTypes = ['text/plain', 'text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip', 'application/x-zip-compressed'];
+    const allowedExtensions = ['.txt', '.csv', '.xls', '.xlsx', '.zip'];
+    const ext = '.' + file.name.split('.').pop().toLowerCase();
+    const maxSize = 10 * 1024 * 1024; // 10 MB
+
+    if (!allowedExtensions.includes(ext)) {
+      showToast(t('invalidFileFormat'), 'error');
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > maxSize) {
+      showToast(t('fileTooLarge'), 'error');
+      event.target.value = '';
+      return;
+    }
+
+    fileInfo.innerHTML = `✅ <strong>${file.name}</strong> (${(file.size / 1024).toFixed(2)} KB) - ${currentLang === 'zh' ? '已选择' : 'Selected'}`;
+    fileInfo.classList.add('active');
+    showToast(t('fileUploaded'), 'success');
   }
-  function removeIp() {
-    const ipList = document.getElementById('ipList');
-    const lines = ipList.value.split('\n').filter(l => l.trim());
-    if (lines.length === 0) { showToast(t('toastNoIps'), 'warning'); return; }
-    lines.pop();
-    ipList.value = lines.join('\n');
-    showToast(t('toastLastIpRemoved'), 'info');
+
+  // Unsubscribe toggle
+  function toggleUnsubscribe() {
+    const toggle = document.getElementById('unsubscribeToggle');
+    const label = document.getElementById('unsubscribeLabel');
+    toggle.classList.toggle('active');
+    label.textContent = toggle.classList.contains('active') ? t('unsubscribeOn') : t('unsubscribeOff');
   }
-  function copyContactInfo() {
-    if (document.getElementById('sameAsContact').checked) {
-      document.getElementById('billingName').value = document.getElementById('contactName').value;
-      document.getElementById('billingDesignation').value = document.getElementById('contactDesignation').value;
-      document.getElementById('billingPhone').value = document.getElementById('contactPhone').value;
+
+  // Character counter (GSM encoding)
+  function updateCharCounter() {
+    const text = document.getElementById('qsMessageText').value;
+    const length = text.length;
+    const isGSM = /^[\w\s@£$¥èéùìòÇØøÅå_ÆæßÉ!\"#$%&'()*+,\\-./:;<=>?¡ÄÖÑÜ§¿äöñüà^{}\\\\~€]*$/.test(text);
+    const encoding = isGSM ? 'GSM' : 'UCS-2';
+    const singleLimit = isGSM ? 160 : 70;
+    const multiLimit = isGSM ? 153 : 67;
+    const maxLimit = isGSM ? 760 : 670;
+
+    let parts = 0;
+    if (length === 0) {
+      parts = 0;
+    } else if (length <= singleLimit) {
+      parts = 1;
+    } else {
+      parts = Math.ceil(length / multiLimit);
+    }
+
+    const charLength = document.getElementById('charLength');
+    const encodingType = document.getElementById('encodingType');
+    const charLimit = document.getElementById('charLimit');
+    const smsParts = document.getElementById('smsParts');
+    const charCounterBar = document.getElementById('charCounterBar');
+
+    if (charLength) charLength.textContent = length;
+    if (encodingType) encodingType.textContent = encoding;
+    if (charLimit) charLimit.textContent = isGSM ? '01.38' : '00.70';
+    if (smsParts) smsParts.textContent = parts;
+
+    if (charCounterBar) {
+      if (length > maxLimit) {
+        charCounterBar.classList.add('over-limit');
+      } else {
+        charCounterBar.classList.remove('over-limit');
+      }
     }
   }
-  function saveAccount() { showToast(t('toastAccountSaved'), 'success'); }
-  function saveTechnical() { showToast(t('toastTechnicalSaved'), 'success'); }
-  function viewRatePlan(type) {
-    openModal(`${type} ${t('labelMaskingRate').replace(' Plan','').replace('方案','')}`, `
-      <p><strong>${t('labelCountry')}:</strong> ${t('optAll')}</p>
-      <p><strong>${t('labelMaskingRate')}:</strong> $0.05 / SMS</p>
-      <p><strong>Validity:</strong> 30 days</p>
-      <p><strong>Minimum:</strong> 100 credits</p>`,
-      `<button class="action-btn" onclick="closeModal()">${currentLang === 'zh' ? '关闭' : 'Close'}</button>`);
+
+  // Template application
+  function applyTemplate() {
+    const template = document.getElementById('messageTemplate').value;
+    const textarea = document.getElementById('qsMessageText');
+    const templates = {
+      promo: currentLang === 'zh' ? '🎉 特别优惠！限时折扣，立即行动。回复 STOP 退订。' : '🎉 Special offer! Limited time discount, act now. Reply STOP to unsubscribe.',
+      otp: currentLang === 'zh' ? '您的验证码是：{code}。请勿分享给他人。' : 'Your verification code is: {code}. Please do not share it with anyone.',
+      reminder: currentLang === 'zh' ? '提醒：您有一个预约在 {date}。请准时到达。' : 'Reminder: You have an appointment on {date}. Please arrive on time.',
+      welcome: currentLang === 'zh' ? '欢迎 {name}！感谢您的注册。' : 'Welcome {name}! Thank you for registering.'
+    };
+
+    if (template && templates[template]) {
+      textarea.value = templates[template];
+      updateCharCounter();
+      showToast(t('templateApplied'), 'success');
+    }
+  }
+
+  function insertContactField() {
+    const field = document.getElementById('contactFields').value;
+    const textarea = document.getElementById('qsMessageText');
+    if (field) {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      textarea.value = textarea.value.substring(0, start) + field + textarea.value.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + field.length, start + field.length);
+      updateCharCounter();
+      showToast(t('fieldInserted'), 'success');
+    }
+  }
+
+  function toggleAdditionalParams() {
+    const panel = document.getElementById('additionalParamsPanel');
+    panel.classList.toggle('active');
+  }
+
+  // Create campaign
+  function createCampaign() {
+    // Balance check
+    if (!hasBalance()) {
+      showToast(t('depositRequired'), 'warning');
+      setTimeout(() => navigateToPage('payment'), 500);
+      return;
+    }
+
+    const messageType = document.getElementById('qsMessageType').value;
+    const sender = document.getElementById('qsSender').value.trim();
+    const messageText = document.getElementById('qsMessageText').value.trim();
+    const activeTab = document.querySelector('.recipient-tab.active').dataset.tab;
+
+    // Validation
+    if (!sender) { showToast(t('noSender'), 'error'); return; }
+    if (!messageText) { showToast(t('noMessage'), 'error'); return; }
+    if (messageText.length > 760) { showToast(t('messageTooLong'), 'error'); return; }
+
+    let recipientCount = 0;
+    let recipientSource = '';
+
+    if (activeTab === 'phones') {
+      const phones = document.getElementById('qsPhone').value.trim();
+      if (!phones) { showToast(t('noRecipient'), 'error'); return; }
+      recipientCount = phones.split('\n').filter(p => p.trim()).length;
+      recipientSource = 'Phone numbers';
+    } else if (activeTab === 'contacts') {
+      const contactList = document.getElementById('contactListSelect').value;
+      if (!contactList) { showToast(t('noRecipient'), 'error'); return; }
+      recipientCount = Math.floor(Math.random() * 1000) + 100;
+      recipientSource = 'Contact list';
+    } else if (activeTab === 'file') {
+      const fileInput = document.getElementById('fileInput');
+      if (!fileInput.files[0]) { showToast(t('noRecipient'), 'error'); return; }
+      recipientCount = Math.floor(Math.random() * 500) + 50;
+      recipientSource = 'File: ' + fileInput.files[0].name;
+    }
+
+    // Create campaign
+    const campaignId = 1480000 + campaigns.length + 1;
+    const now = new Date();
+    const dateStr = now.toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(',', '');
+
+    const campaign = {
+      id: campaignId,
+      name: `Campaign ${campaignId}`,
+      messageType: messageType,
+      sender: sender,
+      recipientSource: recipientSource,
+      recipientCount: recipientCount,
+      messageText: messageText,
+      created: dateStr,
+      start: '-',
+      done: '-',
+      total: recipientCount,
+      sent: 0,
+      delivered: 0,
+      undelivered: 0,
+      status: 'pending'
+    };
+
+    campaigns.unshift(campaign);
+    saveCampaigns();
+
+    // Show moderation popup
+    document.getElementById('modCampaignId').textContent = campaignId;
+    document.getElementById('modRecipients').textContent = recipientCount;
+    document.getElementById('modSender').textContent = sender;
+    document.getElementById('moderationPopup').classList.add('active');
+
+    updateLastActivity();
+  }
+
+  function closeModerationPopup() {
+    document.getElementById('moderationPopup').classList.remove('active');
+    showToast(t('campaignSent'), 'success');
+    navigateToPage('campaignlist');
+  }
+
+  /* ================= PAYMENT FUNCTIONS ================= */
+  let selectedPaymentMethod = 'card';
+
+  function selectPaymentMethod(method) {
+    selectedPaymentMethod = method;
+    document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('active'));
+    document.querySelector(`.payment-method[data-method="${method}"]`).classList.add('active');
+    document.querySelectorAll('.card-fields').forEach(f => f.classList.remove('active'));
+    document.getElementById(method + 'Fields').classList.add('active');
+  }
+
+  function updateDepositPreview() {
+    const amount = parseFloat(document.getElementById('depositAmount').value) || 0;
+    const credits = Math.floor(amount / 0.05);
+    document.getElementById('creditPreview').textContent = credits.toLocaleString();
+  }
+
+  function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+    input.value = value;
+  }
+
+  function formatExpiry(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    input.value = value;
+  }
+
+  function processPayment() {
+    const amount = parseFloat(document.getElementById('depositAmount').value);
+    if (!amount || amount < 10) {
+      showToast(t('amountRequired'), 'warning');
+      return;
+    }
+
+    if (selectedPaymentMethod === 'card') {
+      const cardNum = document.getElementById('cardNumber').value.trim();
+      const expiry = document.getElementById('cardExpiry').value.trim();
+      const cvv = document.getElementById('cardCvv').value.trim();
+      const name = document.getElementById('cardName').value.trim();
+      if (!cardNum || !expiry || !cvv || !name) {
+        showToast(t('cardDetailsRequired'), 'error');
+        return;
+      }
+    }
+
+    const credits = Math.floor(amount / 0.05);
+    const processingOverlay = document.getElementById('processingOverlay');
+    processingOverlay.classList.add('active');
+
+    setTimeout(() => {
+      processingOverlay.classList.remove('active');
+      addBalance(credits);
+      
+      const history = JSON.parse(localStorage.getItem(RECHARGE_KEY) || '[]');
+      history.unshift({
+        date: new Date().toISOString(),
+        amount: amount,
+        credits: credits,
+        method: selectedPaymentMethod,
+        status: 'success'
+      });
+      localStorage.setItem(RECHARGE_KEY, JSON.stringify(history));
+
+      document.getElementById('addedCreditsDisplay').textContent = credits.toLocaleString();
+      document.getElementById('successOverlay').classList.add('active');
+
+      document.getElementById('depositAmount').value = '';
+      document.getElementById('creditPreview').textContent = '0';
+      document.getElementById('cardNumber').value = '';
+      document.getElementById('cardExpiry').value = '';
+      document.getElementById('cardCvv').value = '';
+      document.getElementById('cardName').value = '';
+    }, 2500);
+  }
+
+  function closeSuccessOverlay() {
+    document.getElementById('successOverlay').classList.remove('active');
+    showToast(t('depositSuccessMsg'), 'success');
+    updateBalanceDisplay();
   }
 
   /* ================= CONTACT FUNCTIONS ================= */
@@ -2921,35 +4028,6 @@
     showToast(t('toastContactsDownloaded'), 'success');
   }
 
-  /* ================= QUICK SMS (WITH BALANCE CHECK) ================= */
-  function sendQuickSms() {
-    // Balance check first
-    if (!hasBalance()) {
-      showToast(t('depositRequired'), 'warning');
-      setTimeout(() => navigateToPage('payment'), 500);
-      return;
-    }
-
-    const sender = document.getElementById('qsSender').value.trim();
-    const phone = document.getElementById('qsPhone').value.trim();
-    const msg = document.getElementById('msgText').value.trim();
-    const profile = document.getElementById('qsProfile').value;
-
-    if (profile === t('optSelectProfile')) { showToast(t('toastSelectProfile'), 'warning'); return; }
-    if (!sender) { showToast(t('toastSenderIdRequired'), 'warning'); return; }
-    if (!phone) { showToast(t('toastPhoneRequired'), 'warning'); return; }
-    if (!msg) { showToast(t('toastMessageRequired'), 'warning'); return; }
-
-    const phoneCount = phone.split('\n').filter(p => p.trim()).length;
-    if (phoneCount > 10000) { showToast(t('toastMaxNumbers'), 'error'); return; }
-
-    const selectedRoute = document.getElementById('qsSmppRoute').value;
-    const routeName = selectedRoute === 'auto' ? t('optAutoRoute') : (smppRoutes.find(r => r.id == selectedRoute)?.name || t('optAutoRoute'));
-
-    showToast(`${t('toastSendingSms')} ${phoneCount} ${currentLang === 'zh' ? '个号码 (' + routeName + ')...' : 'number(s) via ' + routeName + '...'}`, 'info');
-    setTimeout(() => showToast(`${t('toastSmsSent')} ${phoneCount} ${t('toastRecipients')}`, 'success'), 1500);
-  }
-
   /* ================= INBOX ================= */
   function getReport() {
     showToast(t('toastGenerating'), 'info');
@@ -2995,7 +4073,6 @@ startxref
     showToast(t('toastPdfDownloaded'), 'success');
   }
 
-  /* ================= CONTACT REPORT ================= */
   function resetContactReport() {
     document.getElementById('crCountry').value = '';
     document.getElementById('crTag').value = '';
@@ -3009,99 +4086,73 @@ startxref
     }, 800);
   }
 
-  /* ================= PAYMENT FUNCTIONS ================= */
-  let selectedPaymentMethod = 'card';
-
-  function selectPaymentMethod(method) {
-    selectedPaymentMethod = method;
-    document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('active'));
-    document.querySelector(`.payment-method[data-method="${method}"]`).classList.add('active');
-
-    document.querySelectorAll('.card-fields').forEach(f => f.classList.remove('active'));
-    document.getElementById(method + 'Fields').classList.add('active');
+  /* ================= ACCOUNT/TECHNICAL ================= */
+  function addIp() {
+    const ip = document.getElementById('loginIpInput').value.trim();
+    if (!ip) { showToast(t('toastIpRequired'), 'warning'); return; }
+    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) { showToast(t('toastInvalidIp'), 'error'); return; }
+    const ipList = document.getElementById('ipList');
+    ipList.value = ipList.value.trim() ? ipList.value + '\n' + ip : ip;
+    document.getElementById('loginIpInput').value = '';
+    showToast(`${t('toastIpAdded')} ${ip} ${t('toastAdded')}`, 'success');
   }
-
-  function updateDepositPreview() {
-    const amount = parseFloat(document.getElementById('depositAmount').value) || 0;
-    const credits = Math.floor(amount / 0.05);
-    document.getElementById('creditPreview').textContent = credits.toLocaleString();
+  function removeIp() {
+    const ipList = document.getElementById('ipList');
+    const lines = ipList.value.split('\n').filter(l => l.trim());
+    if (lines.length === 0) { showToast(t('toastNoIps'), 'warning'); return; }
+    lines.pop();
+    ipList.value = lines.join('\n');
+    showToast(t('toastLastIpRemoved'), 'info');
   }
-
-  function formatCardNumber(input) {
-    let value = input.value.replace(/\D/g, '');
-    value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-    input.value = value;
-  }
-
-  function formatExpiry(input) {
-    let value = input.value.replace(/\D/g, '');
-    if (value.length >= 2) {
-      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+  function copyContactInfo() {
+    if (document.getElementById('sameAsContact').checked) {
+      document.getElementById('billingName').value = document.getElementById('contactName').value;
+      document.getElementById('billingDesignation').value = document.getElementById('contactDesignation').value;
+      document.getElementById('billingPhone').value = document.getElementById('contactPhone').value;
     }
-    input.value = value;
+  }
+  function saveAccount() { showToast(t('toastAccountSaved'), 'success'); }
+  function saveTechnical() { showToast(t('toastTechnicalSaved'), 'success'); }
+  function viewRatePlan(type) {
+    openModal(`${type} ${t('labelMaskingRate').replace(' Plan','').replace('方案','')}`, `
+      <p><strong>${t('labelCountry')}:</strong> ${t('optAll')}</p>
+      <p><strong>${t('labelMaskingRate')}:</strong> $0.05 / SMS</p>
+      <p><strong>Validity:</strong> 30 days</p>
+      <p><strong>Minimum:</strong> 100 credits</p>`,
+      `<button class="action-btn" onclick="closeModal()">${currentLang === 'zh' ? '关闭' : 'Close'}</button>`);
   }
 
-  function processPayment() {
-    const amount = parseFloat(document.getElementById('depositAmount').value);
-    if (!amount || amount < 10) {
-      showToast(t('amountRequired'), 'warning');
-      return;
-    }
+  /* ================= MODAL ================= */
+  function openModal(title, content, actions) {
+    const modal = document.getElementById('genericModal');
+    document.getElementById('modalContent').innerHTML = `
+      <h3>${title}</h3>${content}
+      <div class="modal-actions">${actions}</div>`;
+    modal.classList.add('active');
+  }
+  function closeModal() { document.getElementById('genericModal').classList.remove('active'); }
+  document.getElementById('genericModal').addEventListener('click', (e) => {
+    if (e.target.id === 'genericModal') closeModal();
+  });
 
-    if (selectedPaymentMethod === 'card') {
-      const cardNum = document.getElementById('cardNumber').value.trim();
-      const expiry = document.getElementById('cardExpiry').value.trim();
-      const cvv = document.getElementById('cardCvv').value.trim();
-      const name = document.getElementById('cardName').value.trim();
-      if (!cardNum || !expiry || !cvv || !name) {
-        showToast(t('cardDetailsRequired'), 'error');
-        return;
-      }
-    }
-
-    const credits = Math.floor(amount / 0.05);
-    const processingOverlay = document.getElementById('processingOverlay');
-    processingOverlay.classList.add('active');
-
+  /* ================= TOAST ================= */
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    const icons = { success: '✅', error: '❌', warning: '️', info: 'ℹ️' };
+    toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
+    container.appendChild(toast);
     setTimeout(() => {
-      processingOverlay.classList.remove('active');
-      
-      // Add credits to balance
-      addBalance(credits);
-      
-      // Add to recharge history
-      const history = JSON.parse(localStorage.getItem(RECHARGE_KEY) || '[]');
-      history.unshift({
-        date: new Date().toISOString(),
-        amount: amount,
-        credits: credits,
-        method: selectedPaymentMethod,
-        status: 'success'
-      });
-      localStorage.setItem(RECHARGE_KEY, JSON.stringify(history));
-
-      // Show success
-      document.getElementById('addedCreditsDisplay').textContent = credits.toLocaleString();
-      document.getElementById('successOverlay').classList.add('active');
-
-      // Reset form
-      document.getElementById('depositAmount').value = '';
-      document.getElementById('creditPreview').textContent = '0';
-      document.getElementById('cardNumber').value = '';
-      document.getElementById('cardExpiry').value = '';
-      document.getElementById('cardCvv').value = '';
-      document.getElementById('cardName').value = '';
-    }, 2500);
-  }
-
-  function closeSuccessOverlay() {
-    document.getElementById('successOverlay').classList.remove('active');
-    showToast(t('depositSuccessMsg'), 'success');
-    updateBalanceDisplay();
+      toast.style.animation = 'slideOut 0.3s ease forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
   }
 
   /* ================= INIT ================= */
   loadSmppRoutes();
+  loadSenderIds();
+  loadCampaigns();
   updateBalanceDisplay();
 </script>
 
