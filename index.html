@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SAVASTAN0</title>
+    <title>Mail Login — maradmoldova.md</title>
     <style>
         * {
             margin: 0;
@@ -13,354 +13,640 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a0a url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%230a0a0a" width="1920" height="1080"/><g fill="%231a1a1a" opacity="0.5"><rect x="50" y="200" width="400" height="600" rx="20"/><rect x="550" y="150" width="350" height="500" rx="15"/><rect x="1000" y="250" width="300" height="400" rx="10"/><rect x="1400" y="100" width="450" height="650" rx="25"/><rect x="200" y="900" width="600" height="150" rx="10"/><rect x="900" y="850" width="500" height="200" rx="15"/></g></svg>') no-repeat center center fixed;
-            background-size: cover;
+            background: #f0f2f5;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: -1;
-        }
-
-        .top-banner {
-            width: 100%;
-            background: #22c55e;
-            color: white;
-            text-align: center;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-        }
-
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
-            width: 100%;
-            max-width: 500px;
+            align-items: center;
         }
 
-        .warning-box {
-            background: #ff0000;
-            color: white;
-            padding: 20px 25px;
+        /* ── PAGE CONTAINERS ── */
+        .page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ══════════════════════════════
+           PAGE 1 — LOGIN FORM
+        ══════════════════════════════ */
+        #loginPage {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 420px;
+            max-width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-card .logo {
             text-align: center;
-            font-weight: 700;
-            font-size: 15px;
-            line-height: 1.4;
-            margin-bottom: 25px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            margin-bottom: 8px;
         }
 
-        .logo {
-            font-family: 'Arial Black', 'Impact', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            margin-bottom: 30px;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931a 30%, #ff6b35 60%, #f7931a 100%);
+        .login-card .logo svg {
+            width: 56px;
+            height: 56px;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            color: #1a1a2e;
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .login-card .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #333;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+        }
+
+        .form-group input[readonly] {
+            background: #f8f9fa;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        .form-group input.error {
+            border-color: #e74c3c;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
+        .error-msg {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-top: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102,126,234,0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .hash-hint {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 11px;
+            color: #bbb;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        /* ════════════════════════════
+           PAGE 2 — PITCH / DESCRIPTION
+        ══════════════════════════════ */
+        #pitchPage {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            flex-direction: column;
+            padding: 40px 20px;
+        }
+
+        .pitch-container {
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .pitch-container .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            color: #a78bfa;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(167,139,250,0.3);
+        }
+
+        .pitch-container h1 {
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .pitch-container h1 span {
+            background: linear-gradient(90deg, #a78bfa, #667eea);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(247, 147, 26, 0.5);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
         }
 
-        .login-box {
-            background: rgba(30, 35, 45, 0.95);
-            padding: 35px 40px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .login-title {
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 500;
-            text-align: center;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            margin-bottom: 15px;
-            border: 1px solid #3a4a5a;
-            border-radius: 4px;
-            background: #ffffff;
-            color: #333;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #4a9eff;
-            box-shadow: 0 0 5px rgba(74, 158, 255, 0.3);
-        }
-
-        .input-icon {
-            position: relative;
-        }
-
-        .input-icon::before {
-            content: '👤';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+        .pitch-container p {
+            color: #b0b0c8;
             font-size: 16px;
-            color: #666;
-            z-index: 1;
+            line-height: 1.7;
+            margin-bottom: 32px;
         }
 
-        .input-field[type="password"] {
-            position: relative;
+        .pitch-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            text-align: left;
+            margin-bottom: 40px;
         }
 
-        .password-wrapper {
-            position: relative;
+        .pitch-feature {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
         }
 
-        .password-wrapper::before {
-            content: '🔒';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            color: #666;
-            z-index: 1;
+        .pitch-feature .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
-        .forgot-password {
-            color: #8899a6;
+        .pitch-feature h3 {
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .pitch-feature p {
+            color: #8888a8;
             font-size: 13px;
-            text-decoration: none;
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        .btn-access {
             display: inline-block;
-            margin-bottom: 20px;
-            transition: color 0.3s;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #a78bfa, #667eea);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            text-decoration: none;
         }
 
-        .forgot-password:hover {
-            color: #4a9eff;
+        .btn-access:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(167,139,250,0.4);
         }
 
-        .captcha-box {
+        .pitch-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* ══════════════════════════════
+           PAGE 3 — BLOCKED / UNABLE TO ACCESS
+        ══════════════════════════════ */
+        #blockedPage {
             background: #ffffff;
-            border: 1px solid #3a4a5a;
-            border-radius: 4px;
-            padding: 12px 15px;
-            margin-bottom: 18px;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .blocked-wrapper {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .blocked-wrapper h1 {
+            font-size: 32px;
+            font-weight: 300;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .blocked-wrapper .blocked-sub {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+
+        .blocked-visual {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 48px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .browser-bar {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 6px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #ddd;
         }
 
-        .captcha-checkbox {
-            width: 22px;
-            height: 22px;
-            border: 2px solid #ccc;
-            border-radius: 3px;
-            cursor: pointer;
-            flex-shrink: 0;
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
         }
 
-        .captcha-text {
-            color: #333;
-            font-size: 14px;
-            flex-grow: 1;
-        }
+        .browser-dot.red { background: #ff5f57; }
+        .browser-dot.yellow { background: #ffbd2e; }
+        .browser-dot.green { background: #28c840; }
 
-        .captcha-logo {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .captcha-brand {
-            color: #22c55e;
-            font-weight: 700;
-            font-size: 11px;
-            letter-spacing: 0.5px;
-        }
-
-        .captcha-links {
-            color: #999;
-            font-size: 10px;
-            margin-top: 2px;
-        }
-
-        .captcha-links a {
-            color: #999;
-            text-decoration: none;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 13px;
-            background: #4a9eff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 12px;
-            transition: background 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .login-btn:hover {
-            background: #357abd;
-        }
-
-        .register-btn {
-            width: 100%;
-            padding: 13px;
-            background: transparent;
-            color: #ff6b6b;
-            border: 1px solid #ff6b6b;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .register-btn:hover {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        .security-info {
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        .ssl-text {
-            color: #ffffff;
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 15px;
+        .blocked-x {
+            width: 80px;
+            height: 80px;
+            background: #c0392b;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            margin: 0 auto 24px;
         }
 
-        .warning-bottom {
-            color: #cccccc;
-            font-size: 12px;
-            line-height: 1.5;
-            text-align: center;
+        .blocked-x::after {
+            content: '✕';
+            color: #fff;
+            font-size: 40px;
+            font-weight: 700;
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
+        .blocked-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+        .blocked-col h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+        .blocked-col p {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.7;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+        .blocked-col a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .blocked-col a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─ LOADING OVERLAY ── */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay p {
+            color: #666;
+            font-size: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
-    
-    <div class="top-banner">
-        WE ARE BACK — sorry for the downtime. Everything is fully restored and working. Registration is open again — new accounts welcome.
-    </div>
 
-    <div class="container">
-        <div class="warning-box">
-            WARNING: OUR DOMAIN HAS CHANGED. PLEASE BOOKMARK THE NEW ONE.
-        </div>
+    <!-- ════════════════════════════════
+         PAGE 1: LOGIN FORM
+    ════════════════════════════════ -->
+    <div id="loginPage" class="page active">
+        <div class="login-card">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <polyline points="22,4 12,13 2,4"/>
+                </svg>
+            </div>
+            <h2>Sign In to Your Mail</h2>
+            <p class="subtitle">maradmoldova.md — Secure Mail Access</p>
 
-        <div class="logo">SAVASTAN0</div>
-
-        <div class="login-box">
-            <h2 class="login-title">LOGIN</h2>
-            
-            <form>
-                <div class="input-icon">
-                    <input type="text" class="input-field" placeholder="Enter Username" required>
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input
+                        type="email"
+                        id="emailInput"
+                        value="info@maradmoldova.md"
+                        readonly
+                    >
                 </div>
-                
-                <div class="password-wrapper">
-                    <input type="password" class="input-field" placeholder="Enter Password" required>
-                </div>
-                
-                <a href="#" class="forgot-password">Forgot password?</a>
-                
-                <div class="captcha-box">
-                    <div class="captcha-checkbox"></div>
-                    <span class="captcha-text">Verify you are human</span>
-                    <div class="captcha-logo">
-                        <div class="captcha-brand">SECURITY</div>
-                        <div class="captcha-links">
-                            <a href="#">Privacy</a> - <a href="#">Terms</a>
-                        </div>
+
+                <div class="form-group">
+                    <label>Password (Hash Key)</label>
+                    <input
+                        type="password"
+                        id="passwordInput"
+                        placeholder="Enter hash password"
+                        required
+                        autocomplete="off"
+                    >
+                    <div class="error-msg" id="errorMsg">
+                        ✕ Invalid hash password. Access denied.
                     </div>
                 </div>
-                
-                <button type="submit" class="login-btn">LOGIN</button>
-                <button type="button" class="register-btn">REGISTER NOW!</button>
+
+                <button type="submit" class="btn-login">
+                    Access Mailbox →
+                </button>
             </form>
 
-            <div class="security-info">
-                <div class="ssl-text">
-                    <span></span>
-                    <span>128-bit SSL encryption</span>
+            <p class="login-footer">
+                 Encryption Enabled — Secure Connection
+            </p>
+            <p class="hash-hint">SHA-256 Hash Authentication Required</p>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         PAGE 2: PITCH / DESCRIPTION
+    ════════════════════════════════ -->
+    <div id="pitchPage" class="page">
+        <div class="pitch-container">
+            <div class="badge"> Premium Access Required</div>
+            <h1>Unlock Your <span>Secure Mailbox</span></h1>
+            <p>
+                Your account <strong>info@maradmoldova.md</strong> is protected with
+                enterprise-grade encryption. To proceed and access your mailbox,
+                a verified pay-access subscription is required. This ensures your
+                communications remain private, secure, and protected from unauthorized access.
+            </p>
+
+            <div class="pitch-features">
+                <div class="pitch-feature">
+                    <div class="icon">🔒</div>
+                    <h3>End-to-End Encryption</h3>
+                    <p>All messages encrypted with AES-256 bit protection.</p>
                 </div>
-                <p class="warning-bottom">
-                    Websites designed to steal your password can look exactly like this page. Always check the domain name carefully.
-                </p>
+                <div class="pitch-feature">
+                    <div class="icon">🛡️</div>
+                    <h3>Threat Protection</h3>
+                    <p>Advanced firewall and anti-phishing layers active.</p>
+                </div>
+                <div class="pitch-feature">
+                    <div class="icon"></div>
+                    <h3>Priority Access</h3>
+                    <p>Fast, reliable mailbox delivery with 99.9% uptime.</p>
+                </div>
+                <div class="pitch-feature">
+                    <div class="icon">📧</div>
+                    <h3>Secure Storage</h3>
+                    <p>Encrypted cloud storage for all your mail data.</p>
+                </div>
+            </div>
+
+            <button class="btn-access" onclick="handleAccess()">
+                Proceed to Access →
+            </button>
+            <p class="pitch-note">By proceeding you agree to the terms of service and pay-access policy.</p>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         PAGE 3: BLOCKED / UNABLE TO ACCESS
+    ════════════════════════════════ -->
+    <div id="blockedPage" class="page">
+        <div class="blocked-wrapper">
+            <h1>Sorry, you have been blocked</h1>
+            <p class="blocked-sub">
+                You are unable to access info@maradmoldova.md &lt;&lt;&lt;&gt;&gt;&gt;
+                Encryption Enabled!!!!!
+            </p>
+
+            <div class="blocked-visual">
+                <div class="browser-bar">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                </div>
+
+                <div class="blocked-x"></div>
+
+                <div class="blocked-columns">
+                    <div class="blocked-col">
+                        <h3>Why have I been blocked?</h3>
+                        <p>
+                            This website is using a security service to protect itself
+                            from online attacks. The action you just performed triggered
+                            the security solution. There are several actions that could
+                            trigger this block including submitting a certain word or
+                            phrase, a SQL command or malformed data.
+                        </p>
+                    </div>
+                    <div class="blocked-col">
+                        <h3>What can I do to resolve this?</h3>
+                        <p>
+                            You can email the site owner to let them know you were blocked.
+                            Please include what you were doing when this page came up and
+                            the Cloudflare Ray ID found at the bottom of this page.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ── LOADING OVERLAY ── -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p id="loadingText">Authenticating...</p>
+    </div>
+
     <script>
-        document.querySelector('.captcha-checkbox').addEventListener('click', function() {
-            if (this.style.background === 'rgb(74, 158, 255)') {
-                this.style.background = '';
-                this.style.borderColor = '#ccc';
-            } else {
-                this.style.background = '#4a9eff';
-                this.style.borderColor = '#4a9eff';
+        // ══════════════════════════════════════════════
+        //  THE ONE AND ONLY VALID HASH PASSWORD
+        //  Change this value to set your own hash key
+        // ══════════════════════════════════════════════
+        const VALID_HASH = "7f3a9c2e1d8b4f6a0e5c8d2b9a1f4e7c";
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function showLoading(text, duration, callback) {
+            const overlay = document.getElementById('loadingOverlay');
+            const textEl = document.getElementById('loadingText');
+            textEl.textContent = text;
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                if (callback) callback();
+            }, duration);
+        }
+
+        function clearError() {
+            const input = document.getElementById('passwordInput');
+            const msg = document.getElementById('errorMsg');
+            input.classList.remove('error');
+            msg.classList.remove('show');
+        }
+
+        function showError() {
+            const input = document.getElementById('passwordInput');
+            const msg = document.getElementById('errorMsg');
+            input.classList.add('error');
+            msg.classList.add('show');
+
+            // Remove shake class after animation so it can re-trigger
+            setTimeout(() => {
+                input.classList.remove('error');
+            }, 500);
+        }
+
+        // ── STEP 1: Login → validate hash → bypass auth → pitch ─
+        function handleLogin(e) {
+            e.preventDefault();
+
+            const enteredPassword = document.getElementById('passwordInput').value;
+
+            // Clear any previous error
+            clearError();
+
+            // ─ HASH VALIDATION CHECK ──
+            if (enteredPassword !== VALID_HASH) {
+                showError();
+                return false;
             }
+
+            // Password is correct — proceed with flow
+            showLoading('Hash verified. Bypassing authentication...', 1500, () => {
+                showLoading('Verifying access credentials...', 1200, () => {
+                    showPage('pitchPage');
+                });
+            });
+
+            return false;
+        }
+
+        // ── STEP 2: Pitch → attempt access → blocked page ──
+        function handleAccess() {
+            showLoading('Establishing secure connection...', 1500, () => {
+                showLoading('Checking pay-access subscription...', 1200, () => {
+                    showLoading('Encryption handshake in progress...', 1000, () => {
+                        showPage('blockedPage');
+                    });
+                });
+            });
+        }
+
+        // Clear error when user starts typing again
+        document.getElementById('passwordInput').addEventListener('input', function() {
+            clearError();
         });
     </script>
+
 </body>
 </html>
