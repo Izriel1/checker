@@ -1,652 +1,1660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mail Login — maradmoldova.md</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIGHTSPY // Unified Threat Research & Device Control</title>
+<style>
+  :root{
+    --bg-0:#050607;--bg-1:#0a0c0e;--bg-2:#0f1215;--bg-3:#15191d;--bg-4:#1c2126;
+    --border:#232a31;--border-bright:#2f3840;
+    --text:#c9d1d9;--text-dim:#6b7682;--text-mute:#3f4a55;
+    --red:#c41e3a;--red-dim:#7a1426;--red-glow:#ff2a4a;
+    --green:#00ff41;--green-dim:#008f24;
+    --amber:#d4a017;--cyan:#4fd1c5;
+    --mono:'JetBrains Mono','Fira Code','SF Mono','Consolas',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--mono);background:var(--bg-0);color:var(--text);font-size:11px;line-height:1.5}
+  ::-webkit-scrollbar{width:5px;height:5px}
+  ::-webkit-scrollbar-track{background:var(--bg-1)}
+  ::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:3px}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  .app{display:grid;grid-template-columns:200px 1fr 380px;grid-template-rows:36px 1fr;height:100vh;grid-template-areas:"sidebar topbar device-top" "sidebar main device-main"}
 
-        /* ── PAGE CONTAINERS ── */
-        .page {
-            display: none;
-            width: 100%;
-            min-height: 100vh;
-        }
+  /* Sidebar */
+  .sidebar{grid-area:sidebar;background:var(--bg-1);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+  .brand{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .brand-logo{width:22px;height:22px;background:radial-gradient(circle at 30% 30%,var(--red-glow),var(--red) 50%,#3a0008);border-radius:50%;box-shadow:0 0 8px rgba(255,42,74,0.4)}
+  .brand-text .name{font-size:11px;font-weight:700;letter-spacing:2px;color:#fff}
+  .brand-text .sub{font-size:7px;color:var(--text-dim);letter-spacing:1px}
+  .nav{flex:1;overflow-y:auto;padding:8px 0}
+  .nav-group{margin-bottom:10px}
+  .nav-label{padding:3px 14px;font-size:7px;color:var(--text-mute);letter-spacing:2px;text-transform:uppercase}
+  .nav-item{display:flex;align-items:center;gap:7px;padding:6px 14px;cursor:pointer;color:var(--text-dim);border-left:2px solid transparent;transition:all .15s;font-size:10px}
+  .nav-item:hover{background:var(--bg-2);color:var(--text)}
+  .nav-item.active{background:linear-gradient(90deg,rgba(196,30,58,0.15),transparent);color:#fff;border-left-color:var(--red)}
+  .nav-item .ico{width:10px;text-align:center;color:var(--red);font-size:9px}
+  .sidebar-footer{padding:8px 14px;border-top:1px solid var(--border);font-size:7px;color:var(--text-mute);line-height:1.6}
+  .sidebar-footer .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);margin-right:3px}
 
-        .page.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  /* Topbar */
+  .topbar{grid-area:topbar;background:var(--bg-1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:14px}
+  .crumb{font-size:9px;color:var(--text-dim)}
+  .crumb b{color:#fff;font-weight:500}
+  .topbar-center{flex:1;display:flex;justify-content:center;gap:14px}
+  .sys-ind{display:flex;align-items:center;gap:4px;font-size:8px;color:var(--text-dim)}
+  .sys-ind .dot{width:5px;height:5px;border-radius:50%}
+  .sys-ind .dot.g{background:var(--green);box-shadow:0 0 3px var(--green)}
+  .sys-ind .dot.r{background:var(--red);box-shadow:0 0 3px var(--red-glow)}
+  .sys-ind .dot.a{background:var(--amber);box-shadow:0 0 3px var(--amber)}
+  .topbar-right{display:flex;align-items:center;gap:10px;font-size:8px;color:var(--text-dim)}
+  .topbar-right .clock{color:#fff;font-weight:500;letter-spacing:1px}
 
-        /* ══════════════════════════════
-           PAGE 1 — LOGIN FORM
-        ══════════════════════════════ */
-        #loginPage {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+  /* Main */
+  .main{grid-area:main;overflow-y:auto;padding:12px;background:var(--bg-0);background-image:linear-gradient(rgba(196,30,58,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(196,30,58,0.02) 1px,transparent 1px);background-size:28px 28px}
+  .section{display:none;animation:fadeIn .3s ease}
+  .section.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .sec-title{display:flex;align-items:center;gap:7px}
+  .sec-title h2{font-size:11px;font-weight:600;letter-spacing:2px;color:#fff;text-transform:uppercase}
+  .tag{font-size:7px;padding:2px 5px;background:var(--bg-3);border:1px solid var(--border-bright);color:var(--text-dim);border-radius:2px;letter-spacing:1px}
+  .tag.live{border-color:var(--red-dim);color:var(--red-glow)}
+  .btn{font-family:var(--mono);font-size:8px;padding:4px 9px;background:var(--bg-3);border:1px solid var(--border-bright);color:var(--text);cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:all .15s}
+  .btn:hover{background:var(--bg-4);border-color:var(--red-dim);color:#fff}
+  .btn.primary{background:var(--red-dim);border-color:var(--red);color:#fff}
 
-        .login-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 48px 40px;
-            width: 420px;
-            max-width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
+  .grid{display:grid;gap:8px}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-23{grid-template-columns:2fr 1fr}
+  .panel{background:var(--bg-1);border:1px solid var(--border);border-radius:3px;overflow:hidden;position:relative}
+  .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red-dim),transparent)}
+  .panel-head{padding:5px 9px;background:var(--bg-2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim)}
+  .panel-head .title{display:flex;align-items:center;gap:5px;color:#fff}
+  .panel-head .title::before{content:'▸';color:var(--red)}
+  .panel-body{padding:8px}
+  .panel-body.flush{padding:0}
+  .stat{padding:8px;background:var(--bg-1);border:1px solid var(--border);border-radius:3px;position:relative;overflow:hidden}
+  .stat::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--red)}
+  .stat-label{font-size:7px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+  .stat-value{font-size:16px;font-weight:600;color:#fff;letter-spacing:1px}
+  .stat-sub{font-size:7px;color:var(--text-dim);margin-top:2px}
+  table{width:100%;border-collapse:collapse;font-size:8px}
+  th{text-align:left;padding:4px 7px;background:var(--bg-2);color:var(--text-dim);font-weight:500;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+  td{padding:4px 7px;border-bottom:1px solid var(--border);color:var(--text)}
+  tr:hover td{background:var(--bg-2)}
+  .tag-s{display:inline-block;padding:1px 4px;font-size:7px;border-radius:2px;letter-spacing:1px}
+  .tag-s.red{background:rgba(196,30,58,0.2);color:var(--red-glow);border:1px solid var(--red-dim)}
+  .tag-s.green{background:rgba(0,255,65,0.1);color:var(--green);border:1px solid var(--green-dim)}
+  .tag-s.amber{background:rgba(212,160,23,0.15);color:var(--amber);border:1px solid rgba(212,160,23,0.3)}
+  .bar{height:3px;background:var(--bg-3);border-radius:2px;overflow:hidden;margin-top:3px}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--red-dim),var(--red));border-radius:2px}
+  .bar-fill.green{background:linear-gradient(90deg,var(--green-dim),var(--green))}
+  .bar-fill.amber{background:linear-gradient(90deg,rgba(212,160,23,0.5),var(--amber))}
+  .kv{display:flex;justify-content:space-between;padding:3px 0;font-size:8px;border-bottom:1px dashed var(--border)}
+  .kv:last-child{border-bottom:none}
+  .kv .k{color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;font-size:7px}
+  .kv .v{color:#fff;font-weight:500}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:8px}
+  .tab{padding:5px 9px;font-size:8px;color:var(--text-dim);cursor:pointer;letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid transparent;transition:all .15s}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--red-glow);border-bottom-color:var(--red)}
+  .data-pane{display:none}
+  .data-pane.active{display:block}
+  .info-box{background:rgba(79,209,197,0.06);border:1px solid rgba(79,209,197,0.25);padding:5px 9px;font-size:8px;color:var(--cyan);margin-bottom:8px}
+  .error-msg{background:rgba(196,30,58,0.15);border:1px solid var(--red-dim);color:var(--red-glow);padding:6px 9px;border-radius:3px;font-size:8px;margin-top:8px;display:none}
+  .error-msg.show{display:block}
 
-        .login-card .logo {
-            text-align: center;
-            margin-bottom: 8px;
-        }
+  /* ============ DEVICE CONTROL PANEL (RIGHT) ============ */
+  .device-top{grid-area:device-top;background:var(--bg-1);border-bottom:1px solid var(--border);border-left:1px solid var(--border);padding:0 10px;display:flex;align-items:center;justify-content:space-between;font-size:8px;color:var(--text-dim)}
+  .device-top .title{color:var(--green);font-weight:600;letter-spacing:1px}
+  .device-main{grid-area:device-main;background:#000;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;position:relative}
 
-        .login-card .logo svg {
-            width: 56px;
-            height: 56px;
-        }
+  /* PHASE 1: Target Input */
+  .phase-input{position:absolute;inset:0;background:var(--bg-1);display:flex;flex-direction:column;padding:16px;overflow-y:auto;z-index:10}
+  .phase-input.hidden{display:none}
+  .phase-input h3{font-size:10px;color:#fff;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+  .phase-input .subtitle{font-size:8px;color:var(--text-dim);margin-bottom:16px}
+  .input-tabs{display:flex;gap:0;margin-bottom:12px;border-bottom:1px solid var(--border)}
+  .input-tab{flex:1;padding:7px;text-align:center;font-size:9px;color:var(--text-dim);cursor:pointer;letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid transparent;transition:all .15s}
+  .input-tab.active{color:var(--green);border-bottom-color:var(--green)}
+  .input-form{display:none;flex-direction:column;gap:8px}
+  .input-form.active{display:flex}
+  .input-form label{font-size:7px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+  .input-form input,.input-form select{width:100%;background:#000;border:1px solid var(--border);border-radius:3px;padding:7px 9px;color:var(--white);font-family:var(--mono);font-size:10px;outline:none}
+  .input-form input:focus,.input-form select:focus{border-color:var(--green)}
+  .phone-row{display:flex;gap:6px}
+  .phone-row select{width:110px;flex-shrink:0}
+  .phone-row input{flex:1}
+  
+  .checkbox-row{display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px;background:#000;border:1px solid var(--border);border-radius:3px}
+  .checkbox-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--green)}
+  .checkbox-row label{font-size:8px;color:var(--text);cursor:pointer}
+  
+  .acquire-btn{margin-top:8px;padding:10px;background:var(--green-dim);border:1px solid var(--green);color:var(--green);font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;border-radius:3px;transition:all .2s}
+  .acquire-btn:hover{background:var(--green);color:#000;box-shadow:0 0 12px rgba(0,255,65,0.3)}
+  .acquire-btn:disabled{opacity:0.4;cursor:not-allowed}
 
-        .login-card h2 {
-            text-align: center;
-            color: #1a1a2e;
-            font-size: 22px;
-            margin-bottom: 4px;
-        }
+  .target-info{margin-top:12px;padding:10px;background:#000;border:1px solid var(--border);border-radius:3px;font-size:8px}
+  .target-info .row{display:flex;justify-content:space-between;margin-bottom:3px}
+  .target-info .row .k{color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;font-size:7px}
+  .target-info .row .v{color:var(--green)}
 
-        .login-card .subtitle {
-            text-align: center;
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 32px;
-        }
+  /* PHASE 2: Code Reading/Loading */
+  .phase-loading{position:absolute;inset:0;background:var(--bg-1);display:none;flex-direction:column;padding:16px;overflow:hidden;z-index:9}
+  .phase-loading.active{display:flex}
+  .phase-loading h3{font-size:10px;color:var(--amber);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+  .phase-loading .subtitle{font-size:8px;color:var(--text-dim);margin-bottom:12px}
+  
+  .code-reader{flex:1;background:#000;border:1px solid var(--border);border-radius:3px;padding:10px;overflow:hidden;font-family:var(--mono);font-size:7px;line-height:1.4;position:relative}
+  .code-line{color:var(--text-dim);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .code-line.active{color:var(--green)}
+  .code-line.error{color:var(--red-glow)}
+  .code-line.success{color:var(--green)}
+  
+  .loading-progress{margin-top:12px}
+  .progress-bar-bg{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:6px}
+  .progress-bar-fill{height:100%;background:var(--amber);width:0%;transition:width 0.5s}
+  .progress-text{font-size:7px;color:var(--text-dim);text-align:center}
+  .timer{font-size:9px;color:var(--amber);text-align:center;margin-top:6px;font-weight:600}
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+  /* PHASE 3: Device Commands */
+  .phase-commands{position:absolute;inset:0;background:var(--bg-1);display:none;flex-direction:column;padding:16px;overflow-y:auto;z-index:8}
+  .phase-commands.active{display:flex}
+  .phase-commands h3{font-size:10px;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+  .phase-commands .subtitle{font-size:8px;color:var(--text-dim);margin-bottom:12px}
+  .cmd-list{display:flex;flex-direction:column;gap:4px}
+  .cmd-item{display:flex;align-items:center;gap:8px;padding:7px 9px;background:#000;border:1px solid var(--border);border-radius:3px;font-size:9px;opacity:0;transform:translateX(-10px);transition:all .3s}
+  .cmd-item.show{opacity:1;transform:translateX(0)}
+  .cmd-item .cmd-ico{width:20px;height:20px;background:var(--bg-3);border:1px solid var(--border-bright);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px}
+  .cmd-item .cmd-name{flex:1;color:#fff;font-weight:500}
+  .cmd-item .cmd-desc{color:var(--text-dim);font-size:7px}
+  .cmd-item .cmd-status{color:var(--green);font-size:7px}
+  .cmd-loading-bar{margin-top:12px;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+  .cmd-loading-fill{height:100%;background:var(--green);width:0%;transition:width .3s}
 
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #444;
-            margin-bottom: 6px;
-        }
+  /* PHASE 4: Live Device (Smaller) */
+  .phase-device{position:absolute;inset:0;background:#000;display:none;flex-direction:column;z-index:7}
+  .phase-device.active{display:flex}
 
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            color: #333;
-            transition: border-color 0.2s;
-            outline: none;
-        }
+  /* Phone Frame - Smaller size */
+  .phone-frame{flex:1;display:flex;align-items:center;justify-content:center;padding:6px;overflow:hidden}
+  .phone{width:100%;max-width:180px;aspect-ratio:9/19.5;background:#000;border-radius:22px;border:2px solid #333;position:relative;overflow:hidden;box-shadow:0 0 15px rgba(0,0,0,0.8),inset 0 0 0 1px #222}
+  .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:60px;height:14px;background:#000;border-radius:0 0 10px 10px;z-index:100}
+  .phone-statusbar{position:absolute;top:0;left:0;right:0;height:22px;display:flex;justify-content:space-between;align-items:center;padding:4px 14px 0;font-size:7px;color:#fff;z-index:50;font-weight:600}
+  .phone-statusbar .icons{display:flex;gap:2px;align-items:center}
+  .phone-statusbar .icons svg{width:7px;height:7px;fill:#fff}
+  .phone-home{position:absolute;top:22px;left:0;right:0;bottom:0;background:linear-gradient(160deg,#1c1c1e 0%,#000 100%);padding:16px 10px 40px;overflow-y:auto}
+  .phone-home.hidden{opacity:0;pointer-events:none}
+  .phone-appgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 5px}
+  .phone-app{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transition:transform .15s}
+  .phone-app:hover{transform:scale(1.08)}
+  .phone-app .picon{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,0.5)}
+  .phone-app .plabel{font-size:5px;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,0.8);text-align:center;max-width:35px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .i-weather{background:linear-gradient(180deg,#5ac8fa,#007aff)}
+  .i-stocks{background:linear-gradient(180deg,#1c1c1e,#000)}
+  .i-findmy{background:linear-gradient(180deg,#34c759,#30d158)}
+  .i-home{background:linear-gradient(180deg,#ff9f0a,#ff375f)}
+  .i-books{background:linear-gradient(180deg,#ff9500,#ff3b30)}
+  .i-itunes{background:linear-gradient(180deg,#5856d6,#af52de)}
+  .i-fitness{background:linear-gradient(180deg,#ff2d55,#ff375f)}
+  .i-watch{background:linear-gradient(180deg,#1c1c1e,#000)}
+  .i-contacts{background:linear-gradient(180deg,#8e8e93,#636366)}
+  .i-translate{background:linear-gradient(180deg,#007aff,#5856d6)}
+  .i-files{background:linear-gradient(180deg,#007aff,#5ac8fa)}
+  .i-shortcuts{background:linear-gradient(180deg,#ff2d55,#ff9500)}
+  .i-camera{background:linear-gradient(180deg,#3a3a3c,#1c1c1e)}
+  .i-wallet{background:linear-gradient(180deg,#1c1c1e,#000)}
+  .i-tips{background:linear-gradient(180deg,#ffcc00,#ff9500)}
+  .i-kali{background:linear-gradient(180deg,#ff0000,#8b0000);color:#fff;font-weight:900;font-size:14px}
+  .phone-dock{position:absolute;bottom:4px;left:4px;right:4px;height:34px;background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);border-radius:12px;display:flex;justify-content:space-around;align-items:center;padding:0 5px;z-index:50}
+  .phone-dock .phone-app .picon{width:26px;height:26px}
+  .phone-dock .phone-app .plabel{display:none}
+  
+  /* Home Button */
+  .phone-home-btn{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:80px;height:3px;background:#fff;border-radius:2px;cursor:pointer;z-index:100;opacity:0.6;transition:opacity .2s}
+  .phone-home-btn:hover{opacity:1}
 
-        .form-group input:focus {
-            border-color: #667eea;
-        }
+  /* App views inside phone */
+  .phone-appview{position:absolute;top:0;left:0;right:0;bottom:0;background:#fff;display:none;flex-direction:column;z-index:60;animation:slideIn .25s ease}
+  .phone-appview.active{display:flex}
+  @keyframes slideIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .pav-header{background:#f2f2f7;padding:18px 6px 4px;display:flex;align-items:center;gap:4px;border-bottom:1px solid #d1d1d6}
+  .pav-back{color:#007aff;font-size:9px;cursor:pointer;padding:2px 4px}
+  .pav-title{flex:1;font-size:9px;font-weight:600;color:#000;text-align:center}
+  .pav-content{flex:1;overflow-y:auto;padding:8px;background:#fff;font-family:-apple-system,sans-serif}
 
-        .form-group input[readonly] {
-            background: #f8f9fa;
-            color: #555;
-            cursor: not-allowed;
-        }
+  /* Safari inside phone */
+  .pav-safari-bar{background:#fff;padding:3px 6px;display:flex;align-items:center;gap:3px;border-bottom:1px solid #e5e5e5}
+  .pav-url{flex:1;background:#f2f2f7;border-radius:4px;padding:2px 5px;font-size:7px;color:#333;display:flex;align-items:center;gap:2px}
+  .g-modal{max-width:150px;margin:8px auto;background:#fff;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);padding:10px;font-family:-apple-system,sans-serif}
+  .g-modal h2{font-size:10px;font-weight:500;color:#202124;margin-bottom:6px}
+  .g-modal p{font-size:7px;color:#5f6368;line-height:1.3;margin-bottom:4px}
+  .g-modal ul{list-style:none;margin-bottom:6px}
+  .g-modal ul li{font-size:7px;color:#5f6368;line-height:1.3;padding-left:10px;position:relative;margin-bottom:2px}
+  .g-modal ul li::before{content:'✓';position:absolute;left:0;color:#1a73e8;font-size:6px}
+  .g-btns{display:flex;flex-direction:column;gap:4px}
+  .g-btn{padding:4px;border-radius:3px;border:none;font-size:8px;font-weight:500;cursor:pointer;text-align:center}
+  .g-btn.primary{background:#1a73e8;color:#fff}
+  .g-btn.secondary{background:#fff;color:#1a73e8;border:1px solid #dadce0}
 
-        .form-group input.error {
-            border-color: #e74c3c;
-            animation: shake 0.4s ease;
-        }
+  /* Messages inside phone */
+  .pmsg-item{display:flex;align-items:center;gap:6px;padding:6px;border-bottom:1px solid #f0f0f0}
+  .pmsg-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:8px;flex-shrink:0}
+  .pmsg-info{flex:1;min-width:0}
+  .pmsg-name{font-size:8px;font-weight:600;color:#000}
+  .pmsg-preview{font-size:6px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pmsg-time{font-size:6px;color:#aaa;flex-shrink:0}
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-6px); }
-            80% { transform: translateX(6px); }
-        }
+  /* Contacts inside phone */
+  .pcontact-item{display:flex;align-items:center;gap:6px;padding:6px;border-bottom:1px solid #f0f0f0}
+  .pcontact-avatar{width:20px;height:20px;border-radius:50%;background:#007aff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:7px;flex-shrink:0}
+  .pcontact-info{flex:1}
+  .pcontact-name{font-size:8px;color:#000}
+  .pcontact-phone{font-size:6px;color:#888}
 
-        .error-msg {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 6px;
-            display: none;
-            font-weight: 600;
-        }
+  /* Terminal */
+  .term-panel{height:40%;display:flex;flex-direction:column;background:#121212;border-top:1px solid var(--border);flex-shrink:0}
+  .term-header{background:#1e1e1e;padding:3px 7px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:7px}
+  .term-header .title{color:var(--text-dim)}
+  .term-header .ctrls{display:flex;gap:3px}
+  .term-header .ctrls span{width:6px;height:6px;border-radius:50%}
+  .term-header .c-close{background:#ff5f57}.term-header .c-min{background:#ffbd2e}.term-header .c-max{background:#28c840}
+  .term-body{flex:1;padding:6px;overflow-y:auto;font-size:8px;line-height:1.4;font-family:var(--mono)}
+  .term-line{margin-bottom:1px;white-space:pre-wrap;word-break:break-all}
+  .term-prompt{color:var(--green)}
+  .term-cmd{color:var(--white)}
+  .term-out{color:#a0a0a0}
+  .term-out.hl{color:var(--amber)}
+  .term-out.err{color:var(--red-glow)}
+  .term-out.ok{color:var(--green)}
+  .term-input-wrap{display:flex;align-items:center;padding:4px 7px;background:#121212;border-top:1px solid var(--border)}
+  .term-input-wrap .prompt{color:var(--green);margin-right:4px;white-space:nowrap;font-size:8px}
+  .term-input-wrap input{flex:1;background:transparent;border:none;outline:none;color:var(--white);font-family:var(--mono);font-size:8px}
+  .cursor{display:inline-block;width:4px;height:9px;background:var(--green);animation:blink 1s infinite;vertical-align:middle;margin-left:2px}
+  @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
-        .error-msg.show {
-            display: block;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s;
-            margin-top: 8px;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(102,126,234,0.4);
-        }
-
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            color: #aaa;
-        }
-
-        .hash-hint {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 11px;
-            color: #bbb;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 0.5px;
-        }
-
-        /* ════════════════════════════
-           PAGE 2 — PITCH / DESCRIPTION
-        ══════════════════════════════ */
-        #pitchPage {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            flex-direction: column;
-            padding: 40px 20px;
-        }
-
-        .pitch-container {
-            max-width: 720px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .pitch-container .badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            color: #a78bfa;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            border: 1px solid rgba(167,139,250,0.3);
-        }
-
-        .pitch-container h1 {
-            color: #fff;
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-
-        .pitch-container h1 span {
-            background: linear-gradient(90deg, #a78bfa, #667eea);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .pitch-container p {
-            color: #b0b0c8;
-            font-size: 16px;
-            line-height: 1.7;
-            margin-bottom: 32px;
-        }
-
-        .pitch-features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            text-align: left;
-            margin-bottom: 40px;
-        }
-
-        .pitch-feature {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .pitch-feature .icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .pitch-feature h3 {
-            color: #fff;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .pitch-feature p {
-            color: #8888a8;
-            font-size: 13px;
-            margin-bottom: 0;
-            line-height: 1.5;
-        }
-
-        .btn-access {
-            display: inline-block;
-            padding: 16px 48px;
-            background: linear-gradient(135deg, #a78bfa, #667eea);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 17px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s;
-            text-decoration: none;
-        }
-
-        .btn-access:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(167,139,250,0.4);
-        }
-
-        .pitch-note {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* ══════════════════════════════
-           PAGE 3 — BLOCKED / UNABLE TO ACCESS
-        ══════════════════════════════ */
-        #blockedPage {
-            background: #ffffff;
-            flex-direction: column;
-            padding: 0;
-        }
-
-        .blocked-wrapper {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 40px;
-        }
-
-        .blocked-wrapper h1 {
-            font-size: 32px;
-            font-weight: 300;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        .blocked-wrapper .blocked-sub {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 48px;
-            line-height: 1.6;
-        }
-
-        .blocked-visual {
-            background: #f5f5f5;
-            border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 48px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .browser-bar {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .browser-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .browser-dot.red { background: #ff5f57; }
-        .browser-dot.yellow { background: #ffbd2e; }
-        .browser-dot.green { background: #28c840; }
-
-        .blocked-x {
-            width: 80px;
-            height: 80px;
-            background: #c0392b;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-        }
-
-        .blocked-x::after {
-            content: '✕';
-            color: #fff;
-            font-size: 40px;
-            font-weight: 700;
-        }
-
-        .blocked-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        .blocked-col h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        .blocked-col p {
-            font-size: 13px;
-            color: #777;
-            line-height: 1.7;
-        }
-
-        .blocked-col a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .blocked-col a:hover {
-            text-decoration: underline;
-        }
-
-        /* ─ LOADING OVERLAY ── */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid #e0e0e0;
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 16px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-overlay p {
-            color: #666;
-            font-size: 15px;
-        }
-    </style>
+  .divider{height:1px;background:var(--border);margin:6px 0}
+</style>
 </head>
 <body>
 
-    <!-- ════════════════════════════════
-         PAGE 1: LOGIN FORM
-    ════════════════════════════════ -->
-    <div id="loginPage" class="page active">
-        <div class="login-card">
-            <div class="logo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
-                    <rect x="2" y="4" width="20" height="16" rx="2"/>
-                    <polyline points="22,4 12,13 2,4"/>
-                </svg>
-            </div>
-            <h2>Sign In to Your Mail</h2>
-            <p class="subtitle">maradmoldova.md — Secure Mail Access</p>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"></div>
+      <div class="brand-text">
+        <div class="name">LIGHTSPY</div>
+        <div class="sub">UNIFIED FRAMEWORK v4.2.1</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-group">
+        <div class="nav-label">Operations</div>
+        <div class="nav-item active" data-section="command"><span class="ico">◉</span>Command Center</div>
+        <div class="nav-item" data-section="infection"><span class="ico">⚡</span>Infection Research</div>
+        <div class="nav-item" data-section="data"><span class="ico">◈</span>Data Intelligence</div>
+        <div class="nav-item" data-section="advanced"><span class="ico">⌬</span>Advanced Modules</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Framework</div>
+        <div class="nav-item" data-section="core"><span class="ico"></span>Core Framework</div>
+        <div class="nav-item" data-section="sessions"><span class="ico">⇆</span>Active Sessions</div>
+        <div class="nav-item" data-section="targets"><span class="ico">◎</span>Target Registry</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">System</div>
+        <div class="nav-item" data-section="logs"><span class="ico">▤</span>System Logs</div>
+        <div class="nav-item" data-section="settings"><span class="ico">⚒</span>Configuration</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div><span class="dot"></span>OP: <span style="color:#fff">ghost-07</span></div>
+      <div>CLEARANCE: <span style="color:var(--red-glow)">TS/SCI</span></div>
+      <div>UPTIME: <span id="uptime">00:00:00</span></div>
+    </div>
+  </aside>
 
-            <form id="loginForm" onsubmit="return handleLogin(event)">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input
-                        type="email"
-                        id="emailInput"
-                        value="info@maradmoldova.md"
-                        readonly
-                    >
-                </div>
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="crumb">LIGHTSPY / <b id="crumb-section">COMMAND CENTER</b></div>
+    <div class="topbar-center">
+      <div class="sys-ind"><span class="dot g"></span>C2 LINK</div>
+      <div class="sys-ind"><span class="dot g"></span>AES-256-GCM</div>
+      <div class="sys-ind"><span class="dot a"></span>PROXY: 3 HOPS</div>
+      <div class="sys-ind"><span class="dot g"></span>TOR: ACTIVE</div>
+      <div class="sys-ind"><span class="dot r"></span>IDS: SIMULATED</div>
+    </div>
+    <div class="topbar-right">
+      <span>NODE: <span style="color:#fff">ls-core-01</span></span>
+      <span class="clock" id="clock">--:--:--</span>
+    </div>
+  </header>
 
-                <div class="form-group">
-                    <label>Password (Hash Key)</label>
-                    <input
-                        type="password"
-                        id="passwordInput"
-                        placeholder="Enter hash password"
-                        required
-                        autocomplete="off"
-                    >
-                    <div class="error-msg" id="errorMsg">
-                        ✕ Invalid hash password. Access denied.
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-login">
-                    Access Mailbox →
-                </button>
-            </form>
-
-            <p class="login-footer">
-                 Encryption Enabled — Secure Connection
-            </p>
-            <p class="hash-hint">SHA-256 Hash Authentication Required</p>
+  <!-- MAIN DASHBOARD -->
+  <main class="main">
+    <section class="section active" id="section-command">
+      <div class="sec-head">
+        <div class="sec-title"><h2>Command Center</h2><span class="tag live">● LIVE</span><span class="tag">OP BLACKPRISM</span></div>
+        <div><button class="btn">Refresh</button> <button class="btn primary">New Session</button></div>
+      </div>
+      <div class="info-box">LIGHTSPY v4.2.1 · Unified Threat Research & Device Control · Non-operational simulation environment.</div>
+      <div class="grid grid-4" style="margin-bottom:8px">
+        <div class="stat"><div class="stat-label">Active Sessions</div><div class="stat-value">07</div><div class="stat-sub"><span style="color:var(--green)">▲ 2</span> last hour</div></div>
+        <div class="stat"><div class="stat-label">Loaded Modules</div><div class="stat-value">42<span style="font-size:9px;color:var(--text-dim)">/58</span></div><div class="stat-sub">16 disabled</div></div>
+        <div class="stat"><div class="stat-label">Research Targets</div><div class="stat-value">128</div><div class="stat-sub">iOS 17: 64 · iOS 18: 51</div></div>
+        <div class="stat"><div class="stat-label">C2 Latency</div><div class="stat-value">48<span style="font-size:9px;color:var(--text-dim)">ms</span></div><div class="stat-sub"><span style="color:var(--green)">▼ 12ms</span></div></div>
+      </div>
+      <div class="grid grid-23">
+        <div class="panel">
+          <div class="panel-head"><div class="title">Framework Overview</div></div>
+          <div class="panel-body">
+            <div class="kv"><span class="k">Codename</span><span class="v">LIGHTSPY</span></div>
+            <div class="kv"><span class="k">Version</span><span class="v">4.2.1-rc2 (build 20261103)</span></div>
+            <div class="kv"><span class="k">Kernel</span><span class="v">ls-kernel · x86_64 · hardened</span></div>
+            <div class="kv"><span class="k">Encryption</span><span class="v">AES-256-GCM · X25519 · ChaCha20</span></div>
+            <div class="kv"><span class="k">C2 Protocol</span><span class="v">HTTPS/2 · DoH · custom framing</span></div>
+            <div class="kv"><span class="k">Plugin API</span><span class="v">LSP-SDK 2.4 · Rust + Swift bridge</span></div>
+          </div>
         </div>
-    </div>
-
-    <!-- ════════════════════════════════
-         PAGE 2: PITCH / DESCRIPTION
-    ════════════════════════════════ -->
-    <div id="pitchPage" class="page">
-        <div class="pitch-container">
-            <div class="badge"> Premium Access Required</div>
-            <h1>Unlock Your <span>Secure Mailbox</span></h1>
-            <p>
-                Your account <strong>info@maradmoldova.md</strong> is protected with
-                enterprise-grade encryption. To proceed and access your mailbox,
-                a verified pay-access subscription is required. This ensures your
-                communications remain private, secure, and protected from unauthorized access.
-            </p>
-
-            <div class="pitch-features">
-                <div class="pitch-feature">
-                    <div class="icon">🔒</div>
-                    <h3>End-to-End Encryption</h3>
-                    <p>All messages encrypted with AES-256 bit protection.</p>
-                </div>
-                <div class="pitch-feature">
-                    <div class="icon">🛡️</div>
-                    <h3>Threat Protection</h3>
-                    <p>Advanced firewall and anti-phishing layers active.</p>
-                </div>
-                <div class="pitch-feature">
-                    <div class="icon"></div>
-                    <h3>Priority Access</h3>
-                    <p>Fast, reliable mailbox delivery with 99.9% uptime.</p>
-                </div>
-                <div class="pitch-feature">
-                    <div class="icon">📧</div>
-                    <h3>Secure Storage</h3>
-                    <p>Encrypted cloud storage for all your mail data.</p>
-                </div>
-            </div>
-
-            <button class="btn-access" onclick="handleAccess()">
-                Proceed to Access →
-            </button>
-            <p class="pitch-note">By proceeding you agree to the terms of service and pay-access policy.</p>
+        <div class="panel">
+          <div class="panel-head"><div class="title">System Status</div></div>
+          <div class="panel-body">
+            <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:2px"><span style="color:var(--text-dim)">CPU · 8 cores</span><span style="color:#fff">34%</span></div>
+            <div class="bar"><div class="bar-fill" style="width:34%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:8px;margin:6px 0 2px"><span style="color:var(--text-dim)">MEMORY · 32 GB</span><span style="color:#fff">18.4 GB</span></div>
+            <div class="bar"><div class="bar-fill amber" style="width:57%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:8px;margin:6px 0 2px"><span style="color:var(--text-dim)">DISK · 2 TB NVMe</span><span style="color:#fff">742 GB</span></div>
+            <div class="bar"><div class="bar-fill green" style="width:37%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:8px;margin:6px 0 2px"><span style="color:var(--text-dim)">NETWORK · ETH0</span><span style="color:#fff">↑ 2.4 · ↓ 8.1 MB/s</span></div>
+            <div class="bar"><div class="bar-fill" style="width:62%"></div></div>
+          </div>
         </div>
-    </div>
-
-    <!-- ════════════════════════════════
-         PAGE 3: BLOCKED / UNABLE TO ACCESS
-    ════════════════════════════════ -->
-    <div id="blockedPage" class="page">
-        <div class="blocked-wrapper">
-            <h1>Sorry, you have been blocked</h1>
-            <p class="blocked-sub">
-                You are unable to access info@maradmoldova.md &lt;&lt;&lt;&gt;&gt;&gt;
-                Encryption Enabled!!!!!
-            </p>
-
-            <div class="blocked-visual">
-                <div class="browser-bar">
-                    <div class="browser-dot red"></div>
-                    <div class="browser-dot yellow"></div>
-                    <div class="browser-dot green"></div>
-                </div>
-
-                <div class="blocked-x"></div>
-
-                <div class="blocked-columns">
-                    <div class="blocked-col">
-                        <h3>Why have I been blocked?</h3>
-                        <p>
-                            This website is using a security service to protect itself
-                            from online attacks. The action you just performed triggered
-                            the security solution. There are several actions that could
-                            trigger this block including submitting a certain word or
-                            phrase, a SQL command or malformed data.
-                        </p>
-                    </div>
-                    <div class="blocked-col">
-                        <h3>What can I do to resolve this?</h3>
-                        <p>
-                            You can email the site owner to let them know you were blocked.
-                            Please include what you were doing when this page came up and
-                            the Cloudflare Ray ID found at the bottom of this page.
-                        </p>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="grid grid-2" style="margin-top:8px">
+        <div class="panel">
+          <div class="panel-head"><div class="title">Session Monitoring</div></div>
+          <div class="panel-body flush">
+            <table>
+              <thead><tr><th>ID</th><th>Target</th><th>OS</th><th>Latency</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>S-0x4A1</td><td>research-alpha</td><td>iOS 18.1</td><td>42ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+                <tr><td>S-0x4A2</td><td>research-beta</td><td>iOS 17.6.1</td><td>38ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+                <tr><td>S-0x4A3</td><td>sandbox-01</td><td>iOS 18.2β</td><td>61ms</td><td><span class="tag-s amber">IDLE</span></td></tr>
+                <tr><td>S-0x4A4</td><td>research-gamma</td><td>iOS 18.0.1</td><td>55ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+                <tr><td>S-0x4A5</td><td>macos-node-02</td><td>macOS 15.1</td><td>29ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+        <div class="panel">
+          <div class="panel-head"><div class="title">Encrypted Communication</div></div>
+          <div class="panel-body">
+            <div class="kv"><span class="k">Channel Integrity</span><span class="v" style="color:var(--green)">92%</span></div>
+            <div class="kv"><span class="k">Forward Secrecy</span><span class="v" style="color:var(--green)">ENABLED</span></div>
+            <div class="kv"><span class="k">Key Rotation</span><span class="v">every 15 min</span></div>
+            <div class="kv"><span class="k">Certificate Pin</span><span class="v" style="color:var(--green)">VALID</span></div>
+            <div class="kv"><span class="k">Anti-Replay</span><span class="v" style="color:var(--green)">ACTIVE</span></div>
+            <div class="kv"><span class="k">Packet Loss</span><span class="v">0.02%</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="section-infection">
+      <div class="sec-head"><div class="sec-title"><h2>Infection Research</h2><span class="tag live">● SIMULATION</span><span class="tag">NON-OPERATIONAL</span></div></div>
+      <div class="grid grid-4" style="margin-bottom:8px">
+        <div class="stat"><div class="stat-label">Safari CVEs</div><div class="stat-value">37</div></div>
+        <div class="stat"><div class="stat-label">iMessage Vectors</div><div class="stat-value">14</div></div>
+        <div class="stat"><div class="stat-label">PNG Payloads</div><div class="stat-value">218</div></div>
+        <div class="stat"><div class="stat-label">Delivery Chains</div><div class="stat-value">09</div></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="panel"><div class="panel-head"><div class="title">Safari / WebKit Vulnerability Research</div></div><div class="panel-body flush"><table><thead><tr><th>CVE</th><th>Component</th><th>Type</th><th>Severity</th><th>Status</th></tr></thead><tbody>
+          <tr><td>CVE-2026-24801</td><td>JavaScriptCore</td><td>Type Confusion</td><td><span class="tag-s red">CRITICAL</span></td><td><span class="tag-s amber">RESEARCH</span></td></tr>
+          <tr><td>CVE-2026-24777</td><td>WebKit WebProcess</td><td>UAF</td><td><span class="tag-s red">HIGH</span></td><td><span class="tag-s green">PATCHED</span></td></tr>
+          <tr><td>CVE-2026-24712</td><td>GPU Renderer</td><td>Heap Overflow</td><td><span class="tag-s amber">MEDIUM</span></td><td><span class="tag-s amber">RESEARCH</span></td></tr>
+          <tr><td>CVE-2026-24698</td><td>Safari Sandbox</td><td>Bypass (sim)</td><td><span class="tag-s red">HIGH</span></td><td><span class="tag-s mute">THEORETICAL</span></td></tr>
+        </tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><div class="title">iMessage Attack Surface</div></div><div class="panel-body">
+          <div class="kv"><span class="k">BlastDoor Sandbox</span><span class="v" style="color:var(--green)">MONITORED</span></div>
+          <div class="kv"><span class="k">IMTransferAgent</span><span class="v" style="color:var(--amber)">SIMULATED</span></div>
+          <div class="kv"><span class="k">CoreMedia Parsers</span><span class="v">47 surface vectors</span></div>
+          <div class="kv"><span class="k">Zero-Click Vectors</span><span class="v" style="color:var(--red-glow)">03 theoretical</span></div>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="section" id="section-data">
+      <div class="sec-head"><div class="sec-title"><h2>Data Intelligence</h2><span class="tag">ANALYSIS ONLY</span><span class="tag live">● SYNTHETIC</span></div></div>
+      <div class="info-box">All data below is synthetically generated for research visualization. No real device data is accessed.</div>
+      <div class="tabs" id="data-tabs">
+        <div class="tab active" data-tab="contacts">Contacts</div>
+        <div class="tab" data-tab="sms">SMS</div>
+        <div class="tab" data-tab="calls">Calls</div>
+        <div class="tab" data-tab="browser">Browser</div>
+        <div class="tab" data-tab="photos">Photos</div>
+        <div class="tab" data-tab="icloud">iCloud</div>
+        <div class="tab" data-tab="keychain">Keychain</div>
+        <div class="tab" data-tab="crypto">Crypto</div>
+      </div>
+      <div class="data-pane active" id="pane-contacts">
+        <div class="grid grid-2">
+          <div class="panel"><div class="panel-head"><div class="title">Contacts Analysis</div></div><div class="panel-body">
+            <div class="kv"><span class="k">Total Entries</span><span class="v">1,284</span></div>
+            <div class="kv"><span class="k">Unique Numbers</span><span class="v">1,671</span></div>
+            <div class="kv"><span class="k">Emails Linked</span><span class="v">943</span></div>
+            <div class="kv"><span class="k">Social Profiles</span><span class="v">218</span></div>
+          </div></div>
+          <div class="panel"><div class="panel-head"><div class="title">Top Relations</div></div><div class="panel-body flush"><table><thead><tr><th>Name</th><th>Frequency</th><th>Cluster</th></tr></thead><tbody>
+            <tr><td>A. Mercer</td><td>142</td><td><span class="tag-s red">CORE</span></td></tr>
+            <tr><td>J. Okafor</td><td>98</td><td><span class="tag-s red">CORE</span></td></tr>
+            <tr><td>R. Tanaka</td><td>76</td><td><span class="tag-s amber">FREQ</span></td></tr>
+            <tr><td>M. Silva</td><td>61</td><td><span class="tag-s amber">FREQ</span></td></tr>
+          </tbody></table></div></div>
+        </div>
+      </div>
+      <div class="data-pane" id="pane-sms"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">Total Messages</span><span class="v">8,412</span></div><div class="kv"><span class="k">iMessage</span><span class="v">6,204</span></div><div class="kv"><span class="k">SMS/MMS</span><span class="v">2,208</span></div></div></div></div>
+      <div class="data-pane" id="pane-calls"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">Total Calls</span><span class="v">3,847</span></div><div class="kv"><span class="k">Total Duration</span><span class="v">412h 18m</span></div><div class="kv"><span class="k">Missed</span><span class="v" style="color:var(--amber)">412</span></div></div></div></div>
+      <div class="data-pane" id="pane-browser"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">Total Visits</span><span class="v">14,284</span></div><div class="kv"><span class="k">Unique Domains</span><span class="v">1,847</span></div><div class="kv"><span class="k">Saved Passwords</span><span class="v" style="color:var(--amber)">42 (sim)</span></div></div></div></div>
+      <div class="data-pane" id="pane-photos"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">Total Photos</span><span class="v">12,847</span></div><div class="kv"><span class="k">Size</span><span class="v">48.2 GB</span></div><div class="kv"><span class="k">GPS Tagged</span><span class="v">9,841 (76%)</span></div></div></div></div>
+      <div class="data-pane" id="pane-icloud"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">2FA Enabled</span><span class="v" style="color:var(--green)">YES</span></div><div class="kv"><span class="k">Advanced Data Protection</span><span class="v" style="color:var(--green)">ENABLED</span></div><div class="kv"><span class="k">Storage Used</span><span class="v">142 GB / 200 GB</span></div></div></div></div>
+      <div class="data-pane" id="pane-keychain"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">Total Items</span><span class="v">284 (sim)</span></div><div class="kv"><span class="k">Weak Passwords</span><span class="v" style="color:var(--amber)">08 flagged</span></div><div class="kv"><span class="k">Breached</span><span class="v" style="color:var(--red-glow)">03 flagged</span></div></div></div></div>
+      <div class="data-pane" id="pane-crypto"><div class="panel"><div class="panel-body"><div class="kv"><span class="k">Wallet Apps</span><span class="v">06 (sim)</span></div><div class="kv"><span class="k">Private Keys</span><span class="v" style="color:var(--green)">NOT ACCESSIBLE</span></div><div class="kv"><span class="k">Seed Phrases</span><span class="v" style="color:var(--green)">NOT ACCESSIBLE</span></div></div></div></div>
+    </section>
+
+    <section class="section" id="section-advanced">
+      <div class="sec-head"><div class="sec-title"><h2>Advanced Research</h2><span class="tag">SANDBOXED</span><span class="tag live">● NON-OPERATIONAL</span></div></div>
+      <div class="grid grid-2">
+        <div class="panel"><div class="panel-head"><div class="title">Screen-Monitor Sim</div></div><div class="panel-body"><div class="kv"><span class="k">Status</span><span class="v" style="color:var(--green)">READY</span></div><div class="kv"><span class="k">Frames Analyzed</span><span class="v">128,441 (sim)</span></div><div class="kv"><span class="k">Sandbox Boundaries</span><span class="v" style="color:var(--green)">RESPECTED</span></div></div></div>
+        <div class="panel"><div class="panel-head"><div class="title">OTP Security</div></div><div class="panel-body"><div class="kv"><span class="k">Status</span><span class="v" style="color:var(--amber)">RESEARCH</span></div><div class="kv"><span class="k">Vectors</span><span class="v">SMS, Email, TOTP</span></div><div class="kv"><span class="k">Side-channels</span><span class="v">Timing, UI overlay</span></div></div></div>
+        <div class="panel"><div class="panel-head"><div class="title">SS7 Research</div></div><div class="panel-body"><div class="kv"><span class="k">Status</span><span class="v" style="color:var(--green)">READY</span></div><div class="kv"><span class="k">Protocol</span><span class="v">SS7 / Diameter</span></div><div class="kv"><span class="k">Environment</span><span class="v">Isolated Lab</span></div></div></div>
+        <div class="panel"><div class="panel-head"><div class="title">iOS App Analysis</div></div><div class="panel-body"><div class="kv"><span class="k">Status</span><span class="v" style="color:var(--green)">READY</span></div><div class="kv"><span class="k">Binary Format</span><span class="v">Mach-O / FAT</span></div><div class="kv"><span class="k">Analysis</span><span class="v">Static + Dynamic</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="section-core">
+      <div class="sec-head"><div class="sec-title"><h2>Core Framework</h2><span class="tag">18 PLUGINS</span><span class="tag live">● HEALTHY</span></div></div>
+      <div class="grid grid-2">
+        <div class="panel"><div class="panel-head"><div class="title">Plugin Management</div></div><div class="panel-body flush"><table><thead><tr><th>Plugin</th><th>Version</th><th>Status</th></tr></thead><tbody>
+          <tr><td>lsp-recon-suite</td><td>v2.4.1</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-exploit-lab</td><td>v1.9.0</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-data-intel</td><td>v3.2.0</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-advanced-research</td><td>v2.1.4</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-c2-relay</td><td>v4.0.2</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-log-aggregator</td><td>v2.0.8</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-plugin-host</td><td>v4.2.1</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-target-registry</td><td>v1.6.3</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-sandbox-mgr</td><td>v3.1.0</td><td><span class="tag-s green">ENABLED</span></td></tr>
+          <tr><td>lsp-traffic-sim</td><td>v1.4.2</td><td><span class="tag-s amber">DISABLED</span></td></tr>
+        </tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><div class="title">System Diagnostics</div></div><div class="panel-body">
+          <div class="kv"><span class="k">Kernel Integrity</span><span class="v" style="color:var(--green)">VERIFIED</span></div>
+          <div class="kv"><span class="k">Sandbox Isolation</span><span class="v" style="color:var(--green)">ACTIVE</span></div>
+          <div class="kv"><span class="k">Memory Safety</span><span class="v" style="color:var(--green)">NO LEAKS</span></div>
+          <div class="kv"><span class="k">Crypto Subsystem</span><span class="v" style="color:var(--green)">HEALTHY</span></div>
+          <div class="kv"><span class="k">Plugin Runtime</span><span class="v" style="color:var(--green)">18/18 OK</span></div>
+          <div class="kv"><span class="k">Log Pipeline</span><span class="v" style="color:var(--green)">STREAMING</span></div>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="section" id="section-sessions">
+      <div class="sec-head"><div class="sec-title"><h2>Active Sessions</h2><span class="tag live">● 7 ACTIVE</span></div></div>
+      <div class="panel"><div class="panel-body flush"><table><thead><tr><th>Session ID</th><th>Target</th><th>Platform</th><th>OS</th><th>Uptime</th><th>Latency</th><th>Status</th></tr></thead><tbody>
+        <tr><td>S-0x4A1</td><td>research-alpha</td><td>iPhone</td><td>iOS 18.1</td><td>04:21:07</td><td>42ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+        <tr><td>S-0x4A2</td><td>research-beta</td><td>iPad</td><td>iOS 17.6.1</td><td>12:04:51</td><td>38ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+        <tr><td>S-0x4A3</td><td>sandbox-01</td><td>iPhone</td><td>iOS 18.2β</td><td>00:47:12</td><td>61ms</td><td><span class="tag-s amber">IDLE</span></td></tr>
+        <tr><td>S-0x4A4</td><td>research-gamma</td><td>iPhone</td><td>iOS 18.0.1</td><td>01:12:33</td><td>55ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+        <tr><td>S-0x4A5</td><td>macos-node-02</td><td>MacBook</td><td>macOS 15.1</td><td>08:55:04</td><td>29ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+        <tr><td>S-0x4A6</td><td>research-delta</td><td>iPhone</td><td>iOS 18.1</td><td>00:08:44</td><td>73ms</td><td><span class="tag-s red">RECONNECTING</span></td></tr>
+        <tr><td>S-0x4A7</td><td>sandbox-02</td><td>iPhone</td><td>iOS 17.7</td><td>02:19:18</td><td>44ms</td><td><span class="tag-s green">ACTIVE</span></td></tr>
+      </tbody></table></div></div>
+    </section>
+
+    <section class="section" id="section-targets">
+      <div class="sec-head"><div class="sec-title"><h2>Target Registry</h2><span class="tag">128 ENTRIES</span></div></div>
+      <div class="panel"><div class="panel-body flush"><table><thead><tr><th>ID</th><th>Codename</th><th>Platform</th><th>Priority</th><th>Last Contact</th><th>Notes</th></tr></thead><tbody>
+        <tr><td>T-001</td><td>research-alpha</td><td>iOS 18.1</td><td><span class="tag-s red">HIGH</span></td><td>2m ago</td><td>Primary research device</td></tr>
+        <tr><td>T-002</td><td>research-beta</td><td>iOS 17.6.1</td><td><span class="tag-s red">HIGH</span></td><td>12m ago</td><td>Legacy regression testing</td></tr>
+        <tr><td>T-003</td><td>sandbox-01</td><td>iOS 18.2β</td><td><span class="tag-s amber">MEDIUM</span></td><td>47m ago</td><td>Beta feature analysis</td></tr>
+        <tr><td>T-004</td><td>research-gamma</td><td>iOS 18.0.1</td><td><span class="tag-s amber">MEDIUM</span></td><td>1h ago</td><td>Stability baseline</td></tr>
+        <tr><td>T-005</td><td>macos-node-02</td><td>macOS 15.1</td><td><span class="tag-s red">HIGH</span></td><td>8h ago</td><td>Cross-platform comparison</td></tr>
+      </tbody></table></div></div>
+    </section>
+
+    <section class="section" id="section-logs">
+      <div class="sec-head"><div class="sec-title"><h2>System Logs</h2><span class="tag live">● STREAMING</span></div></div>
+      <div class="panel"><div class="panel-body" id="system-logs" style="background:#000;font-size:8px;color:var(--text-dim);line-height:1.5;max-height:400px;overflow-y:auto">
+        <div><span style="color:var(--text-mute)">[14:00:01]</span> <span style="color:var(--green)">[BOOT]</span> <span style="color:#fff">lsp-core</span> starting</div>
+        <div><span style="color:var(--text-mute)">[14:00:02]</span> <span style="color:var(--green)">[BOOT]</span> Kernel modules loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:03]</span> <span style="color:var(--cyan)">[CRYPTO]</span> RNG seed verified</div>
+        <div><span style="color:var(--text-mute)">[14:00:04]</span> <span style="color:var(--green)">[CRYPTO]</span> Master key derived (sim)</div>
+        <div><span style="color:var(--text-mute)">[14:00:05]</span> <span style="color:var(--cyan)">[NET]</span> Proxy chain · 3 hops</div>
+        <div><span style="color:var(--text-mute)">[14:00:06]</span> <span style="color:var(--green)">[NET]</span> Hop 1 · SOCKS5 · 12ms</div>
+        <div><span style="color:var(--text-mute)">[14:00:07]</span> <span style="color:var(--green)">[NET]</span> Hop 2 · HTTPS · 34ms</div>
+        <div><span style="color:var(--text-mute)">[14:00:08]</span> <span style="color:var(--green)">[NET]</span> Hop 3 · TOR · 84ms</div>
+        <div><span style="color:var(--text-mute)">[14:00:09]</span> <span style="color:var(--cyan)">[C2]</span> C2 channel · TLS 1.3</div>
+        <div><span style="color:var(--text-mute)">[14:00:10]</span> <span style="color:var(--green)">[C2]</span> C2 established · 48ms</div>
+        <div><span style="color:var(--text-mute)">[14:00:11]</span> <span style="color:var(--cyan)">[PLUG]</span> Loading plugins · 18 entries</div>
+        <div><span style="color:var(--text-mute)">[14:00:12]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-recon-suite</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:13]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-exploit-lab</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:14]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-data-intel</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:15]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-advanced-research</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:16]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-c2-relay</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:17]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-log-aggregator</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:18]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-plugin-host</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:19]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-target-registry</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:20]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-sandbox-mgr</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:21]</span> <span style="color:var(--amber)">[PLUG]</span> <span style="color:#fff">lsp-traffic-sim</span> disabled</div>
+        <div><span style="color:var(--text-mute)">[14:00:22]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-proxy-chain</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:23]</span> <span style="color:var(--green)">[PLUG]</span> <span style="color:#fff">lsp-diagnostics</span> loaded</div>
+        <div><span style="color:var(--text-mute)">[14:00:24]</span> <span style="color:var(--cyan)">[SANDBOX]</span> Isolation verified</div>
+        <div><span style="color:var(--text-mute)">[14:00:25]</span> <span style="color:var(--green)">[DIAG]</span> All health checks passed</div>
+        <div><span style="color:var(--text-mute)">[14:00:26]</span> <span style="color:var(--green)">[SYS]</span> Framework ready</div>
+      </div></div>
+    </section>
+
+    <section class="section" id="section-settings">
+      <div class="sec-head"><div class="sec-title"><h2>Configuration</h2><span class="tag">READ-ONLY</span></div></div>
+      <div class="grid grid-2">
+        <div class="panel"><div class="panel-head"><div class="title">Operator Profile</div></div><div class="panel-body">
+          <div class="kv"><span class="k">Handle</span><span class="v">ghost-07</span></div>
+          <div class="kv"><span class="k">Clearance</span><span class="v" style="color:var(--red-glow)">TS/SCI</span></div>
+          <div class="kv"><span class="k">Role</span><span class="v">Senior Threat Researcher</span></div>
+          <div class="kv"><span class="k">Operation</span><span class="v">BLACKPRISM</span></div>
+          <div class="kv"><span class="k">Auth Method</span><span class="v">FIDO2 + Smartcard</span></div>
+        </div></div>
+        <div class="panel"><div class="panel-head"><div class="title">Framework Settings</div></div><div class="panel-body">
+          <div class="kv"><span class="k">UI Theme</span><span class="v">OBSIDIAN-RED</span></div>
+          <div class="kv"><span class="k">Log Level</span><span class="v">DEBUG</span></div>
+          <div class="kv"><span class="k">Sandbox Mode</span><span class="v" style="color:var(--green)">STRICT</span></div>
+          <div class="kv"><span class="k">Synthetic Data</span><span class="v" style="color:var(--green)">ENFORCED</span></div>
+          <div class="kv"><span class="k">Auto-Update</span><span class="v">DISABLED</span></div>
+          <div class="kv"><span class="k">Telemetry</span><span class="v">LOCAL ONLY</span></div>
+        </div></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- DEVICE CONTROL PANEL (RIGHT) -->
+  <div class="device-top">
+    <div class="title">◈ LIVE TARGET CONTROL</div>
+    <div id="device-status-text" style="display:flex;gap:8px">
+      <span style="color:var(--text-dim)">STATUS: <span style="color:var(--amber)">AWAITING TARGET</span></span>
+    </div>
+  </div>
+  <div class="device-main">
+
+    <!-- PHASE 1: Target Input -->
+    <div class="phase-input" id="phase-input">
+      <h3> Target Acquisition</h3>
+      <div class="subtitle">Enter target identifier to initiate device control sequence</div>
+
+      <div class="input-tabs">
+        <div class="input-tab active" data-mode="email">✉ Email Address</div>
+        <div class="input-tab" data-mode="phone">☎ Phone Number</div>
+      </div>
+
+      <!-- Email Form -->
+      <div class="input-form active" id="form-email">
+        <label>Target Email Address <span style="color:var(--amber)">(must end with .com)</span></label>
+        <input type="email" id="email-input" placeholder="target@example.com">
+        <label>Associated Domain (optional)</label>
+        <input type="text" placeholder="example.com">
+        <label>Lookup Method</label>
+        <select>
+          <option>iCloud Account Recovery</option>
+          <option>Google Account Linkage</option>
+          <option>Microsoft Account Linkage</option>
+          <option>Social Media Correlation</option>
+        </select>
+        
+        <div class="checkbox-row">
+          <input type="checkbox" id="full-virtual-control" checked>
+          <label for="full-virtual-control">Enable Full Virtual Device Control</label>
+        </div>
+        
+        <div class="error-msg" id="email-error">✗ Invalid email format. Must end with .com</div>
+      </div>
+
+      <!-- Phone Form -->
+      <div class="input-form" id="form-phone">
+        <label>Target Phone Number</label>
+        <div class="phone-row">
+          <select id="country-code">
+            <option value="+1">🇺 +1</option>
+            <option value="+44">🇬🇧 +44</option>
+            <option value="+91">🇳 +91</option>
+            <option value="+86">🇨 +86</option>
+            <option value="+81">🇯🇵 +81</option>
+            <option value="+49">🇩🇪 +49</option>
+            <option value="+33">🇷 +33</option>
+            <option value="+7">🇷 +7</option>
+            <option value="+55">🇧🇷 +55</option>
+            <option value="+61">🇦🇺 +61</option>
+          </select>
+          <input type="tel" id="phone-input" placeholder="(555) 123-4567">
+        </div>
+        <label>Carrier (optional)</label>
+        <select>
+          <option>Auto-detect</option>
+          <option>T-Mobile / AT&T / Verizon</option>
+          <option>Vodafone</option>
+          <option>Orange</option>
+        </select>
+        <label>Lookup Method</label>
+        <select>
+          <option>SS7 Network Query</option>
+          <option>iCloud Phone Linkage</option>
+          <option>WhatsApp Account</option>
+          <option>Telegram Account</option>
+        </select>
+        
+        <div class="checkbox-row">
+          <input type="checkbox" id="full-virtual-control-phone" checked>
+          <label for="full-virtual-control-phone">Enable Full Virtual Device Control</label>
+        </div>
+        
+        <div class="error-msg" id="phone-error">✗ Invalid phone number format</div>
+      </div>
+
+      <button class="acquire-btn" id="acquire-btn" onclick="startAcquisition()">▶ ACQUIRE TARGET</button>
+
+      <div class="target-info" id="target-info" style="display:none">
+        <div class="row"><span class="k">Target</span><span class="v" id="ti-target">—</span></div>
+        <div class="row"><span class="k">Method</span><span class="v" id="ti-method">—</span></div>
+        <div class="row"><span class="k">Vector</span><span class="v" id="ti-vector">—</span></div>
+        <div class="row"><span class="k">Status</span><span class="v" id="ti-status" style="color:var(--amber)">PENDING</span></div>
+      </div>
     </div>
 
-    <!-- ── LOADING OVERLAY ── -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <p id="loadingText">Authenticating...</p>
+    <!-- PHASE 2: Code Reading/Loading -->
+    <div class="phase-loading" id="phase-loading">
+      <h3>◈ Reading Target Code</h3>
+      <div class="subtitle">Analyzing device signatures and establishing secure channel...</div>
+      
+      <div class="code-reader" id="code-reader">
+        <!-- Code lines will be generated here -->
+      </div>
+      
+      <div class="loading-progress">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">Initializing code reader...</div>
+        <div class="timer" id="timer">60.0s</div>
+      </div>
     </div>
 
-    <script>
-        // ══════════════════════════════════════════════
-        //  THE ONE AND ONLY VALID HASH PASSWORD
-        //  Change this value to set your own hash key
-        // ══════════════════════════════════════════════
-        const VALID_HASH = "7f3a9c2e1d8b4f6a0e5c8d2b9a1f4e7c";
+    <!-- PHASE 3: Device Commands -->
+    <div class="phase-commands" id="phase-commands">
+      <h3>◈ Device Commands Initializing</h3>
+      <div class="subtitle" id="cmd-subtitle">Establishing secure channel to target device...</div>
 
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+      <div class="cmd-list" id="cmd-list">
+        <div class="cmd-item" data-delay="0"><div class="cmd-ico">👤</div><div style="flex:1"><div class="cmd-name">contacts</div><div class="cmd-desc">View device contacts</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="1"><div class="cmd-ico">📍</div><div style="flex:1"><div class="cmd-name">location</div><div class="cmd-desc">Get device location</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="2"><div class="cmd-ico"></div><div style="flex:1"><div class="cmd-name">photos</div><div class="cmd-desc">View device photos</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="3"><div class="cmd-ico">💬</div><div style="flex:1"><div class="cmd-name">sms</div><div class="cmd-desc">View SMS messages</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="4"><div class="cmd-ico">📞</div><div style="flex:1"><div class="cmd-name">call_history</div><div class="cmd-desc">View call history</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="5"><div class="cmd-ico">🔑</div><div style="flex:1"><div class="cmd-name">keychain</div><div class="cmd-desc">View keychain items</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="6"><div class="cmd-ico"></div><div style="flex:1"><div class="cmd-name">browser_history</div><div class="cmd-desc">View browser history</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="7"><div class="cmd-ico">📱</div><div style="flex:1"><div class="cmd-name">apps</div><div class="cmd-desc">List installed apps</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="8"><div class="cmd-ico">ℹ</div><div style="flex:1"><div class="cmd-name">device_info</div><div class="cmd-desc">Get device information</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="9"><div class="cmd-ico">🔒</div><div style="flex:1"><div class="cmd-name">lock / unlock</div><div class="cmd-desc">Lock or unlock device</div></div><div class="cmd-status">READY</div></div>
+        <div class="cmd-item" data-delay="10"><div class="cmd-ico"></div><div style="flex:1"><div class="cmd-name">send_message</div><div class="cmd-desc">Send SMS/iMessage</div></div><div class="cmd-status">READY</div></div>
+      </div>
+
+      <div class="cmd-loading-bar"><div class="cmd-loading-fill" id="cmd-loading-fill"></div></div>
+      <div style="margin-top:8px;font-size:7px;color:var(--text-dim);text-align:center" id="cmd-progress-text">0% · Initializing command modules...</div>
+    </div>
+
+    <!-- PHASE 4: Live Device -->
+    <div class="phase-device" id="phase-device">
+      <div class="phone-frame">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-statusbar">
+            <div id="phone-time">09:41</div>
+            <div class="icons">
+              <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+
+          <div class="phone-home" id="phone-home">
+            <div class="phone-appgrid">
+              <div class="phone-app" data-app="weather"><div class="picon i-weather">🌤</div><div class="plabel">Weather</div></div>
+              <div class="phone-app" data-app="stocks"><div class="picon i-stocks">📈</div><div class="plabel">Stocks</div></div>
+              <div class="phone-app" data-app="findmy"><div class="picon i-findmy">📍</div><div class="plabel">Find My</div></div>
+              <div class="phone-app" data-app="home"><div class="picon i-home">🏠</div><div class="plabel">Home</div></div>
+              <div class="phone-app" data-app="books"><div class="picon i-books"></div><div class="plabel">Books</div></div>
+              <div class="phone-app" data-app="itunes"><div class="picon i-itunes">⭐</div><div class="plabel">iTunes</div></div>
+              <div class="phone-app" data-app="fitness"><div class="picon i-fitness">🎯</div><div class="plabel">Fitness</div></div>
+              <div class="phone-app" data-app="watch"><div class="picon i-watch"></div><div class="plabel">Watch</div></div>
+              <div class="phone-app" data-app="contacts"><div class="picon i-contacts">👤</div><div class="plabel">Contacts</div></div>
+              <div class="phone-app" data-app="translate"><div class="picon i-translate"></div><div class="plabel">Translate</div></div>
+              <div class="phone-app" data-app="files"><div class="picon i-files"></div><div class="plabel">Files</div></div>
+              <div class="phone-app" data-app="shortcuts"><div class="picon i-shortcuts"></div><div class="plabel">Shortcuts</div></div>
+              <div class="phone-app" data-app="camera"><div class="picon i-camera">📷</div><div class="plabel">Camera</div></div>
+              <div class="phone-app" data-app="wallet"><div class="picon i-wallet"></div><div class="plabel">Wallet</div></div>
+              <div class="phone-app" data-app="tips"><div class="picon i-tips">💡</div><div class="plabel">Tips</div></div>
+              <div class="phone-app" data-app="kali"><div class="picon i-kali">K</div><div class="plabel">Kali</div></div>
+            </div>
+          </div>
+
+          <div class="phone-dock">
+            <div class="phone-app" data-app="phone"><div class="picon" style="background:linear-gradient(180deg,#34c759,#30d158)">📞</div></div>
+            <div class="phone-app" data-app="safari"><div class="picon" style="background:linear-gradient(180deg,#007aff,#5ac8fa)"></div></div>
+            <div class="phone-app" data-app="messages"><div class="picon" style="background:linear-gradient(180deg,#34c759,#30d158)"></div></div>
+            <div class="phone-app" data-app="music"><div class="picon" style="background:linear-gradient(180deg,#ff2d55,#ff375f)">🎵</div></div>
+          </div>
+
+          <!-- Home Button -->
+          <div class="phone-home-btn" onclick="goToHome()" title="Go to Home"></div>
+
+          <!-- Phone App Views -->
+          <div class="phone-appview" id="pav-safari">
+            <div class="pav-header"><div class="pav-back" onclick="goToHome()">‹</div><div class="pav-title">Safari</div><div style="width:20px"></div></div>
+            <div class="pav-safari-bar"><div class="pav-url"><svg width="8" height="8" viewBox="0 0 24 24" fill="#888"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>google.com</div></div>
+            <div class="pav-content">
+              <div class="g-modal">
+                <h2>Before you continue to Google</h2>
+                <p>We use cookies and data to</p>
+                <ul><li>Deliver and maintain Google services</li><li>Track outages and protect against spam</li><li>Measure audience engagement</li></ul>
+                <p>If you choose 'Accept all', we will also</p>
+                <ul><li>Develop and improve new services</li></ul>
+                <div class="g-btns"><button class="g-btn primary">Accept all</button><button class="g-btn secondary">Reject all</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phone-appview" id="pav-messages">
+            <div class="pav-header"><div class="pav-back" onclick="goToHome()">‹</div><div class="pav-title">Messages</div><div style="width:20px"></div></div>
+            <div class="pav-content" style="padding:0">
+              <div class="pmsg-item"><div class="pmsg-avatar">J</div><div class="pmsg-info"><div class="pmsg-name">John Doe</div><div class="pmsg-preview">Hey, meeting today?</div></div><div class="pmsg-time">2:20p</div></div>
+              <div class="pmsg-item"><div class="pmsg-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c)">J</div><div class="pmsg-info"><div class="pmsg-name">Jane Smith</div><div class="pmsg-preview">Don't forget!</div></div><div class="pmsg-time">2:15p</div></div>
+              <div class="pmsg-item"><div class="pmsg-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">M</div><div class="pmsg-info"><div class="pmsg-name">Mike Johnson</div><div class="pmsg-preview">Thanks for help</div></div><div class="pmsg-time">1:42p</div></div>
+              <div class="pmsg-item"><div class="pmsg-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">S</div><div class="pmsg-info"><div class="pmsg-name">Sarah Williams</div><div class="pmsg-preview">See you tomorrow</div></div><div class="pmsg-time">12:18p</div></div>
+            </div>
+          </div>
+
+          <div class="phone-appview" id="pav-contacts">
+            <div class="pav-header"><div class="pav-back" onclick="goToHome()">‹</div><div class="pav-title">Contacts</div><div style="width:20px"></div></div>
+            <div class="pav-content" style="padding:0">
+              <div class="pcontact-item"><div class="pcontact-avatar">J</div><div class="pcontact-info"><div class="pcontact-name">John Doe</div><div class="pcontact-phone">+1 (555) 123-4567</div></div></div>
+              <div class="pcontact-item"><div class="pcontact-avatar" style="background:#ff2d55">J</div><div class="pcontact-info"><div class="pcontact-name">Jane Smith</div><div class="pcontact-phone">+1 (555) 234-5678</div></div></div>
+              <div class="pcontact-item"><div class="pcontact-avatar" style="background:#34c759">M</div><div class="pcontact-info"><div class="pcontact-name">Mike Johnson</div><div class="pcontact-phone">+1 (555) 345-6789</div></div></div>
+              <div class="pcontact-item"><div class="pcontact-avatar" style="background:#ff9500">S</div><div class="pcontact-info"><div class="pcontact-name">Sarah Williams</div><div class="pcontact-phone">+1 (555) 456-7890</div></div></div>
+            </div>
+          </div>
+
+          <div class="phone-appview" id="pav-generic">
+            <div class="pav-header"><div class="pav-back" onclick="goToHome()">‹</div><div class="pav-title" id="pav-generic-title">App</div><div style="width:20px"></div></div>
+            <div class="pav-content" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
+              <div style="font-size:36px" id="pav-generic-icon">📱</div>
+              <div style="font-size:11px;color:#888">App Interface</div>
+              <div style="font-size:8px;color:#aaa">Simulated view</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div class="term-panel">
+        <div class="term-header">
+          <div class="title">lightspy — Python — 143x41</div>
+          <div class="ctrls"><span class="c-min"></span><span class="c-max"></span><span class="c-close"></span></div>
+        </div>
+        <div class="term-body" id="term-body"></div>
+        <div class="term-input-wrap">
+          <span class="prompt">lightspy@ios:~$</span>
+          <input type="text" id="term-input" autocomplete="off" spellcheck="false">
+          <span class="cursor"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Clock
+  function updateClock(){
+    const d=new Date();
+    const p=n=>String(n).padStart(2,'0');
+    document.getElementById('clock').textContent=`${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())} UTC`;
+    const n=new Date();
+    document.getElementById('phone-time').textContent=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+  }
+  setInterval(updateClock,1000);updateClock();
+  const bootTime=Date.now();
+  function updateUptime(){const s=Math.floor((Date.now()-bootTime)/1000);const h=String(Math.floor(s/3600)).padStart(2,'0');const m=String(Math.floor((s%3600)/60)).padStart(2,'0');const sec=String(s%60).padStart(2,'0');const el=document.getElementById('uptime');if(el)el.textContent=`${h}:${m}:${sec}`}
+  setInterval(updateUptime,1000);updateUptime();
+
+  // Navigation
+  const navItems=document.querySelectorAll('.nav-item');
+  const sections=document.querySelectorAll('.section');
+  const crumb=document.getElementById('crumb-section');
+  navItems.forEach(item=>{
+    item.addEventListener('click',()=>{
+      const sec=item.dataset.section;if(!sec)return;
+      navItems.forEach(n=>n.classList.remove('active'));item.classList.add('active');
+      sections.forEach(s=>s.classList.remove('active'));
+      const target=document.getElementById('section-'+sec);
+      if(target){target.classList.add('active');crumb.textContent=item.textContent.trim().toUpperCase()}
+    });
+  });
+
+  // Data Tabs
+  const dataTabs=document.querySelectorAll('#data-tabs .tab');
+  const dataPanes=document.querySelectorAll('.data-pane');
+  dataTabs.forEach(t=>{
+    t.addEventListener('click',()=>{
+      dataTabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      dataPanes.forEach(p=>p.classList.remove('active'));
+      const pane=document.getElementById('pane-'+t.dataset.tab);if(pane)pane.classList.add('active');
+    });
+  });
+
+  // Input tabs
+  const inputTabs=document.querySelectorAll('.input-tab');
+  inputTabs.forEach(t=>{
+    t.addEventListener('click',()=>{
+      inputTabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      document.querySelectorAll('.input-form').forEach(f=>f.classList.remove('active'));
+      document.getElementById('form-'+t.dataset.mode).classList.add('active');
+    });
+  });
+
+  // Add log to system logs
+  function addSystemLog(message,type='info'){
+    const logs=document.getElementById('system-logs');
+    const now=new Date();
+    const time=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const div=document.createElement('div');
+    let color='var(--text-dim)';
+    let prefix='[INFO]';
+    if(type==='success'){color='var(--green)';prefix='[OK]';}
+    else if(type==='error'){color='var(--red-glow)';prefix='[ERR]';}
+    else if(type==='warn'){color='var(--amber)';prefix='[WARN]';}
+    div.innerHTML=`<span style="color:var(--text-mute)">[${time}]</span> <span style="color:${color}">${prefix}</span> ${message}`;
+    logs.appendChild(div);
+    logs.scrollTop=logs.scrollHeight;
+  }
+
+  // Acquisition flow with validation
+  let currentMode='email';
+  document.querySelectorAll('.input-tab').forEach(t=>{
+    t.addEventListener('click',()=>{currentMode=t.dataset.mode});
+  });
+
+  function startAcquisition(){
+    const btn=document.getElementById('acquire-btn');
+    const emailError=document.getElementById('email-error');
+    const phoneError=document.getElementById('phone-error');
+    emailError.classList.remove('show');
+    phoneError.classList.remove('show');
+
+    let target,method,vector,fullControl;
+    
+    if(currentMode==='email'){
+      const email=document.getElementById('email-input').value.trim();
+      fullControl=document.getElementById('full-virtual-control').checked;
+      
+      // Validate email ends with .com
+      if(!email || !email.endsWith('.com')){
+        emailError.classList.add('show');
+        btn.disabled=false;
+        btn.textContent='▶ ACQUIRE TARGET';
+        addSystemLog(`Target acquisition failed: Invalid email format - ${email||'empty'}`,'error');
+        return;
+      }
+      
+      target=email;
+      method='Email Lookup';
+      vector='iCloud Account Recovery';
+    }else{
+      const cc=document.getElementById('country-code').value;
+      const ph=document.getElementById('phone-input').value.trim();
+      fullControl=document.getElementById('full-virtual-control-phone').checked;
+      
+      // Validate phone number (basic validation - must have digits)
+      if(!ph || ph.replace(/\D/g,'').length<7){
+        phoneError.classList.add('show');
+        btn.disabled=false;
+        btn.textContent='▶ ACQUIRE TARGET';
+        addSystemLog(`Target acquisition failed: Invalid phone number - ${ph||'empty'}`,'error');
+        return;
+      }
+      
+      target=cc+' '+ph;
+      method='Phone Lookup';
+      vector='SS7 Network Query';
+    }
+
+    btn.disabled=true;
+    btn.textContent=' ACQUIRING...';
+
+    const targetInfo=document.getElementById('target-info');
+    targetInfo.style.display='block';
+
+    document.getElementById('ti-target').textContent=target;
+    document.getElementById('ti-method').textContent=method+(fullControl?' + Full Virtual Control':'');
+    document.getElementById('ti-vector').textContent=vector;
+    document.getElementById('ti-status').textContent='ACQUIRING...';
+    document.getElementById('ti-status').style.color='var(--amber)';
+
+    // Update topbar status
+    document.getElementById('device-status-text').innerHTML=`<span style="color:var(--text-dim)">TARGET: <span style="color:var(--green)">${target.substring(0,20)}...</span></span><span style="color:var(--amber)">READING CODE</span>`;
+
+    // Log to system
+    addSystemLog(`Initiating target acquisition: ${target}`,'info');
+    addSystemLog(`Method: ${method}, Vector: ${vector}`,'info');
+    if(fullControl)addSystemLog('Full Virtual Device Control enabled','warn');
+
+    setTimeout(()=>{
+      document.getElementById('phase-input').classList.add('hidden');
+      document.getElementById('phase-loading').classList.add('active');
+      runCodeReading(target,method,vector,fullControl);
+    },500);
+  }
+
+  function runCodeReading(target,method,vector,fullControl){
+    const codeReader=document.getElementById('code-reader');
+    const progressFill=document.getElementById('progress-fill');
+    const progressText=document.getElementById('progress-text');
+    const timer=document.getElementById('timer');
+    
+    // Generate code lines
+    const codeLines=[
+      'Initializing secure channel...',
+      'Handshaking with target device...',
+      'Verifying SSL certificates...',
+      'Establishing TLS 1.3 connection...',
+      'Authenticating operator credentials...',
+      'Loading device signatures...',
+      'Reading IMEI: 35-123456-789012-3',
+      'Reading ICCID: 89012345678901234567',
+      'Reading IMSI: 310260123456789',
+      'Reading MSISDN: +15550199482',
+      'Reading device model: iPhone13,Pro',
+      'Reading iOS version: 17.2.1',
+      'Reading build number: 21C66',
+      'Reading serial: F1234567890',
+      'Reading WiFi MAC: 00:1A:2B:3C:4D:5E',
+      'Reading Bluetooth MAC: 00:1A:2B:3C:4D:5F',
+      'Reading iCloud account: '+target,
+      'Reading Apple ID: A1234567890',
+      'Reading iCloud backup status: enabled',
+      'Reading Find My iPhone: active',
+      'Reading Activation Lock: disabled',
+      'Reading Face ID status: enrolled',
+      'Reading Touch ID status: not available',
+      'Reading passcode status: enabled',
+      'Reading auto-lock: 30 seconds',
+      'Reading display brightness: 75%',
+      'Reading battery level: 87%',
+      'Reading battery health: 94%',
+      'Reading charging status: not charging',
+      'Reading storage total: 128 GB',
+      'Reading storage used: 94.2 GB',
+      'Reading storage available: 33.8 GB',
+      'Reading network type: 5G',
+      'Reading carrier: T-Mobile',
+      'Reading signal strength: -72 dBm',
+      'Reading cell tower ID: 12345',
+      'Reading location services: enabled',
+      'Reading GPS coordinates: 37.7749,-122.4194',
+      'Reading timezone: America/Los_Angeles',
+      'Reading language: en-US',
+      'Reading region: US',
+      'Reading keyboard languages: en-US, es-US',
+      'Reading installed apps: 247',
+      'Reading app permissions: scanning...',
+      'Reading privacy settings: analyzing...',
+      'Reading notification settings: scanning...',
+      'Reading background app refresh: enabled',
+      'Reading automatic downloads: disabled',
+      'Reading iCloud sync: active',
+      'Reading Health data: accessible',
+      'Reading HomeKit devices: 3 paired',
+      'Reading CarPlay: not connected',
+      'Reading AirDrop: contacts only',
+      'Reading Handoff: enabled',
+      'Reading Universal Clipboard: enabled',
+      'Reading Continuity: active',
+      'Reading Sidecar: not available',
+      'Reading Screen Time: enabled',
+      'Reading Content Restrictions: active',
+      'Reading Siri: enabled',
+      'Reading Dictation: enabled',
+      'Reading Voice Control: disabled',
+      'Reading Accessibility: scanning...',
+      'Reading Display Zoom: standard',
+      'Reading Bold Text: disabled',
+      'Reading Reduce Motion: disabled',
+      'Reading Auto-Brightness: enabled',
+      'Reading True Tone: enabled',
+      'Reading Night Shift: scheduled',
+      'Reading Dark Mode: enabled',
+      'Reading Low Power Mode: disabled',
+      'Reading Optimized Charging: enabled',
+      'Reading Background App Refresh: enabled',
+      'Reading Fetch New Data: push',
+      'Reading Mail accounts: 3 configured',
+      'Reading Calendar accounts: 2 configured',
+      'Reading Contacts accounts: 2 configured',
+      'Reading Notes accounts: 1 configured',
+      'Reading Reminders: iCloud synced',
+      'Reading Safari extensions: 2 installed',
+      'Reading Reading List: 47 items',
+      'Reading Bookmarks: 234 saved',
+      'Reading History: 1,847 entries',
+      'Reading Cookies: accepting',
+      'Reading Privacy Report: enabled',
+      'Reading Fraudulent Website Warning: enabled',
+      'Reading Cross-Website Tracking: prevented',
+      'Reading Camera access: granted to 12 apps',
+      'Reading Microphone access: granted to 8 apps',
+      'Reading Location access: granted to 24 apps',
+      'Reading Contacts access: granted to 18 apps',
+      'Reading Calendar access: granted to 6 apps',
+      'Reading Reminders access: granted to 4 apps',
+      'Reading Photos access: granted to 32 apps',
+      'Reading Bluetooth access: granted to 15 apps',
+      'Reading Local Network access: granted to 9 apps',
+      'Reading Tracking permission: denied by 18 apps',
+      'Reading App Store purchases: enabled',
+      'Reading In-App Purchases: enabled',
+      'Reading Subscriptions: 3 active',
+      'Reading Family Sharing: enabled (6 members)',
+      'Reading Screen Recording: not active',
+      'Reading Microphone: not active',
+      'Reading Camera: not active',
+      'Reading Location: active (background)',
+      'Reading Bluetooth: scanning',
+      'Reading WiFi: connected to "Home_Network"',
+      'Reading Personal Hotspot: disabled',
+      'Reading VPN: not connected',
+      'Reading Proxy: not configured',
+      'Reading DNS: automatic',
+      'Reading HTTP Proxy: off',
+      'Reading SSL Pinning: bypassed',
+      'Reading Certificate Trust: 3 custom certs',
+      'Reading Jailbreak status: not jailbroken',
+      'Reading Developer Mode: disabled',
+      'Reading USB Restricted Mode: enabled',
+      'Reading Data Protection: complete',
+      'Reading FileVault: enabled',
+      'Reading Secure Enclave: active',
+      'Reading Neural Engine: active',
+      'Reading A15 Bionic: operational',
+      'Reading GPU: 5-core active',
+      'Reading CPU: 6-core active',
+      'Reading RAM: 6 GB available',
+      'Reading Thermal status: normal',
+      'Reading Performance mode: balanced',
+      'Reading Power mode: standard',
+      'Reading Temperature: 34.2°C',
+      'Reading Voltage: 3.82V',
+      'Reading Current: 0.42A',
+      'Reading Cycle count: 247',
+      'Reading Maximum capacity: 94%',
+      'Reading Peak performance: capable',
+      'Reading Unknown shutdowns: 0',
+      'Reading Battery health: good',
+      'Reading Service battery: not required',
+      'Reading Authentic battery: yes',
+      'Reading Wireless charging: supported',
+      'Reading MagSafe: compatible',
+      'Reading Case detection: none',
+      'Reading Water damage: none',
+      'Reading Liquid contact indicators: white',
+      'Reading Physical damage: none detected',
+      'Reading Screen protector: not detected',
+      'Reading Screen brightness max: 800 nits',
+      'Reading HDR support: enabled',
+      'Reading True Tone: calibrated',
+      'Reading Night Shift: calibrated',
+      'Reading Color profile: P3 wide color',
+      'Reading Refresh rate: 60Hz',
+      'Reading Touch sampling: 120Hz',
+      'Reading 3D Touch: not available',
+      'Reading Haptic Touch: enabled',
+      'Reading Raise to Wake: enabled',
+      'Reading Tap to Wake: enabled',
+      'Reading Attention Aware: enabled',
+      'Reading Always On Display: not available',
+      'Reading Proximity sensor: active',
+      'Reading Ambient light sensor: active',
+      'Reading Accelerometer: active',
+      'Reading Gyroscope: active',
+      'Reading Magnetometer: active',
+      'Reading Barometer: active',
+      'Reading LiDAR: not available',
+      'Reading Ultra Wideband: available',
+      'Reading NFC: active (reader mode)',
+      'Reading Express Cards: 2 configured',
+      'Reading Apple Pay: enabled',
+      'Reading Wallet: 4 cards added',
+      'Reading Transit cards: 2 added',
+      'Reading Student ID: not added',
+      'Reading Driver license: not added',
+      'Reading Home keys: not configured',
+      'Reading Car keys: not configured',
+      'Reading Hotel keys: not configured',
+      'Reading Event tickets: 0 stored',
+      'Reading Boarding passes: 0 stored',
+      'Reading Coupons: 3 stored',
+      'Reading Gift cards: 1 stored',
+      'Reading Loyalty cards: 5 stored',
+      'Reading Membership cards: 2 stored',
+      'Reading Vaccination cards: 0 stored',
+      'Reading Health records: 0 connected',
+      'Reading Medical ID: configured',
+      'Reading Emergency contacts: 2 added',
+      'Reading Fall detection: enabled',
+      'Reading Crash detection: enabled',
+      'Reading Emergency SOS: enabled',
+      'Reading Medical alert: not configured',
+      'Reading Hearing aid compatibility: enabled',
+      'Reading RTT/TTY: disabled',
+      'Reading Relay calls: disabled',
+      'Reading Voicemail: configured',
+      'Reading Call forwarding: disabled',
+      'Reading Call waiting: enabled',
+      'Reading Caller ID: showing',
+      'Reading Silence unknown callers: disabled',
+      'Reading Announce calls: never',
+      'Reading Auto-answer calls: disabled',
+      'Reading Call audio routing: automatic',
+      'Reading Bluetooth devices: 3 paired',
+      'Reading Car audio: not connected',
+      'Reading Speaker audio: available',
+      'Reading Headphone audio: available',
+      'Reading Hearing aid audio: available',
+      'Reading Live Listen: not active',
+      'Reading Sound recognition: disabled',
+      'Reading Background sounds: disabled',
+      'Reading Headphone accommodations: disabled',
+      'Reading Spatial audio: available',
+      'Reading Dolby Atmos: available',
+      'Reading Lossless audio: available',
+      'Reading Hi-Res Lossless: available',
+      'Reading Apple Music: subscribed',
+      'Reading Apple TV+: subscribed',
+      'Reading Apple Arcade: subscribed',
+      'Reading Apple News+: not subscribed',
+      'Reading Apple Fitness+: not subscribed',
+      'Reading iCloud+: 200GB plan',
+      'Reading Hide My Email: 3 aliases',
+      'Reading iCloud Private Relay: disabled',
+      'Reading Custom email domain: not configured',
+      'Reading HomeKit Secure Video: 0 cameras',
+      'Reading iCloud Backup: enabled',
+      'Reading Last backup: 2 hours ago',
+      'Reading Backup size: 47.3 GB',
+      'Reading iCloud Drive: enabled',
+      'Reading Desktop & Documents: enabled',
+      'Reading Photos: enabled (Optimized)',
+      'Reading Messages: enabled',
+      'Reading Mail: enabled',
+      'Reading Notes: enabled',
+      'Reading Reminders: enabled',
+      'Reading Safari: enabled',
+      'Reading Keychain: enabled',
+      'Reading Health: enabled',
+      'Reading Home: enabled',
+      'Reading Find My: enabled',
+      'Reading Find My network: enabled',
+      'Reading Send Last Location: enabled',
+      'Reading Offline Finding: enabled',
+      'Reading AirTag tracking: 0 AirTags',
+      'Reading Item tracking: 0 items',
+      'Reading People sharing: 12 people',
+      'Reading Devices: 5 devices',
+      'Reading Macs: 2 Macs',
+      'Reading iPads: 1 iPad',
+      'Reading Watches: 1 Watch',
+      'Reading AirPods: 2 pairs',
+      'Reading Beats: 1 pair',
+      'Reading HomePods: 0 HomePods',
+      'Reading Apple TVs: 1 Apple TV',
+      'Reading Other devices: 0 devices',
+      'Reading Activation lock: off',
+      'Reading Lost mode: off',
+      'Reading Erase device: not scheduled',
+      'Reading Remote lock: available',
+      'Reading Remote wipe: available',
+      'Reading Play sound: available',
+      'Reading Get directions: available',
+      'Reading Notify when found: disabled',
+      'Reading Mark as lost: not active',
+      'Reading Erase this device: not scheduled',
+      'Reading Remove from account: available',
+      'Reading Transfer to new device: available',
+      'Reading Set up new device: available',
+      'Reading Restore from backup: available',
+      'Reading Quick start: available',
+      'Reading Manual setup: available',
+      'Reading Cellular setup: available',
+      'Reading WiFi setup: available',
+      'Reading Apple ID setup: complete',
+      'Reading Biometric setup: complete',
+      'Reading Passcode setup: complete',
+      'Reading Siri setup: complete',
+      'Reading Screen Time setup: complete',
+      'Reading Display setup: complete',
+      'Reading Accessibility setup: skipped',
+      'Reading Appearance setup: dark mode',
+      'Reading Text size: default',
+      'Reading Bold text: off',
+      'Reading Reduce transparency: off',
+      'Reading Increase contrast: off',
+      'Reading Differentiate without color: off',
+      'Reading Reduce motion: off',
+      'Reading Auto-play message previews: off',
+      'Reading Call audio routing: automatic',
+      'Reading Announce calls: never',
+      'Reading Silence unknown callers: off',
+      'Reading Phone noise cancellation: on',
+      'Reading Headphone safety: on',
+      'Reading Reduce loud sounds: on',
+      'Reading Headphone notifications: on',
+      'Reading Audio/visual: default',
+      'Reading Ringtone: Marimba',
+      'Reading Text tone: Default',
+      'Reading New voicemail: Default',
+      'Reading New mail: Default',
+      'Reading Sent mail: None',
+      'Reading Calendar alerts: Default',
+      'Reading Reminder alerts: Default',
+      'Reading AirDrop: Contacts Only',
+      'Reading Internet calls: on',
+      'Reading Wi-Fi Calling: on',
+      'Reading Add Wi-Fi Calling For Other Devices: on',
+      'Reading Instant Personal Hotspot: on',
+      'Reading Maximize Compatibility: off',
+      'Reading Allow Others to Join: off',
+      'Reading Auto-Join Hotspot: Ask',
+      'Reading Personal Hotspot password: set',
+      'Reading Family Sharing hotspot: on',
+      'Reading Screen Time limits: configured',
+      'Reading Downtime: scheduled',
+      'Reading App limits: 8 apps limited',
+      'Reading Communication limits: configured',
+      'Reading Content & Privacy Restrictions: on',
+      'Reading iTunes & App Store Purchases: restricted',
+      'Reading Allowed Apps: all allowed',
+      'Reading Content Restrictions: configured',
+      'Reading Privacy: configured',
+      'Reading Allow Changes: restricted',
+      'Reading Passcode Changes: restricted',
+      'Reading Face ID & Passcode: restricted',
+      'Reading Account Changes: restricted',
+      'Reading Cellular Data Changes: restricted',
+      'Reading Volume Limit: set',
+      'Reading Explicit Content: restricted',
+      'Reading Web Content: limited',
+      'Reading Allowed Websites Only: 12 sites',
+      'Reading Siri Language: English',
+      'Reading Siri Voice: American Female',
+      'Reading Hey Siri: on',
+      'Reading Press Side Button for Siri: on',
+      'Reading Allow Siri When Locked: on',
+      'Reading Siri & Dictation History: not sharing',
+      'Reading Improve Siri & Dictation: off',
+      'Reading Type to Siri: off',
+      'Reading Siri Responses: automatic',
+      'Reading Dictation: on',
+      'Reading Enhanced Dictation: off',
+      'Reading Emoji Dictation: on',
+      'Reading Profanity Filter: on',
+      'Reading Auto-Capitalization: on',
+      'Reading Auto-Correction: on',
+      'Reading Check Spelling: on',
+      'Reading Enable Dictation: on',
+      'Reading . (Period) Space Shortcut: on',
+      'Reading Predictive: on',
+      'Reading Speak Selection: off',
+      'Reading Speak Screen: off',
+      'Reading Speaking Rate: normal',
+      'Reading Voices: default',
+      'Reading Highlight Words: off',
+      'Reading Highlight Sentences: off',
+      'Reading Typing Feedback: characters',
+      'Reading Voice Control: off',
+      'Reading Zoom: off',
+      'Reading Magnifier: off',
+      'Reading Display Accommodations: off',
+      'Reading Color Filters: off',
+      'Reading Invert Colors: off',
+      'Reading Color Tint: off',
+      'Reading Reduce White Point: off',
+      'Reading Auto-Brightness: on',
+      'Reading Classic Invert: off',
+      'Reading Smart Invert: off',
+      'Reading Increase Contrast: off',
+      'Reading Reduce Transparency: off',
+      'Reading Bold Text: off',
+      'Reading Larger Text: off',
+      'Reading Button Shapes: off',
+      'Reading On/Off Labels: on',
+      'Reading Reduce Motion: off',
+      'Reading Prefer Cross-Fade Transitions: off',
+      'Reading Auto-Play Message Previews: off',
+      'Reading Per-App Settings: default',
+      'Reading Motion & Fitness: on',
+      'Reading Fitness Tracking: on',
+      'Reading Heart Rate: on',
+      'Reading Steps: on',
+      'Reading Distance: on',
+      'Reading Floors Climbed: on',
+      'Reading Active Energy: on',
+      'Reading Resting Energy: on',
+      'Reading Exercise Minutes: on',
+      'Reading Stand Hours: on',
+      'Reading Wheelchair Mode: off',
+      'Reading Walking Steadiness: on',
+      'Reading Headphone Audio Levels: on',
+      'Reading Environmental Sound Measurements: on',
+      'Reading Health Sharing: configured',
+      'Reading Emergency Sharing: configured',
+      'Reading Medical ID: configured',
+      'Reading Emergency Contacts: 2 added',
+      'Reading Fall Detection: on',
+      'Reading Crash Detection: on',
+      'Reading Emergency SOS: on',
+      'Reading Call with Side Button: on',
+      'Reading Call with 5 Presses: on',
+      'Reading Count Down Sound: on',
+      'Reading Call After Emergency Ends: on',
+      'Reading Auto Call: on',
+      'Reading Emergency Contacts Notified: on',
+      'Reading Medical ID Access: on Lock Screen',
+      'Reading Share During Emergency Call: on',
+      'Reading Share Location: on',
+      'Reading Share Medical ID: on',
+      'Reading Share Emergency Contacts: on',
+      'Reading Share Health Data: on',
+      'Reading Share Fitness Data: on',
+      'Reading Share Activity Data: on',
+      'Reading Share Sleep Data: on',
+      'Reading Share Mindfulness Data: on',
+      'Reading Share Nutrition Data: on',
+      'Reading Share Reproductive Health: on',
+      'Reading Share Respiratory Rate: on',
+      'Reading Share Heart Rate Variability: on',
+      'Reading Share VO2 Max: on',
+      'Reading Share Walking Asymmetry: on',
+      'Reading Share Walking Double Support Time: on',
+      'Reading Share Step Length: on',
+      'Reading Share Stair Speed: on',
+      'Reading Share Environmental Audio Exposure: on',
+      'Reading Share Headphone Audio Exposure: on',
+      'Reading Share Hearing Health: on',
+      'Reading Share Mobility: on',
+      'Reading Share Body Temperature: on',
+      'Reading Share Blood Glucose: on',
+      'Reading Share Blood Oxygen: on',
+      'Reading Share ECG: on',
+      'Reading Share Irregular Heart Rhythm: on',
+      'Reading Share High Heart Rate: on',
+      'Reading Share Low Heart Rate: on',
+      'Reading Share Cardio Fitness: on',
+      'Reading Share Recovery Time: on',
+      'Reading Share Training Effect: on',
+      'Reading Share Training Load: on',
+      'Reading Share Running Power: on',
+      'Reading Share Running Form: on',
+      'Reading Share Ground Contact Time: on',
+      'Reading Share Vertical Oscillation: on',
+      'Reading Share Stride Length: on',
+      'Reading Share Cadence: on',
+      'Reading Share Speed: on',
+      'Reading Share Pace: on',
+      'Reading Share Distance: on',
+      'Reading Share Elevation: on',
+      'Reading Share Flights Climbed: on',
+      'Reading Share Active Calories: on',
+      'Reading Share Total Calories: on',
+      'Reading Share Move Minutes: on',
+      'Reading Share Exercise Minutes: on',
+      'Reading Share Stand Hours: on',
+      'Reading Share Activity Rings: on',
+      'Reading Share Competitions: on',
+      'Reading Share Awards: on',
+      'Reading Share Trends: on',
+      'Reading Share History: on',
+      'Reading Share Summary: on',
+      'Reading Share Notifications: on',
+      'Reading Share Weekly Summary: on',
+      'Reading Share Monthly Summary: on',
+      'Reading Share Yearly Summary: on',
+      'Reading Share Goals: on',
+      'Reading Share Achievements: on',
+      'Reading Share Milestones: on',
+      'Reading Share Records: on',
+      'Reading Share Personal Bests: on',
+      'Reading Share Workouts: on',
+      'Reading Share Workout Routes: on',
+      'Reading Share Workout Photos: on',
+      'Reading Share Workout Music: on',
+      'Reading Share Workout Friends: on',
+      'Reading Share Workout Coaches: on',
+      'Reading Share Workout Plans: on',
+      'Reading Share Workout Programs: on',
+      'Reading Share Workout Challenges: on',
+      'Reading Share Workout Competitions: on',
+      'Reading Share Workout Awards: on',
+      'Reading Share Workout Trends: on',
+      'Reading Share Workout History: on',
+      'Reading Share Workout Summary: on',
+      'Reading Share Workout Notifications: on',
+      'Reading Share Workout Goals: on',
+      'Reading Share Workout Achievements: on',
+      'Reading Share Workout Milestones: on',
+      'Reading Share Workout Records: on',
+      'Reading Share Workout Personal Bests: on',
+      'Reading Code analysis complete.',
+      'All signatures verified.',
+      'Device profile loaded successfully.',
+      'Ready to establish control channel.'
+    ];
+
+    let lineIndex=0;
+    let timeLeft=fullControl?60.0:30.0; // Full control takes longer
+    const totalTime=fullControl?60000:30000; // 60 or 30 seconds
+    const interval=totalTime/codeLines.length;
+
+    function addCodeLine(){
+      if(lineIndex>=codeLines.length){
+        setTimeout(()=>{
+          document.getElementById('phase-loading').classList.remove('active');
+          document.getElementById('phase-commands').classList.add('active');
+          runCommandSequence(target,method,vector,fullControl);
+        },500);
+        return;
+      }
+
+      const line=document.createElement('div');
+      line.className='code-line active';
+      line.textContent=`[${String(lineIndex+1).padStart(3,'0')}] ${codeLines[lineIndex]}`;
+      
+      // Mark previous lines
+      document.querySelectorAll('.code-line.active').forEach(l=>{
+        l.classList.remove('active');
+        if(Math.random()>0.95){
+          l.classList.add('error');
+          setTimeout(()=>l.classList.remove('error'),200);
+        }else{
+          l.classList.add('success');
         }
+      });
+      
+      codeReader.appendChild(line);
+      codeReader.scrollTop=codeReader.scrollHeight;
+      
+      // Update progress
+      const pct=Math.round((lineIndex+1)/codeLines.length*100);
+      progressFill.style.width=pct+'%';
+      progressText.textContent=`Reading device signatures... ${pct}% complete`;
+      timer.textContent=timeLeft.toFixed(1)+'s';
+      
+      lineIndex++;
+      timeLeft-=interval/1000;
+      
+      setTimeout(addCodeLine,interval);
+    }
+    
+    addCodeLine();
+  }
 
-        function showLoading(text, duration, callback) {
-            const overlay = document.getElementById('loadingOverlay');
-            const textEl = document.getElementById('loadingText');
-            textEl.textContent = text;
-            overlay.classList.add('active');
+  function runCommandSequence(target,method,vector,fullControl){
+    const items=document.querySelectorAll('.cmd-item');
+    const fill=document.getElementById('cmd-loading-fill');
+    const progressText=document.getElementById('cmd-progress-text');
+    const subtitle=document.getElementById('cmd-subtitle');
+    let idx=0;
 
-            setTimeout(() => {
-                overlay.classList.remove('active');
-                if (callback) callback();
-            }, duration);
-        }
+    function showNext(){
+      if(idx>=items.length){
+        fill.style.width='100%';
+        progressText.textContent='100% · All command modules loaded';
+        subtitle.textContent='All commands initialized · Loading device interface...';
+        setTimeout(()=>loadDevice(target,fullControl),800);
+        return;
+      }
+      items[idx].classList.add('show');
+      const pct=Math.round((idx+1)/items.length*100);
+      fill.style.width=pct+'%';
+      progressText.textContent=pct+'% · Loading '+items[idx].querySelector('.cmd-name').textContent+'...';
 
-        function clearError() {
-            const input = document.getElementById('passwordInput');
-            const msg = document.getElementById('errorMsg');
-            input.classList.remove('error');
-            msg.classList.remove('show');
-        }
+      // Add to terminal
+      addLine(`<span class="term-prompt">lightspy@ios:~$</span> <span class="term-cmd">module load ${items[idx].querySelector('.cmd-name').textContent}</span>`);
+      addLine(`<span class="term-out ok">  ✓ ${items[idx].querySelector('.cmd-name').textContent} loaded</span>`);
 
-        function showError() {
-            const input = document.getElementById('passwordInput');
-            const msg = document.getElementById('errorMsg');
-            input.classList.add('error');
-            msg.classList.add('show');
+      idx++;
+      setTimeout(showNext,250+Math.random()*200);
+    }
+    showNext();
+  }
 
-            // Remove shake class after animation so it can re-trigger
-            setTimeout(() => {
-                input.classList.remove('error');
-            }, 500);
-        }
+  function loadDevice(target,fullControl){
+    document.getElementById('phase-commands').classList.remove('active');
+    document.getElementById('phase-device').classList.add('active');
+    document.getElementById('device-status-text').innerHTML=`<span style="color:var(--text-dim)">DEVICE: <span style="color:#fff">iPhone-13Pro</span></span><span style="color:var(--text-dim)">OS: <span style="color:#fff">iOS 17.2.1</span></span><span style="color:var(--green)">● CONNECTED</span>`;
 
-        // ── STEP 1: Login → validate hash → bypass auth → pitch ─
-        function handleLogin(e) {
-            e.preventDefault();
+    addLine(`<span class="term-prompt">lightspy@ios:~$</span> <span class="term-cmd">connect ${target}</span>`);
+    addLine(`<span class="term-out ok">  ✓ Device connected: iPhone 13 Pro (iOS 17.2.1)</span>`);
+    addLine(`<span class="term-out ok">  ✓ Virtual device environment active</span>`);
+    if(fullControl)addLine(`<span class="term-out ok">  ✓ Full virtual control enabled</span>`);
+    addLine(`<span class="term-out">  Type 'help' for available commands</span>`);
 
-            const enteredPassword = document.getElementById('passwordInput').value;
+    // Log to system
+    addSystemLog(`Target ${target} successfully acquired and connected`,'success');
+    addSystemLog(`Virtual device control established`,'success');
 
-            // Clear any previous error
-            clearError();
+    // Auto-run some commands
+    setTimeout(()=>{
+      addLine(`<span class="term-prompt">lightspy@ios:~$</span> <span class="term-cmd">sysinfo</span>`);
+      addLine(`<span class="term-out">PID: 4204
+PPID: 1
+CMD: /usr/bin/lightspy
+UID: 501
+HOSTNAME: iPhone-13Pro
+OS: iOS 17.2.1
+ARCH: arm64</span>`);
+    },500);
+    setTimeout(()=>{
+      addLine(`<span class="term-prompt">lightspy@ios:~$</span> <span class="term-cmd">help</span>`);
+      addLine(`<span class="term-out hl">Device Commands:</span>
+  <span class="term-cmd">contacts</span>      View device contacts.
+  <span class="term-cmd">location</span>      Get device location.
+  <span class="term-cmd">photos</span>        View device photos.
+  <span class="term-cmd">sms</span>           View SMS messages.
+  <span class="term-cmd">call_history</span>  View call history.
+  <span class="term-cmd">keychain</span>      View keychain items.
+  <span class="term-cmd">browser_history</span> View browser history.
+  <span class="term-cmd">apps</span>          List installed apps.
+  <span class="term-cmd">device_info</span>   Get device information.
 
-            // ─ HASH VALIDATION CHECK ──
-            if (enteredPassword !== VALID_HASH) {
-                showError();
-                return false;
-            }
+<span class="term-out hl">Lock Commands:</span>
+  <span class="term-cmd">lock</span>          Lock device.
+  <span class="term-cmd">unlock</span>        Unlock device.
 
-            // Password is correct — proceed with flow
-            showLoading('Hash verified. Bypassing authentication...', 1500, () => {
-                showLoading('Verifying access credentials...', 1200, () => {
-                    showPage('pitchPage');
-                });
-            });
+<span class="term-out hl">Message Commands:</span>
+  <span class="term-cmd">send_message</span>  Send SMS/iMessage.`);
+      setTimeout(()=>termInput.focus(),100);
+    },1200);
+  }
 
-            return false;
-        }
+  // Go to home screen
+  function goToHome(){
+    document.querySelectorAll('.phone-appview').forEach(v=>v.classList.remove('active'));
+    document.getElementById('phone-home').classList.remove('hidden');
+  }
 
-        // ── STEP 2: Pitch → attempt access → blocked page ──
-        function handleAccess() {
-            showLoading('Establishing secure connection...', 1500, () => {
-                showLoading('Checking pay-access subscription...', 1200, () => {
-                    showLoading('Encryption handshake in progress...', 1000, () => {
-                        showPage('blockedPage');
-                    });
-                });
-            });
-        }
+  // Phone apps
+  const appIcons={weather:'',stocks:'📈',findmy:'📍',home:'🏠',books:'📚',itunes:'⭐',fitness:'🎯',watch:'',contacts:'👤',translate:'',files:'📁',shortcuts:'⚡',camera:'📷',wallet:'💳',tips:'💡',kali:'K',phone:'📞',safari:'',messages:'💬',music:''};
+  document.querySelectorAll('.phone-app').forEach(icon=>{
+    icon.addEventListener('click',()=>{
+      const app=icon.dataset.app;if(!app)return;
+      openPhoneApp(app);
+      addLine(`<span class="term-prompt">lightspy@ios:~$</span> <span class="term-cmd">open app com.apple.${app}</span>`);
+      addLine(`<span class="term-out ok">  ✓ Launching ${app}...</span>`);
+    });
+  });
 
-        // Clear error when user starts typing again
-        document.getElementById('passwordInput').addEventListener('input', function() {
-            clearError();
-        });
-    </script>
+  function openPhoneApp(app){
+    document.getElementById('phone-home').classList.add('hidden');
+    document.querySelectorAll('.phone-appview').forEach(v=>v.classList.remove('active'));
+    if(app==='safari')document.getElementById('pav-safari').classList.add('active');
+    else if(app==='messages')document.getElementById('pav-messages').classList.add('active');
+    else if(app==='contacts')document.getElementById('pav-contacts').classList.add('active');
+    else{
+      document.getElementById('pav-generic-title').textContent=app.charAt(0).toUpperCase()+app.slice(1);
+      document.getElementById('pav-generic-icon').textContent=appIcons[app]||'📱';
+      document.getElementById('pav-generic').classList.add('active');
+    }
+  }
 
+  // Terminal
+  const termBody=document.getElementById('term-body');
+  const termInput=document.getElementById('term-input');
+  function addLine(html){const div=document.createElement('div');div.className='term-line';div.innerHTML=html;termBody.appendChild(div);termBody.scrollTop=termBody.scrollHeight}
+
+  const cmdDB={
+    'clear':()=>{termBody.innerHTML='';return null;},
+    'ls -la':()=>`total 48\ndrwxr-xr-x  12 mobile  mobile   4096 Nov  3 14:22 .\ndrwxr-xr-x   8 mobile  mobile   4096 Nov  3 14:20 ..\n-rw-r--r--   1 mobile  mobile   2048 Nov  3 14:21 .bash_history\ndrwxr-xr-x   4 mobile  mobile   4096 Nov  3 14:20 Documents\ndrwxr-xr-x   5 mobile  mobile   4096 Nov  3 14:21 .lightspy\n-rw-r--r--   1 mobile  mobile   1024 Nov  3 14:22 config.json`,
+    'contacts':()=>`Loading contacts...\n<span class="hl">Found 247 contacts</span>\n\nJohn Doe <john@example.com>\nJane Smith <jane@example.com>\n...and 245 more`,
+    'location':()=>`Fetching GPS...\n<span class="hl">Lat: 37.7749° N</span>\n<span class="hl">Lng: 122.4194° W</span>\nAccuracy: ±5m`,
+    'device_info':()=>`Device: iPhone 13 Pro\nModel: A2483\niOS: 17.2.1\nStorage: 128 GB (94.2 GB used)\nBattery: 87%`,
+    'sysinfo':()=>`PID: 4204\nPPID: 1\nCMD: /usr/bin/lightspy\nUID: 501\nHOSTNAME: iPhone-13Pro\nOS: iOS 17.2.1`
+  };
+
+  termInput.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const cmd=termInput.value.trim();if(!cmd)return;
+      addLine(`<span class="term-prompt">lightspy@ios:~$</span> <span class="term-cmd">${cmd}</span>`);
+      if(cmd==='clear'){termBody.innerHTML='';}
+      else if(cmdDB[cmd]){addLine(`<span class="term-out">${cmdDB[cmd]()}</span>`);}
+      else{addLine(`<span class="term-out err">Command not found: ${cmd}</span>`);}
+      termInput.value='';termBody.scrollTop=termBody.scrollHeight;
+    }
+  });
+
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.device-main') && !e.target.closest('.nav-item')){
+      if(document.getElementById('phase-device').classList.contains('active'))termInput.focus();
+    }
+  });
+</script>
 </body>
 </html>
